@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://foxmaccloud.com/writeups/magic/</loc>
+    <lastmod>2020-05-05T06:47:08+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/writeups/</loc>
+    <lastmod>2020-05-05T06:47:08+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/posts/</loc>
+    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/</loc>
+    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/posts/2020/05/welcome/</loc>
+    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/welcome/</loc>
+    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/</loc>
+    <lastmod>2020-05-05T05:29:48+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/whoami/</loc>
+    <lastmod>2020-05-05T05:29:48+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/blog/</loc>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/series/</loc>
+  </url>
+  
+</urlset>
