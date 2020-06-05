@@ -7,10 +7,46 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Tue, 05 May 2020 06:34:51 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jun 2020 18:49:09 +0200</lastBuildDate>
     
 	<atom:link href="http://foxmaccloud.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>pwnable</title>
+      <link>http://foxmaccloud.com/tags/pwnable/</link>
+      <pubDate>Fri, 05 Jun 2020 18:49:09 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/tags/pwnable/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>start</title>
+      <link>http://foxmaccloud.com/tags/start/</link>
+      <pubDate>Fri, 05 Jun 2020 18:49:09 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/tags/start/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tw</title>
+      <link>http://foxmaccloud.com/tags/tw/</link>
+      <pubDate>Fri, 05 Jun 2020 18:49:09 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/tags/tw/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>writeup</title>
+      <link>http://foxmaccloud.com/tags/writeup/</link>
+      <pubDate>Fri, 05 Jun 2020 18:49:09 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/tags/writeup/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>welcome</title>

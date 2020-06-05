@@ -6,8 +6,23 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Tue, 05 May 2020 06:34:51 +0200</lastBuildDate>
+        <lastBuildDate>Fri, 05 Jun 2020 18:49:09 +0200</lastBuildDate>
         <atom:link href="http://foxmaccloud.com/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Pwnable - Start</title>
+            <link>http://foxmaccloud.com/posts/2020/06/pwnable-start/</link>
+            <pubDate>Fri, 05 Jun 2020 18:49:09 +0200</pubDate>
+            
+            <guid>http://foxmaccloud.com/posts/2020/06/pwnable-start/</guid>
+            <description>I started doing pwnable a few months back. I think the site is very cool and very good for learning basic binary exploiting skills. I wanted to add some more contents to this site so I made a writeup for the first challenge.
+My first writeup can be found Here
+There will be more writeups comming in the future, but I&amp;rsquo;m currently working on making a writeup for the Fatty machine from Hack The Box first.</description>
+            <content type="html"><![CDATA[<p>I started doing pwnable a few months back. I think the site is very cool and very good for learning basic binary exploiting skills. I wanted to add some more contents to this site so I made a writeup for the first challenge.</p>
+<p>My first writeup can be found <a href="https://foxmaccloud.com/writeups/pwnabletw/start/">Here</a></p>
+<p>There will be more writeups comming in the future, but I&rsquo;m currently working on making a writeup for the Fatty machine from Hack The Box first.</p>
+]]></content>
+        </item>
         
         <item>
             <title>Welcome</title>

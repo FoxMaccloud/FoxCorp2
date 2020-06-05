@@ -4,7 +4,42 @@
   
   <url>
     <loc>http://foxmaccloud.com/</loc>
-    <lastmod>2020-06-05T16:48:25+02:00</lastmod>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/posts/</loc>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/pwnable/</loc>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/posts/2020/06/pwnable-start/</loc>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/start/</loc>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/</loc>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/tw/</loc>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/writeup/</loc>
+    <lastmod>2020-06-05T18:49:09+02:00</lastmod>
   </url>
   
   <url>
@@ -20,16 +55,6 @@
   <url>
     <loc>http://foxmaccloud.com/writeups/hackthebox/magic/</loc>
     <lastmod>2020-05-05T06:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/posts/</loc>
-    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/</loc>
-    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
   </url>
   
   <url>

