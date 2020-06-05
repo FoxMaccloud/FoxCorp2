@@ -7,17 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Tue, 05 May 2020 05:29:48 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jun 2020 16:48:25 +0200</lastBuildDate>
     
 	<atom:link href="http://foxmaccloud.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Magic</title>
-      <link>http://foxmaccloud.com/writeups/magic/</link>
+      <title>Start - Pwnable.tw</title>
+      <link>http://foxmaccloud.com/writeups/pwnabletw/start/</link>
+      <pubDate>Fri, 05 Jun 2020 16:48:25 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/writeups/pwnabletw/start/</guid>
+      <description>This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
+Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &amp;ldquo;6Aa7&amp;rdquo;.</description>
+    </item>
+    
+    <item>
+      <title>Magic - Hack The Box</title>
+      <link>http://foxmaccloud.com/writeups/hackthebox/magic/</link>
       <pubDate>Tue, 05 May 2020 06:47:08 +0200</pubDate>
       
-      <guid>http://foxmaccloud.com/writeups/magic/</guid>
+      <guid>http://foxmaccloud.com/writeups/hackthebox/magic/</guid>
       <description>Come back after box is retired! </description>
     </item>
     
@@ -33,7 +43,7 @@ Check out whoami for more information about who I am.</description>
     </item>
     
     <item>
-      <title>Whoami?</title>
+      <title>‎‎‎‎&gt; $ whoami</title>
       <link>http://foxmaccloud.com/whoami/</link>
       <pubDate>Tue, 05 May 2020 05:29:48 +0200</pubDate>
       
