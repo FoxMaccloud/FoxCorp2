@@ -30,7 +30,7 @@ There will be more writeups comming in the future, but I&amp;rsquo;m currently w
       
       <guid>http://foxmaccloud.com/writeups/pwnabletw/start/</guid>
       <description>This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
- Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string &amp;ldquo;6Aa7&amp;rdquo;.</description>
+ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7.</description>
     </item>
     
     <item>
