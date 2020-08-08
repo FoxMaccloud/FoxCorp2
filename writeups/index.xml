@@ -23,6 +23,15 @@
     </item>
     
     <item>
+      <title>Fatty - Hack The Box</title>
+      <link>http://foxmaccloud.com/writeups/hackthebox/fatty/</link>
+      <pubDate>Wed, 06 May 2020 01:03:36 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/writeups/hackthebox/fatty/</guid>
+      <description>Box enumeration  Ports opened:  nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Nmap 7.80 scan initiated Sat Feb 8 20:06:13 2020 as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Warning: 10.10.10.174 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.174 Host is up (0.050s latency). Not shown: 990 closed ports PORT STATE SERVICE VERSION 21/tcp open ftp vsftpd 2.0.8 or later | ftp-anon: Anonymous FTP login allowed (FTP code 230) | -rw-r--r-- 1 ftp ftp 15426727 Oct 30 12:10 fatty-client.</description>
+    </item>
+    
+    <item>
       <title>Magic - Hack The Box</title>
       <link>http://foxmaccloud.com/writeups/hackthebox/magic/</link>
       <pubDate>Tue, 05 May 2020 06:47:08 +0200</pubDate>

