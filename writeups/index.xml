@@ -37,7 +37,7 @@
       <pubDate>Tue, 05 May 2020 06:47:08 +0200</pubDate>
       
       <guid>http://foxmaccloud.com/writeups/hackthebox/magic/</guid>
-      <description>Come back after box is retired! </description>
+      <description>Enumeration  Only two ports are open:  nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.185 # Nmap 7.80 scan initiated Sat Apr 18 22:30:30 2020 as: nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.185 Warning: 10.10.10.185 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.185 Host is up (0.048s latency). Not shown: 971 closed ports, 27 filtered ports PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 7.</description>
     </item>
     
   </channel>
