@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Introduction I wanted to learn C&#43;&#43;, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&amp;rsquo;t know, but looking into it, LiveOverflow came into mind with his pwnadventure. From one of the episodes we were introduced to guided hacking. I then looked into it and found their playlist Start Here Beginner&amp;rsquo;s Guide to Game Hacking." />
+<meta name="keywords" content=", c&#43;&#43;, cpp, re, reverse engineering, hacking, games, game, cheat, cheat engine" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/" />
+
+
+    <title>
+        
+            I wanna learn C&#43;&#43;, computers and reverse engineering :: FoxCorp  — Welcome to FoxCorp!
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.393856bf2c430bb6c01d7af07c6fe966e7cce8073435cfbbc46e590bab7405ef.css">
+
+
+
+
+
+
+<meta itemprop="name" content="I wanna learn C&#43;&#43;, computers and reverse engineering">
+<meta itemprop="description" content="Introduction I wanted to learn C&#43;&#43;, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&rsquo;t know, but looking into it, LiveOverflow came into mind with his pwnadventure. From one of the episodes we were introduced to guided hacking. I then looked into it and found their playlist Start Here Beginner&rsquo;s Guide to Game Hacking.">
+<meta itemprop="datePublished" content="2020-06-09T01:57:59+02:00" />
+<meta itemprop="dateModified" content="2020-06-09T01:57:59+02:00" />
+<meta itemprop="wordCount" content="2234">
+<meta itemprop="image" content="http://foxmaccloud.com/"/>
+
+
+
+<meta itemprop="keywords" content="c&#43;&#43;,cpp,re,reverse engineering,hacking,games,game,cheat,cheat engine," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://foxmaccloud.com/"/>
+
+<meta name="twitter:title" content="I wanna learn C&#43;&#43;, computers and reverse engineering"/>
+<meta name="twitter:description" content="Introduction I wanted to learn C&#43;&#43;, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&rsquo;t know, but looking into it, LiveOverflow came into mind with his pwnadventure. From one of the episodes we were introduced to guided hacking. I then looked into it and found their playlist Start Here Beginner&rsquo;s Guide to Game Hacking."/>
+
+
+
+    <meta property="og:title" content="I wanna learn C&#43;&#43;, computers and reverse engineering" />
+<meta property="og:description" content="Introduction I wanted to learn C&#43;&#43;, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&rsquo;t know, but looking into it, LiveOverflow came into mind with his pwnadventure. From one of the episodes we were introduced to guided hacking. I then looked into it and found their playlist Start Here Beginner&rsquo;s Guide to Game Hacking." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/" />
+<meta property="og:image" content="http://foxmaccloud.com/"/>
+<meta property="article:published_time" content="2020-06-09T01:57:59+02:00" />
+<meta property="article:modified_time" content="2020-06-09T01:57:59+02:00" /><meta property="og:site_name" content="FoxCorp" />
+
+
+
+
+
+
+    <meta property="article:published_time" content="2020-06-09 01:57:59 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+    </head>
+
+    <body class="dark-theme">
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">$ cd /home/</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="http://foxmaccloud.com/posts/">Posts</a></li><li><a href="http://foxmaccloud.com/whoami/">whoami</a></li><li><a href="http://foxmaccloud.com/writeups/">Writeups</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+
+            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+</span>
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        11 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/">I wanna learn C++, computers and reverse engineering</a>
+      </h1>
+
+      
+
+      <div class="post-content">
+        <h2 id="introduction">Introduction</h2>
+<p>I wanted to learn C++, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&rsquo;t know, but looking into it, <a href="https://www.youtube.com/channel/UClcE-kVhqyiHCcjYwcpfj9w">LiveOverflow</a> came into mind with his pwnadventure. From one of the episodes we were introduced to <a href="https://www.youtube.com/user/L4DL4D2EUROPE">guided hacking</a>. I then looked into it and found their playlist <a href="https://www.youtube.com/watch?v=hj4rhfnikVs&amp;list=PLt9cUwGw6CYHKBH5OoR8M2ELGlNlrgBKl">Start Here Beginner&rsquo;s Guide to Game Hacking</a>. So I started watching.</p>
+<p>Before Guided Hacking even started showing how games are hacked he introduced us to how computers worked. I have previous experience in this topic from both university and my own research. Guided Hacking started with an introduction in how a computers memory works and how important the memory is for everything a computer does. Next he gives an introduction to different way games are cheated. Memory editing (editing values in memory), Assembly editing (rewrite the game&rsquo;s code), hex editing (edit save-files and other on-disk resources) and packet editing (send modified information to the servers).</p>
+<h2 id="hacking-process">Hacking process</h2>
+<p>Find thing to exploit/hack -&gt; Try to exploit/hack -&gt; See if it worked</p>
+<p>After looking trough his introduction on how to hack games I needed to learn C++. Off to <a href="https://learncpp.com/">learncpp.com</a> I go! I have prior experience to programming before from python, java, assembly, bash, lua etc. learning basic C++ didn&rsquo;t take long, but how C++ handled memory and pointers was new to me. And the windows.h header was another beast to tame. I headed off to my first challenge. I figured that making a cheat for <a href="https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/">Counter-Strike: Global Offensive</a> was a good place to start since CS:GO is a game that has been done to death when it comes to making game cheats.</p>
+<h2 id="what-are-offsets">What are offsets?</h2>
+<p>Before attempting making a cheat for CS:GO I tried making one for a game called <a href="https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_The_Wind_Waker">The Legend of Zelda: The Wind Waker</a>. The game was emulated using the <a href="https://dolphin-emu.org/">Dolphin Emulator</a>. I found the address rupies in the game by using cheat engine scanning memory. Much like how I used to cheat in flash games in browsers as a kid. I successfully was able to create infinite rupies for the game writing this script:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> maxCash <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span>;
+<span style="color:#66d9ef">int</span> addressCash <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x803B4C0C</span>; <span style="color:#75715e">//address for rupies
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+  HWND hwnd <span style="color:#f92672">=</span> FindWindowA(NULL, <span style="color:#e6db74">&#34;Dolphin 5.0 | JIT64 DC | Direct3D 12 (experimental) | HLE | FPS: 30 - VPS: 60 - 100%&#34;</span>);
+  <span style="color:#66d9ef">if</span> (hwnd <span style="color:#f92672">==</span> NULL)
+  {
+    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Cannot find window!&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+    Sleep(<span style="color:#ae81ff">2000</span>);
+    exit(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+  }
+  <span style="color:#66d9ef">else</span>
+  {
+    DWORD procID;
+    GetWindowThreadProcessId(hwnd, <span style="color:#f92672">&amp;</span>procID);
+    HANDLE handle <span style="color:#f92672">=</span> OpenProcess(PROCESS_ALL_ACCESS, FALSE, procID);
+    <span style="color:#66d9ef">if</span> (procID <span style="color:#f92672">==</span> NULL)
+    {
+      std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Cannot obtain process ID!&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+      Sleep(<span style="color:#ae81ff">2000</span>);
+      exit(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+    }
+    <span style="color:#66d9ef">else</span>
+    {
+      <span style="color:#66d9ef">while</span> (true)
+      {
+        WriteProcessMemory(handle, (LPVOID)ad_Cash, <span style="color:#f92672">&amp;</span>maxCash, <span style="color:#66d9ef">sizeof</span>(maxCash), <span style="color:#ae81ff">0</span>);
+        Sleep(<span style="color:#ae81ff">1000</span>);
+      }
+    }
+  }
+  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><p>Issue using this is that I&rsquo;m using the address in memory where the rupies are stored. This address will be different every time I reboot the game. I need a way to find the address(es) where the rupies are stored from wherever in memory it is&hellip; Another issue is that for the rupies value to change it also needs an update of some sort e.g., spending or getting a rupie. So how do we solve our first issue? Entering offsets and pointers! We can find the rupies address from the games base address e.g., <code>game.exe+0x3ACA0</code> where <code>0x3ACA0</code> would be the offset.</p>
+<h2 id="playing-with-cheat-engine">Playing with cheat engine</h2>
+<p>A year went by with me not doing anything related to this. I was very buzzy with school and was having a hard time doing extra courses. I&rsquo;m not a very good student and will mostly focus on what interest me at the time. Anyways this section is dedicated to me learning about cheat engine. I believe many of us remember doing simple hacks for flash games getting unlimited X or doing Y.</p>
+<p>At the time of writing this I have successfully made some cheats for CS:GO and I&rsquo;m a little bit more familiar with how everything works. I can see why CS:GO has been cheated to death since it&rsquo;s so easy to do! The VAC anticheat is also a joke <a href="https://guidedhacking.com/threads/how-to-bypass-vac-valve-anti-cheat-info.8125/">according to the guided hacking forums</a>. I haven&rsquo;t learned about anticheats or how they are defeated yet, so to me they don&rsquo;t exists.</p>
+<p>Cheat engine is actually mega powerfull and is a huge part of game hacking. I really suggest learning how to use it and it has a fun tutorial</p>
+<p>(you will find the tutorial in Help -&gt; Cheat Engine Tutorial *).</p>
+
+    <img src="/CheatEngineTutorial.png"  alt="CheatEngineTutorialExampleImg"  class="left"  />
+
+
+<p>Ok cool! Now we know a little about cheat engine, now how do we get these magic offsets? Easy! We just apply what we learned from the tutorial and then follow <a href="https://guidedhacking.com/threads/how-to-hack-any-game-cheat-engine.7194/">GuidedHackings guide</a> on how to find offsets. The TL;DR of it tho is that you wanna find pointers to what you wanna find because everything is created dynamically. What we then need is a static address which will always be relative to a module e.g., <code>client.exe + 0xD882BC</code> will lead you to your player structure which contains your player vars. We can find these static addresses by using cheat engine searching for pointers. I&rsquo;m not gonna go deep in on how to find these as the video in the link above is gonna explain this a lot better than I can ever type.</p>
+<h2 id="writing-csgo-hacks">Writing CS:GO hacks!</h2>
+<p>So here we are. Lets make some cheats! First we get our offsets. At this point I wanted to write so code badly! I got all the offsets using a tool called <a href="https://github.com/frk1/hazedumper">hazedumper</a>. I also picked up some headers from guidedhacking called <a href="https://guidedhacking.com/">MemMan</a> which I picked up from their website somewhere. MemMan is very nice because it simplify the <code>WriteProcessMemory();</code>, <code>ReadProcessMemory();</code> and the process of getting handles. e.g., instead of: <code>WriteProcessMemory(handle, (LPVOID)ad_Cash, &amp;maxCash, sizeof(maxCash), 0);</code> I can simply do <code>MemMan.writeMem(address, maxCash);</code></p>
+<p>First I wanted to write a <a href="https://www.youtube.com/watch?v=UypEUaqsCpk">bunny hop</a> script. To make this script, we first need to get a handle to the process. It&rsquo;s nice to store all these vales in a class or a struct since these values will be used over and over. We also need a need to get the right module. Using MemMan we can get the process like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;MemMan.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+MemMan memClass;
+
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">vars</span>
+{
+  uintptr_t process;
+  uintptr_t gameModule;
+}vars;
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+  vars.process <span style="color:#f92672">=</span> memClass.getProcess(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;csgo.exe&#34;</span>);
+  vars.gameModule <span style="color:#f92672">=</span> memClass.getModule(vars.process, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;client.dll&#34;</span>);
+  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><p>Now lets make our bunny hop script. First we need the offset to our player structure, the relative offset from out player structure to see what state our player is in (if in the air, on the ground, in water etc.) and we need a way to force a jump. I got all my offsets from hazedumper and will be using those and also save them in a struct for easy access.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">gameOffsets</span>
+{
+  uintptr_t lPlayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xD882BC</span>; <span style="color:#75715e">// offset to player structure
+</span><span style="color:#75715e"></span>  uintptr_t fJump <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x5249B34</span>; <span style="color:#75715e">// offset from client to address storing jump value
+</span><span style="color:#75715e"></span>  uintptr_t flags <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x104</span>; <span style="color:#75715e">// offset from player structure to what state we are in.
+</span><span style="color:#75715e"></span>}offsets;
+
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">vars</span> <span style="color:#75715e">// the saved variables from the offsets
+</span><span style="color:#75715e"></span>{
+  uintptr_t process;
+  uintptr_t gameModule;
+  BYTE flag;
+}vars;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bunnyHop</span>()
+{
+  vars.flag <span style="color:#f92672">=</span> memClass.readMem<span style="color:#f92672">&lt;</span>BYTE<span style="color:#f92672">&gt;</span>(vars.localPlayer <span style="color:#f92672">+</span> offsets.flags);
+  <span style="color:#66d9ef">if</span> (GetAsyncKeyState(VK_SPACE) <span style="color:#f92672">&amp;&amp;</span> vars.flag <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">0</span>))
+  {
+    memClass.writeMem<span style="color:#f92672">&lt;</span>uintptr_t<span style="color:#f92672">&gt;</span>(vars.gameModule <span style="color:#f92672">+</span> offsets.fJump, <span style="color:#ae81ff">6</span>);
+    Sleep(<span style="color:#ae81ff">1</span>);
+  }
+}
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+{
+  vars.process <span style="color:#f92672">=</span> memClass.getProcess(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;csgo.exe&#34;</span>);
+  vars.gameModule <span style="color:#f92672">=</span> memClass.getModule(vars.process, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;client.dll&#34;</span>);
+
+  <span style="color:#66d9ef">while</span> (true)
+  {
+    bunnyHop();
+  }
+  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><p>We now have a basic bunny hop script working! We also needs to know what&rsquo;s going on or else it is just copy-pasted code. When I first wrote this, I was confused about <code>(1 &lt;&lt; 0)</code> in flags and why we wrote <code>6</code> into fjump&hellip; The gist of it is that <code>(1 &lt;&lt; 0)</code> means that we are standing on the ground and we are writing <code>6</code> in to memory since that will do a jump and reset it back to 4. Why 4? Because 4 i believe is the &ldquo;base&rdquo; state and by 5 is spacebar down. In cheat engine, you will see that if you type +jump in the cs:go console you will jump and the address will be set to 5. If you try to jump again after, you can&rsquo;t since it needs a -jump before you can jump again. Writing <code>6</code> into it, forces a jump and resets it back to 4.</p>
+<p>I have made some others cheats for the game like a radar-hack, triggerbot, wallhack etc. It&rsquo;s kinda funny to see how easy and effective these cheats are. For instance the radar hack just loops trough the entities in the game and sets a bool that they are indeed spotted to true. The <a href="https://guidedhacking.com/threads/external-c-csgo-glowhack-tutorial.11822/">wallhack</a> I belive isn&rsquo;t a true wallhack since it uses an in-game &ldquo;glow&rdquo; to work.</p>
+
+    <img src="/glowHack.png"  alt="glowHack"  class="left"  style="width: 100%"  />
+
+
+<p>You might be wondering why this is in the game, but it&rsquo;s actually very useful. In the game as it stands now, it is used to see players trough walls when you are a spectator, like when you are watching a game or when you are dead. I belive a true wallhack would be able to draw the entities for any game. This &ldquo;glow&rdquo; is true only to games with a glow function like cs:go. I don&rsquo;t think this way of doing it is necessarily bad since this idea can apply to many games. Instead of using glow-effects, you can maybe force nameplates to render trough walls etc.</p>
+<h2 id="applying-knowledge-elsewhere">Applying knowledge elsewhere</h2>
+<p>So for now I have mostly walked in others footsteps. To force myself not to copy code, I decided that I wanted to do another game based on another engine. I decided that I wanted to try to make some cheats for a game called Satisfactory. It&rsquo;s a game where you are supposed to build factories and make them as efficient as possible.</p>
+<p>So what do I wanna hack for this game? The things I wanna be able to do are: god-mode, fly, teleport to begin with. So, for god-mode the first thing I needed was to figure out how I take damage to begin with. Health must be a decent place to start looking. To find the health address I started jumping off cliffs until I found my health address. I knew it was correct since changing it from 30 -&gt; 50 worked.</p>
+
+    <img src="/Health.png"  alt="Health"  class="left"  style="width: 100%"  />
+
+
+<p>Jumping off the cliff again while seeing what accesses this address yielded interesting results.</p>
+
+    <img src="/AccessHealth.png"  alt="AccessHealth"  class="left"  style="width: 100%"  />
+
+
+<p>Viewing these addresses in the disassembler reveals a very fun function.</p>
+
+    <img src="/DisAsmDamage.png"  alt="DisAsmDamage"  class="left"  style="width: 100%"  />
+
+
+<p>I tried to replace the function with a bunch of NOPs, this yielded very funny results. Now I no longer took any damage from any sources. Nice! Job done? Not quite. Funny thing is that all damage in the game uses that function&hellip; I need to figure out a way to check if it&rsquo;s me that is taking damage. Looking at the function the first argument it takes is <code>AActor damagedActor</code>. Ok, need to check this argument. Looking at <a href="https://docs.microsoft.com/en-us/">msdn</a> for <a href="https://docs.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-160">x64 calling convention</a>, we see that the first argument gets put in the <code>RCX</code> registry.</p>
+<p>I put a breakpoint on this function and jumped off the cliff again.
+
+    <img src="/breakpointDamagePlayer.png"  alt="breakpointDamagePlayer"  class="left"  style="width: 100%"  />
+
+</p>
+<p>Great, now I have some value for the player. I tried to jump a few more times to see if the values looked correct, and I noticed something weird. On one of the jumps I died and the health address was no longer valid. The RCX value also changed. At this point I have no idea what&rsquo;s going on as this is completely new. Anyways, I also wanted to test for the animals in the game. This was the closest thing&hellip;</p>
+
+    <img src="/magesticBeast.png"  alt="magesticBeast"  class="left"  style="width: 100%"  />
+
+
+<p>Nothing weird going down there.
+
+    <img src="/breakpointDamageBeast.png"  alt="breakpointDamageBeast"  class="left"  style="width: 100%"  />
+
+</p>
+<p>Registry values for the tests:
+
+    <img src="/DmgFuncRegs.png"  alt="DmgFuncRegs"  class="left"  style="width: 100%"  />
+
+</p>
+<p>Well so what now? Nothing really. I tried looking into it and looked unreal engine up on GuidedHacking forums. I found a <a href="https://guidedhacking.com/threads/unreal-engine-game-hacking.14278/">guide</a> on how to hack unreal engine and was warned. Direct quote: <code>Unreal Engine is Object Oriented Programming on steroids. Reversing it without understanding how the engine works will give you brain damage. I do not recommend anyone tries to hack UE games unless they are experienced hackers. You can use native methods to hack Unreal Engine games but we don't recommend it. The best method to hack these games is to dump an SDK using the Feckless SDK generator.</code> Well I don&rsquo;t know much about dumping SDKs or how to use them. I only know the conventional methods I have been thought, so I&rsquo;m thinking about changing game. You are almost caught up to speed on where I stand. This article doesn&rsquo;t give the full picture as I suck at writing and probably missed some parts&hellip; But I don&rsquo;t really care. I wrote this for me.</p>
+<h2 id="purpose">Purpose</h2>
+<p>There isn&rsquo;t really any purpose behind this post. You can view it as a tour, guide, experience, diary, whatever. But it is more for my own learning. I also wanted to have my work documented since undocumented work sucks. Much of the reason why I did writeups.</p>
+<h2 id="credits">Credits!</h2>
+<p>I would like to thank <a href="https://guidedhacking.com/">GuidedHacking</a> for teaching game hacking. I believe that this is the greatest source for learning game hacking. You should keep in mind if you ever decide to learn, guidedhacking will guide you, but won&rsquo;t hold your hand.</p>
+<p>Second I would like to thank <a href="https://ferib.dev/">Ferib</a> for answering pretty much any of my questions on demand. If you are interested in reverse engineering and it&rsquo;s applications, you can check out <a href="https://ferib.dev/blog/">his blog</a>.</p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="http://foxmaccloud.com/tags/c&#43;&#43;/">c&#43;&#43;</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/cpp/">cpp</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/re/">re</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/reverse-engineering/">reverse engineering</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/hacking/">hacking</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/games/">games</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/game/">game</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/cheat/">cheat</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/cheat-engine/">cheat engine</a></span>
+        
+    </p>
+
+      
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        2234 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2020-06-09 01:57 &#43;0200
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h">Read other posts</span>
+          <hr />
+        </div>
+
+        <div class="pagination__buttons">
+          
+
+          
+            <span class="button next">
+              <a href="http://foxmaccloud.com/posts/2020/06/pwnable-start/">
+                <span class="button__text">Pwnable - Start</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2021</span>
+            
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span> <a href="http://foxmaccloud.com/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/FoxMaccloud">Fox Maccloud</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+
+<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+
+
+
+    </body>
+</html>

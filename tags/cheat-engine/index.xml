@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cheat engine on FoxCorp</title>
+    <link>http://foxmaccloud.com/tags/cheat-engine/</link>
+    <description>Recent content in cheat engine on FoxCorp</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Tue, 09 Jun 2020 01:57:59 +0200</lastBuildDate><atom:link href="http://foxmaccloud.com/tags/cheat-engine/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I wanna learn C&#43;&#43;, computers and reverse engineering</title>
+      <link>http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/</link>
+      <pubDate>Tue, 09 Jun 2020 01:57:59 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/</guid>
+      <description>Introduction I wanted to learn C++, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&amp;rsquo;t know, but looking into it, LiveOverflow came into mind with his pwnadventure. From one of the episodes we were introduced to guided hacking. I then looked into it and found their playlist Start Here Beginner&amp;rsquo;s Guide to Game Hacking.</description>
+    </item>
+    
+  </channel>
+</rss>
