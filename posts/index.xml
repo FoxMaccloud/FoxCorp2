@@ -6,8 +6,42 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Tue, 09 Jun 2020 01:57:59 +0200</lastBuildDate>
+        <lastBuildDate>Wed, 06 Jan 2021 02:06:43 +0100</lastBuildDate>
         <atom:link href="http://foxmaccloud.com/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Lenovo Thinkpad L15 AMD Review</title>
+            <link>http://foxmaccloud.com/posts/2021/01/lenovo-thinkpad-l15-amd-review/</link>
+            <pubDate>Wed, 06 Jan 2021 02:06:43 +0100</pubDate>
+            
+            <guid>http://foxmaccloud.com/posts/2021/01/lenovo-thinkpad-l15-amd-review/</guid>
+            <description>Introduction I recently got a new laptop. I decided that I wanted a powerfull, yet cheap laptop. I didn&amp;rsquo;t want to go for a gaming laptop since I find the look of them ugly, so I got a Lenovo Thinkpad. The model I got was the Lenovo thinkpad L15 AMD. I decided to go for this laptop for it&amp;rsquo;s proffesional looks, decent keyboard, IPS monitor, 8C/16T cpu, replaceable parts and all of this for a good price (compared to the competition).</description>
+            <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>I recently got a new laptop. I decided that I wanted a powerfull, yet cheap laptop. I didn&rsquo;t want to go for a gaming laptop since I find the look of them ugly, so I got a Lenovo Thinkpad.
+The model I got was the <a href="https://www.lenovo.com/no/no/laptops/thinkpad/l-series/ThinkPad-L15-AMD/p/22TPL15L5A1">Lenovo thinkpad L15 AMD</a>. I decided to go for this laptop for it&rsquo;s proffesional looks, decent keyboard, IPS monitor, 8C/16T cpu, replaceable parts and all of this for a good price (compared to the competition).</p>
+<h2 id="first-impressions">First impressions</h2>
+<p>I ordered the laptop mid October 2020. There wasn&rsquo;t anything special about the shipping time, just a few days. But it was delivered on the door which is cool. The laptop arrived in a cardboard box and the laptop was incased with high quality foam. There was nothing special about the unboxing which isn&rsquo;t a bad thing. Everything was just as expected. I started up the computer and was prompted into the bios since I ordered a laptop without an OS. I got my installation media and started to install <a href="https://archlinux.org/">Arch linux</a> on the thing. There wasn&rsquo;t anything special about the installation, everything went smooth. Only thing that annoyed me was that the FN and CTRL key has swapped places which takes time to get used to. You can swap these in the bios, but that&rsquo;s also annoying. The top of the laptop is a fingerprint magnet.</p>
+<h2 id="small-panel-problem">Small panel problem</h2>
+<p>Another thing I noticed was that when the screen was completely black, there was white beams coming from the corners of the IPS panel. This is backlight bleeding. This was bleeding at an unacceptable level. I called up thinkpad tech support. After calling I was moved over to the business wing instead of the consumer wing for the call since they were the only ones that dealt with thinkpads&hellip; The call went smoothly, the operator understood my issue, sent me an email which I answered with an image of my problem and got a replacement part ordered for free. The part wasn&rsquo;t sent to me, but to a repairman who was sent to my door. The repairman swapped the panels, but failed to put back the frame. He asked if he could take the laptop with him for repair which he was allowed. A few days later the laptop came back in the mail and everything looked fine for a few days.</p>
+<p>Sadly tho the repairman failed the repair and missed some plastic clips in the bottom left corner. I was now busy with finals and didn&rsquo;t have time to look into it. Since it wasn&rsquo;t fitted properly, every time I opened and closed my laptop the frame got stressed and worn until one day it cracked.</p>
+
+    <img src="/LaptopCrack.jpg"  alt="LaptopCrack"  class="left"  style="width: 100%"  />
+
+
+<p>After my finals I got on call with Lenovo again and the called looked pretty much the same as earlier. They sent another repairman which arrived and fixed the issue on Christmas eve which was sick! This repairman was a little more experienced and fixed the issue swift and without any issues. 10/10!</p>
+<h2 id="second-impressions">Second impressions</h2>
+<p>Now that I have had some time using the laptop, I would say that it&rsquo;s pretty decent. I haven&rsquo;t had any issues with it expect for the rough start. I brought the laptop with me this Christmas and there wasn&rsquo;t any complaints. The keyboard on this laptop is phenomenal. The trackpad is big and the left/right mouse button has a nice feel. There is also a middle mouse button. The backlight on the keyboard is only white, but works for late nights when it&rsquo;s dark. The feel of the laptop is pretty standard. It&rsquo;s all hard plastic, so don&rsquo;t expect much, but the plastic doesn&rsquo;t feel cheap, but sturdy. Battery life is very good and lasts me about a full day. If i wanted to summarize the laptop, I would say that it is boring. It doesn&rsquo;t have anything that makes it flashy or standout. It just does what it&rsquo;s supposed to do&hellip;</p>
+<h2 id="nice-features">Nice features</h2>
+<p>The laptop I believe is pretty powerful for its pricerange. It rocks an <code>AMD Ryzen 7 PRO 4750U</code>, <code>16GB 3200mhz memory</code>, <code>512GB NVMe ssd</code> and a <code>1080p IPS panel</code>. It also has smaller features such <code>fingerprint sensor</code> and a <code>sim card holder</code>. The I/O on this laptop is massive aswell. There are many usb ports on it, some usb-c, SD-card reader, HDMI and RJ-45. The headphone and mic is combined which I&rsquo;m no fan of. From the store, the laptop has only a single ram chip meaning it&rsquo;s single channel only. The ram slots are not soldered and therefor can be changed. Supports up to 64GB of ram. I myself am buying another 16GB 32000 Mhz stick to put in my empty slot giving myself 32GB ram on a laptop.</p>
+
+    <img src="/LaptopInternal.jpg"  alt="LaptopInternal"  class="left"  style="width: 100%"  />
+
+
+<p>Getting replacement parts for the laptop is pretty easy. Most parts are also very easy to replace which was one of the criteria I had for getting a laptop. There is also a slot for an aftermarket laptop GPU if that&rsquo;s something you want. Sadly the battery is glued to the chassis which I think is completely unnecessary. The laptop has a 720p camera which works for conversations, meetings etc.</p>
+<h2 id="summary">Summary</h2>
+<p>To summarize the laptop it&rsquo;s boring. It does everything you ask it to do. You can even game on it, although mainly e-sport titles as this doesn&rsquo;t have a dedicated gpu, but uses vega 8 onboard graphics on the apu. For the price I bought it at, 1100$ (mind that this is Norwegian pricing). It was the best purchase for me. Similar laptops with same specs usually went for 1500$ and above. Looking at other people who has gotten the same laptop as me, the IPS panel is a little hit or miss. If there are specifics you wanna know, hit me up on <a href="https://twitter.com/FoxMacSwagger">twitter</a> or <a href="https://discord.gg/VHUKpca">discord</a>.</p>
+]]></content>
+        </item>
         
         <item>
             <title>I wanna learn C&#43;&#43;, computers and reverse engineering</title>
