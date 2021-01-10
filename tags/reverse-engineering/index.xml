@@ -7,17 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Sat, 09 Jan 2021 18:19:58 +0100</lastBuildDate><atom:link href="http://foxmaccloud.com/tags/reverse-engineering/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>My Arch Dotfiles</title>
-      <link>http://foxmaccloud.com/posts/2021/01/my-arch-dotfiles/</link>
-      <pubDate>Sat, 09 Jan 2021 18:19:58 +0100</pubDate>
-      
-      <guid>http://foxmaccloud.com/posts/2021/01/my-arch-dotfiles/</guid>
-      <description>Some ppl has been asking me for my dotfiles, so I made a post about it.
-I use a fairly minimalistic set up with i3-gaps. I like i3-gaps since it&amp;rsquo;s fast and it makes me not reliant on a mouse. More info on the github page. I also tried to make an install script for this which needs some work. It&amp;rsquo;s also nice for me since now I can easily get everything working on other computers I get.</description>
-    </item>
-    
+    <lastBuildDate>Tue, 09 Jun 2020 01:57:59 +0200</lastBuildDate><atom:link href="http://foxmaccloud.com/tags/reverse-engineering/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>I wanna learn C&#43;&#43;, computers and reverse engineering</title>
       <link>http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/</link>

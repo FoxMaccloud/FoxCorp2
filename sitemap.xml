@@ -3,22 +3,12 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://foxmaccloud.com/tags/c&#43;&#43;/</loc>
+    <loc>http://foxmaccloud.com/tags/arch/</loc>
     <lastmod>2021-01-09T18:19:58+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://foxmaccloud.com/tags/cheat/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/cheat-engine/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/cpp/</loc>
+    <loc>http://foxmaccloud.com/tags/dotfiles/</loc>
     <lastmod>2021-01-09T18:19:58+01:00</lastmod>
   </url>
   
@@ -28,17 +18,12 @@
   </url>
   
   <url>
-    <loc>http://foxmaccloud.com/tags/game/</loc>
+    <loc>http://foxmaccloud.com/tags/i3/</loc>
     <lastmod>2021-01-09T18:19:58+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://foxmaccloud.com/tags/games/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/hacking/</loc>
+    <loc>http://foxmaccloud.com/tags/i3-gaps/</loc>
     <lastmod>2021-01-09T18:19:58+01:00</lastmod>
   </url>
   
@@ -53,17 +38,17 @@
   </url>
   
   <url>
-    <loc>http://foxmaccloud.com/tags/re/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/reverse-engineering/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>http://foxmaccloud.com/tags/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/vim/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/zsh/</loc>
     <lastmod>2021-01-09T18:19:58+01:00</lastmod>
   </url>
   
@@ -93,7 +78,52 @@
   </url>
   
   <url>
+    <loc>http://foxmaccloud.com/tags/c&#43;&#43;/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/cheat/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/cheat-engine/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/cpp/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/game/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/games/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/hacking/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/re/</loc>
+    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://foxmaccloud.com/tags/reverse-engineering/</loc>
     <lastmod>2020-06-09T01:57:59+02:00</lastmod>
   </url>
   
