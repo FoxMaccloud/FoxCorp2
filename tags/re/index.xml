@@ -7,7 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Tue, 09 Jun 2020 01:57:59 +0200</lastBuildDate><atom:link href="http://foxmaccloud.com/tags/re/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Jul 2022 01:48:58 +0200</lastBuildDate><atom:link href="http://foxmaccloud.com/tags/re/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hacking Videogames For Fun</title>
+      <link>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</link>
+      <pubDate>Fri, 01 Jul 2022 01:48:58 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</guid>
+      <description>Introduction The last year and a half I have been diving into game hacking. At my university I could choose to do a passion project as a course as long as I could get atleast one professor to be on board. The game hacking topic takes a lot of research and is very hard however so does university. Why not then just hack videogames on university time? So I did.</description>
+    </item>
+    
+    <item>
+      <title>I wanna learn C&#43;&#43;, computers and reverse engineering part 2</title>
+      <link>http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/</link>
+      <pubDate>Sat, 09 Jan 2021 18:19:58 +0100</pubDate>
+      
+      <guid>http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/</guid>
+      <description>Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&amp;rsquo;t figure out how to hack Satisfactory.
+A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&amp;rsquo;t been anythign to write about or there wasn&amp;rsquo;t any time.
+Last time we wrote an external cheat for counterstrike.</description>
+    </item>
+    
     <item>
       <title>I wanna learn C&#43;&#43;, computers and reverse engineering</title>
       <link>http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/</link>

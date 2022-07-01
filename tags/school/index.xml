@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>school on FoxCorp</title>
+    <link>http://foxmaccloud.com/tags/school/</link>
+    <description>Recent content in school on FoxCorp</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Fri, 01 Jul 2022 01:48:58 +0200</lastBuildDate><atom:link href="http://foxmaccloud.com/tags/school/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hacking Videogames For Fun</title>
+      <link>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</link>
+      <pubDate>Fri, 01 Jul 2022 01:48:58 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</guid>
+      <description>Introduction The last year and a half I have been diving into game hacking. At my university I could choose to do a passion project as a course as long as I could get atleast one professor to be on board. The game hacking topic takes a lot of research and is very hard however so does university. Why not then just hack videogames on university time? So I did.</description>
+    </item>
+    
+  </channel>
+</rss>

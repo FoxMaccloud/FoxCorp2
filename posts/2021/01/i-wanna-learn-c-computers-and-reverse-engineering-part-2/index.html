@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&amp;rsquo;t figure out how to hack Satisfactory.
+A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&amp;rsquo;t been anythign to write about or there wasn&amp;rsquo;t any time.
+Last time we wrote an external cheat for counterstrike." />
+<meta name="keywords" content=", c&#43;&#43;, cpp, re, reverse engineering, hacking, games, game, cheat, cheat engine" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/" />
+
+
+    <title>
+        
+            I wanna learn C&#43;&#43;, computers and reverse engineering part 2 :: FoxCorp  — Welcome to FoxCorp!
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
+
+
+
+
+
+
+<meta itemprop="name" content="I wanna learn C&#43;&#43;, computers and reverse engineering part 2">
+<meta itemprop="description" content="Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&rsquo;t figure out how to hack Satisfactory.
+A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&rsquo;t been anythign to write about or there wasn&rsquo;t any time.
+Last time we wrote an external cheat for counterstrike."><meta itemprop="datePublished" content="2021-01-09T18:19:58+01:00" />
+<meta itemprop="dateModified" content="2021-01-09T18:19:58+01:00" />
+<meta itemprop="wordCount" content="2808"><meta itemprop="image" content="http://foxmaccloud.com/"/>
+<meta itemprop="keywords" content="c&#43;&#43;,cpp,re,reverse engineering,hacking,games,game,cheat,cheat engine," />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://foxmaccloud.com/"/>
+
+<meta name="twitter:title" content="I wanna learn C&#43;&#43;, computers and reverse engineering part 2"/>
+<meta name="twitter:description" content="Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&rsquo;t figure out how to hack Satisfactory.
+A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&rsquo;t been anythign to write about or there wasn&rsquo;t any time.
+Last time we wrote an external cheat for counterstrike."/>
+
+
+
+
+    <meta property="og:title" content="I wanna learn C&#43;&#43;, computers and reverse engineering part 2" />
+<meta property="og:description" content="Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&rsquo;t figure out how to hack Satisfactory.
+A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&rsquo;t been anythign to write about or there wasn&rsquo;t any time.
+Last time we wrote an external cheat for counterstrike." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/" /><meta property="og:image" content="http://foxmaccloud.com/"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-09T18:19:58+01:00" />
+<meta property="article:modified_time" content="2021-01-09T18:19:58+01:00" /><meta property="og:site_name" content="FoxCorp" />
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2021-01-09 18:19:58 &#43;0100 CET" />
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">$ cd /home/</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/posts/">Posts</a></li><li><a href="/whoami/">whoami</a></li><li><a href="/writeups/">Writeups</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+  <main class="post">
+
+    <div class="post-info">
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        14 minutes
+
+        
+      </p>
+    </div>
+
+    <article>
+      <h1 class="post-title">
+        <a href="http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/">I wanna learn C++, computers and reverse engineering part 2</a>
+      </h1>
+
+      
+
+      
+
+      
+
+      <div class="post-content">
+        <h2 id="introduction">Introduction</h2>
+<p>So from <a href="https://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/">part 1</a> we learned a lot about games, how they work, how they are hacked etc. I couldn&rsquo;t figure out how to hack Satisfactory.</p>
+<p>A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&rsquo;t been anythign to write about or there wasn&rsquo;t any time.</p>
+<p>Last time we wrote an external cheat for counterstrike. I have been studying the GuidedHacking forums some more and read up on internal cheats and ddl injections. It&rsquo;s a topic I have kinda avoided earlier since I wanted to get an external going first. Apparently an internal has many huge features that externals doesn&rsquo;t have like better performance, harder to detect by anti-cheat (if done propper) and you are closer to the process so you can rewrite the actual code of the game/program. <a href="https://guidedhacking.com/threads/how-to-hack-any-game-tutorial-c-trainer-3-first-internal.12142/">Rake from the guidedhacking forums had this to say</a>:
+`
+Internal vs. External?</p>
+<p>External
+External Hacks use WriteProcessMemory(WPM) and ReadProcessMemory(RPM) to interact with the game process&rsquo;s memory. To do this you need to ask the kernel to give you a handle to the process by using OpenProcess() with the Process Access Rights you require, typically PROCESS_ALL_ACCESS. The handle is a required parameter for RPM/WPM. Kernel mode anticheats can easily block external hacks by using ObjRegisterCallbacks to block handle creation. Info from DouggemHacks. RPM/WPM is slow because you have the overhead of the API calls into the kernel. You should limit the frequency of these calls and store as much information locally as possible to increase the performance of your external hack. If the game has no method of detecting RPM making an overlay ESP is a good way of making an undetected external ESP because you only need RPM to be undetected.</p>
+<p>Pros of external:</p>
+<ul>
+<li>In my opinion none compared to internal unless you just want to super quickly patch some bytes and then close the hack</li>
+</ul>
+<p>Cons of external:</p>
+<ul>
+<li>Super easy to detect because of the open process handle</li>
+<li>Harder to use especially for beginners (WPM/RPM, getting the PID, blalba) though easy to master because it has no potential</li>
+<li>Less potential</li>
+<li>Slow</li>
+</ul>
+<p>Internal</p>
+<p>Internal hacks are created by injecting DLLs into the game process, when you do this you have direct access to the process&rsquo;s memory which means fast performance and simplicity. Injected DLL&rsquo;s can be made more sneaky by using different injection methods such as Manual Mapping. View the GuidedHacking Injector thread for more info
+Try a simple DLL hack source code for Assault Cube for learning purposes.
+When you are internal you create pointers to objects, typecast them and point them to objects in memory. Then you can access variables of that object easily through the pointer. ReClass is a great tool for generating classes from memory. This is an example of how to typecast variables in memory and modify them in an internal cheat:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>DWORD<span style="color:#f92672">*</span> localPlayerAddress <span style="color:#f92672">=</span> (DWORD<span style="color:#f92672">*</span>)(<span style="color:#ae81ff">0x509B74</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span> health <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)(<span style="color:#f92672">*</span>localPlayerAddress <span style="color:#f92672">+</span> <span style="color:#ae81ff">0xf8</span>);  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>health <span style="color:#f92672">=</span> <span style="color:#ae81ff">1337</span>;
+</span></span></code></pre></div><p>Pros of internal:</p>
+<ul>
+<li>Sick performance</li>
+<li>Easy to start off with</li>
+<li>Much potential</li>
+<li>Can be super sneaky and almost impossible to detect if done properly</li>
+</ul>
+<p>Cons of internal:</p>
+<ul>
+<li>Hard to master</li>
+<li>Easier to detect when you don&rsquo;t know what you&rsquo;re doing
+`</li>
+</ul>
+<p>I have to get on this internal stuff!</p>
+<h2 id="rewriting-my-csgo-cheats-for-internal">Rewriting my CS:GO cheats for Internal</h2>
+<p>So first thing I did was taking the counterstrike cheat that was already made and make it internal. The process of doing this was easy since everything was kinda already made. Since the game will be injected and running as a thread on the actual process itself, there is no longer need for any read or write process memory. We can just directly set it like it was a variable.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bunnyHop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  vars.flag <span style="color:#f92672">=</span> memClass.readMem<span style="color:#f92672">&lt;</span>BYTE<span style="color:#f92672">&gt;</span>(vars.localPlayer <span style="color:#f92672">+</span> offsets.flags);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (GetAsyncKeyState(VK_SPACE) <span style="color:#f92672">&amp;&amp;</span> vars.flag <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    memClass.writeMem<span style="color:#f92672">&lt;</span>uintptr_t<span style="color:#f92672">&gt;</span>(vars.gameModule <span style="color:#f92672">+</span> offsets.fJump, <span style="color:#ae81ff">6</span>);
+</span></span><span style="display:flex;"><span>    Sleep(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>So instead of doing it like that, we do it like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bunnyHop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	vars.flag <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(BYTE<span style="color:#f92672">*</span>)(vars.localPlayer <span style="color:#f92672">+</span> offsets.flags);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (GetAsyncKeyState(VK_SPACE) <span style="color:#f92672">&amp;&amp;</span> vars.flag <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">*</span>(uintptr_t<span style="color:#f92672">*</span>)(vars.gameModule <span style="color:#f92672">+</span> offsets.fJump) <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Much simpler right?</p>
+<p>Ok good, now how do we inject it?</p>
+<p>I looked into it and injection uses mainly the <code>VritualAllocEx()</code>, <code>WriteProcessMemory()</code> and <code>CreateRemoteThread()</code>, more info <a href="https://guidedhacking.com/threads/simple-dll-injector-source-code.13970/">here</a>. The site does a very good job at explaining how everything works, so I don&rsquo;t have to. At this point I&rsquo;m gonna use <a href="https://github.com/guided-hacking/GuidedHacking-Injector">guidedhackings injection tool</a> to inject my ddls, but I want at some point later wanna make my own that also does it automatically so I don&rsquo;t have to do it manually every time.</p>
+<h2 id="lets-do-skyrim">Lets do Skyrim!</h2>
+<p>So for this next segment I&rsquo;m gonna follow <a href="https://guidedhacking.com/members/icew0lf.20944/">Icew0lf</a>s walkthrough of his making of Skyrim. He introduces us to a loot of amazing tools for gamehacking and ways to reverse engineer. Tools like ReClass.net, x64dbg etc. Very nice! I wanted to avoid copy pasting, so I will be trying my luck on Skyrim Special Edition and not the original skyrim game. The Special Edition is 64-bit while the old one is only 32-bit. This will make some changes to our code and I therefor have to actually think while following. You can think of this much like doing math tasks. Same method different numbers xD.</p>
+<p>So first wanna find an entity list. I first tried to do this using multilevel pointers to a pointer list that points to the entities. I&rsquo;m not yet pro with cheat engine, so there is an easier way to get the entities. Functions such as position, damage, etc. are often shared between all entities including the player entity like they were in Satisfactory. What I mean is that you pass the &ldquo;actor&rdquo; (who is gonna move) to the function, how much etc. What&rsquo;s important here is who. So we can find one of these functions and see who accesses them. A function such as damage would be useless here since it would probably only be accessed when and if something takes damage. A position function would probably be accessed a lot more often. It might be accessed every time something moves or even every game tick.</p>
+<p>Shared instruction for X, Y and Z position in Skyrim.
+
+    <img src="/SharedInstructionsSkyrim.png"  alt="SharedInstructionsSkyrim"  class="left"  style="width: 100%"  />
+
+</p>
+<h2 id="hooks">Hooks</h2>
+<p>A game hook is when you rewrite the games code at some point to jump to your code snippet then jump back and continue the code flow. This means that we can make a game function do something different, e.g., when we take damage in a game the code might look something like this; <code>playerHealth - damage</code>. If we place our hook here and jump to our code, we can make the code do something like this; <code>playerHealth + damage</code>. If we do this we heal everytime we take damage. <a href="https://guidedhacking.com/threads/how-to-hook-functions-code-detouring-guide.14185/">(GuidedHacking, How to Hook Functions - Code Detouring Guide)</a>.</p>
+<p>If we combine these hooks with our knowledge about shared instructions, we can use these hooks to grab entity addresses on the fly and add them to an &ldquo;entity array&rdquo;. When initially doing this I was struggling for about 5 months. When you hook in a game, you overwrite the code with a jmp to your hook and execute your own code. Since you are doing your own stuff, you will mess with the register values and they will change once you jump back. This will lead to unpredictable behavior, but most often crashing. To avoid this I push all the register values onto the stack and pop them off again once I&rsquo;m done with my code and ready to return to the games code. Usually a hook will then look something like;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">__declspec</span>(<span style="color:#66d9ef">naked</span>) <span style="color:#66d9ef">void</span> entHook()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// original bytes we overwrote from the game, aka stolen bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  movss xmm10, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x54</span>]
+</span></span><span style="display:flex;"><span>  movss xmm11, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x58</span>]
+</span></span><span style="display:flex;"><span>  movss xmm12, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x5c</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>		push rax
+</span></span><span style="display:flex;"><span>		push rbx
+</span></span><span style="display:flex;"><span>		push rcx
+</span></span><span style="display:flex;"><span>		push rdx
+</span></span><span style="display:flex;"><span>		push rbp
+</span></span><span style="display:flex;"><span>		push rdi
+</span></span><span style="display:flex;"><span>		push rsi
+</span></span><span style="display:flex;"><span>		push r8
+</span></span><span style="display:flex;"><span>		push r9
+</span></span><span style="display:flex;"><span>		push r10
+</span></span><span style="display:flex;"><span>		push r11
+</span></span><span style="display:flex;"><span>		push r12
+</span></span><span style="display:flex;"><span>		push r13
+</span></span><span style="display:flex;"><span>		push r14
+</span></span><span style="display:flex;"><span>		push r15
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Our things
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>  pop r15
+</span></span><span style="display:flex;"><span>  pop r14
+</span></span><span style="display:flex;"><span>  pop r13
+</span></span><span style="display:flex;"><span>  pop r12
+</span></span><span style="display:flex;"><span>  pop r11
+</span></span><span style="display:flex;"><span>  pop r10
+</span></span><span style="display:flex;"><span>  pop r9
+</span></span><span style="display:flex;"><span>  pop r8
+</span></span><span style="display:flex;"><span>  pop rsi
+</span></span><span style="display:flex;"><span>  pop rdi
+</span></span><span style="display:flex;"><span>  pop rbp
+</span></span><span style="display:flex;"><span>  pop rdx
+</span></span><span style="display:flex;"><span>  pop rcx
+</span></span><span style="display:flex;"><span>  pop rbx
+</span></span><span style="display:flex;"><span>  pop rax
+</span></span><span style="display:flex;"><span>  jmp[jumpBack] <span style="color:#75715e">// Jump back to our gamecode + the bytes we stole.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Since we are overwriting gamecode with our own, we still also need to make sure that what we replaced also gets executed somewhere. Therefor we add these to the start of our hook. We also need to jump back to our gamecode. If we jump back to exactly where we jumped off from, we will be stuck in an infinite loop of jumping to our code and jumping back to our jump. Therefor we add the size of how many bytes stolen to the address of where we jumped from and jump there.</p>
+<h2 id="the-x64-issue">The x64 issue.</h2>
+<p>Inline assembly gives us the option to write assembly code in our c++ programs. This is important because it gives us control over how the code will look like after compile and it also gives access to registers. The problem with x64 inline assembly is that it has been deprecated for x64 and no longer supported. On microsofts website it says; <a href="https://docs.microsoft.com/en-us/cpp/assembler/inline/inline-assembler?view=msvc-160">Inline assembly is not supported on the ARM and x64 processors. The following topics explain how to use the Visual C/C++ inline assembler with x86 processors</a>. My problem then was how to emulate inline assembly using e.g., bytecode and similar. I also needed access to the registers to save those register values to my array, but I couldn&rsquo;t figure this out. After looking around I found out that swapping compilers could work. I first tried LLVM, but with LLVM clean assembly functions are required. I cannot mix c++ code and assembly here. After looking further I got a tip to use ICC (Intel C++ Compiler) which has the option to do regular inline assembly. I made a post about it on Guided hacking which could be interesting to <a href="https://guidedhacking.com/threads/skyrim-x64-midfunction-hook.17355/#post-109303">check out</a>.</p>
+<p>Now that this problem was solved, it&rsquo;s time to finish my hook. This is what I came up with;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>playerEnt<span style="color:#f92672">*&gt;</span> entities;
+</span></span><span style="display:flex;"><span>playerEnt<span style="color:#f92672">*</span> entsptr;
+</span></span><span style="display:flex;"><span>uintptr_t jmpBackAddyEntityList <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">__declspec</span>(<span style="color:#66d9ef">naked</span>) <span style="color:#66d9ef">void</span> entHook()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (entities.size() <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		entities.resize(<span style="color:#ae81ff">256</span>, <span style="color:#66d9ef">nullptr</span>);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>		mov[entsptr], rdi
+</span></span><span style="display:flex;"><span>		movss xmm10, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x54</span>]
+</span></span><span style="display:flex;"><span>		movss xmm11, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x58</span>]
+</span></span><span style="display:flex;"><span>		movss xmm12, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x5c</span>]
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>  push rax; save current rax
+</span></span><span style="display:flex;"><span>  push rbx; save current rbx
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  push r14; save current r14
+</span></span><span style="display:flex;"><span>  push r15; save current r15
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">bool</span> alreadyThere <span style="color:#f92672">=</span> false;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (entsptr <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span> <span style="color:#f92672">||</span> localPlayer <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span>)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">goto</span> GIVE_UP;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  distEnt <span style="color:#f92672">=</span> findDistance(localPlayer<span style="color:#f92672">-&gt;</span>xyz, entsptr<span style="color:#f92672">-&gt;</span>xyz);
+</span></span><span style="display:flex;"><span>  distEnt <span style="color:#f92672">=</span> distEnt <span style="color:#f92672">/</span> <span style="color:#ae81ff">100</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (distEnt <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">160.0f</span> <span style="color:#f92672">||</span> distEnt <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.1f</span>)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">goto</span> GIVE_UP;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> entities.size(); i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (entities.at(i) <span style="color:#f92672">==</span> entsptr)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      alreadyThere <span style="color:#f92672">=</span> true;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (alreadyThere)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">goto</span> GIVE_UP;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> entities.size(); i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (entities.at(i) <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span>)
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        entities.at(i) <span style="color:#f92672">=</span> entsptr; <span style="color:#75715e">// insert
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  GIVE_UP:
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>		pop r15; restore current r15
+</span></span><span style="display:flex;"><span>		pop r14; restore current r14
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>		pop rax; restore current rax
+</span></span><span style="display:flex;"><span>		jmp[jmpBackAddyEntityList]
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>First I&rsquo;m making my array where the entities will be stored. If the array is uninitialized, I resize it to 256 entities. I did this because if not I was crashing due to trying to write to null&hellip; Next I save my entity to a variable and execute the original game code. Save my registers. Check that the entity that I got is not a nullptr (and that I exist. I need to check this because I&rsquo;m using this later.). If nullptr I jump to <code>GIVE_UP</code>, restore the registers and jump back. The findDistance function checks the distance between me the player and the entity. There is no reason load entities that are super far away. The for loop checks if the entity is already in the array. If it is I give up. Next part just adds the entity into the array.</p>
+<p>Now hooking with our hook we can get an entitylist.
+
+    <img src="/Entities.png"  alt="Entities"  class="left"  style="width: 100%"  />
+
+</p>
+<h2 id="the-entities">The entities</h2>
+<p>Now that we have the entities, we can then reverse engineer the structure of the entities. Looking at the code earlier <code>movss xmm10, [rdi + 0x54]</code>. We can see that we have rdi + 0x54. Here rdi is the base of the entity going through this instruction and 0x54 is the offset from the base to whatever the instruction wants to update. In this case it&rsquo;s the X axis. If we set a breakpoint on this instruction we can look at the rdi value and put it into e.g., <a href="https://github.com/ReClassNET/ReClass.NET">REClassNET</a>. Using REClass we can dissect the structure and then automatically generate code from this data.</p>
+
+    <img src="/reclassSkyrimEntities.png"  alt="reclassSkyrimEntities"  class="left"  style="width: 100%"  />
+
+
+<p>Generating code from REclass I end up with something like;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">playerEnt</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> pad_0000[<span style="color:#ae81ff">84</span>]; <span style="color:#75715e">//0x0000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	vec3 xyz; <span style="color:#75715e">//0x0054
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">locationPtrClass</span><span style="color:#f92672">*</span> locationPtr; <span style="color:#75715e">//0x0060
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> validationPtr1; <span style="color:#75715e">//0x0068
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> validationPtr2; <span style="color:#75715e">//0x0070
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> validationPtr3; <span style="color:#75715e">//0x0078
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span> pad_0080[<span style="color:#ae81ff">368</span>]; <span style="color:#75715e">//0x0080
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">namePtrClass</span><span style="color:#f92672">*</span> namePtr; <span style="color:#75715e">//0x01F0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">locationPtrClass</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> pad_0000[<span style="color:#ae81ff">40</span>]; <span style="color:#75715e">//0x0000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> location; <span style="color:#75715e">//0x0028
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span> pad_0030[<span style="color:#ae81ff">24</span>]; <span style="color:#75715e">//0x0030
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}; <span style="color:#75715e">//Size: 0x0048
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">namePtrClass</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> pad_0000[<span style="color:#ae81ff">40</span>]; <span style="color:#75715e">//0x0000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> name; <span style="color:#75715e">//0x0028
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span> pad_0030[<span style="color:#ae81ff">24</span>]; <span style="color:#75715e">//0x0030
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}; <span style="color:#75715e">//Size: 0x0048
+</span></span></span></code></pre></div><p>I now wanted to try to make an ESP or wallhack with this information. We have the entities, their positions, their names etc and their named location (e.g., &ldquo;Riften&rdquo;). To make an ESP I need something to draw on. When we made one for CS:GO we used ingame functions to make our entities glow through walls. I don&rsquo;t know off any game functions that I can use for skyrim to draw them, so I gotta use my own. There are multiple ways to do this. Since the game uses DirectX11 we can hook this and draw our own stuff. Another way is to initialize your own graphics api and render ontop of the game. This is the method I went with.</p>
+<h2 id="overlay">Overlay</h2>
+<p>For the overlay I decided to just go with <a href="https://github.com/ocornut/imgui">ImGui</a>. ImGui is a gui library for c++. My first approach to making an imgui overlay I did using DirectX11. Making the overlay went fine, but drawing was not as easy&hellip;
+
+    <img src="/ImGuiWindow.png"  alt="ImGuiWindow.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>Since it&rsquo;s an overlay it also has its own window.
+
+    <img src="/SkyrimOverlay.png"  alt="SkyrimOverlay.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>I tried to make some wrapper functions for DirectX, but it kept crashing my graphics drivers making everything super unstable. Basically forcing me to restart my computer.
+
+    <img src="/directxFuckedWrapper.png"  alt="directxFuckedWrapper.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>I then tried doing OpenGL3 which I had better luck with. <a href="https://www.youtube.com/c/TheChernoProject">The Cherno</a> has some <a href="https://www.youtube.com/watch?v=W3gAzLwfIP0&amp;list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&amp;ab_channel=TheCherno">amazing guides on how to work with opengl</a> which was a huge help when writing wrappers! Now that we have an overlay and some wrappers, I can start to draw. First I did was figure out how to draw a line, then use that line wrapper to draw a box. Not I just have to write the ESP!</p>
+<h2 id="writing-the-esp">Writing the ESP</h2>
+<p>Writing the esp isn&rsquo;t hard. We need a viewmatrix which you can find using the <a href="https://guidedhacking.com/threads/how-to-find-the-view-matrix-offset.7903/">guide on guidedhacking</a>, the entities locations, a <a href="https://guidedhacking.com/threads/world2screen-direct3d-and-opengl-worldtoscreen-functions.8044/">world to screen</a> function and something to draw on. Now that we have that, we can write our ESP fucntion. I&rsquo;ll first do ESP lines because they are easy.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">float</span> VM[<span style="color:#ae81ff">16</span>];
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Cheats<span style="color:#f92672">::</span>ESPLines(<span style="color:#66d9ef">bool</span> run, <span style="color:#66d9ef">int</span> width, <span style="color:#66d9ef">int</span> height, <span style="color:#66d9ef">float</span> lineWidth, <span style="color:#66d9ef">float</span> r, <span style="color:#66d9ef">float</span> g, <span style="color:#66d9ef">float</span> b, <span style="color:#66d9ef">float</span> a)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>initalized)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		Cheats<span style="color:#f92672">::</span>initalize();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (run)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		memcpy(<span style="color:#f92672">&amp;</span>VM, (PBYTE<span style="color:#f92672">*</span>)viewMatrix, <span style="color:#66d9ef">sizeof</span>(VM));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> entities.size(); i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (entities.at(i) <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nullptr</span>)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				vec2 vScreen;
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> (worldToScreen(entities.at(i)<span style="color:#f92672">-&gt;</span>xyz, vScreen, VM, width, height))
+</span></span><span style="display:flex;"><span>				{
+</span></span><span style="display:flex;"><span>						drawLine(width <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">0</span>, vScreen.x, vScreen.y, lineWidth, r, g, b, a);
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>VM is our viewmatrix. <code>Cheats::initalize();</code> just makes sure that we have our hook in place and gets our offsets etc. <code>if (run)</code> checks if our esp lines are toggled on or off. <code>memcpy(&amp;VM, (PBYTE*)viewMatrix, sizeof(VM));</code> copies the values from the games viewmatrix into our viewmatrix. <code>if (entities.at(i) != nullptr)</code> makes sure that the entity does exist. The rest translates our 3D positions to 2D so we can draw them on screen then draws it. This makes us some basic ESP lines.
+
+    <img src="/ESPLinesSkyrim.png"  alt="ESPLinesSkyrim.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>I started writing this post early 2021 and it&rsquo;s now mid 2022. In the meantime I have finished both this project and started working on more projects. At my university we can choose to have a &ldquo;passion project&rdquo;. In this project we can choose whatever course we want aslong as we can have a professor approve that project. I decided to choose game hacking as that project.</p>
+<p>In this project I explored both Skyrim Special Edition and Final Fantasy XIV as games to hack. I also wrote a lot of prequisite knowledge for understanding which was mainly for my teachers to understand. Since this project  basically makes this text redundant I suggest reading that pdf instead of this post. You can find the pdf and the source code related to the pdf <a href="https://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/">here</a></p>
+
+      </div>
+    </article>
+
+    <hr />
+
+    <div class="post-info">
+      
+    <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
+
+        <span class="tag"><a href="http://foxmaccloud.com/tags/c&#43;&#43;/">c&#43;&#43;</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/cpp/">cpp</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/re/">re</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/reverse-engineering/">reverse engineering</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/hacking/">hacking</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/games/">games</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/game/">game</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/cheat/">cheat</a></span>
+        <span class="tag"><a href="http://foxmaccloud.com/tags/cheat-engine/">cheat engine</a></span>
+        
+    </p>
+
+      
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        2808 Words
+      </p>
+
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        
+          2021-09-01 18:19 &#43;0100
+        
+
+         
+          
+        
+      </p>
+    </div>
+
+    
+    <div class="pagination">
+        
+        <div class="pagination__title">
+            <span class="pagination__title-h">Read other posts</span>
+            <hr />
+        </div>
+        
+
+        <div class="pagination__buttons">
+            
+            <span class="button previous">
+                <a href="http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/">
+                    <span class="button__icon">←</span>
+                    <span class="button__text">Hacking Videogames For Fun</span>
+                </a>
+            </span>
+            
+
+            
+            <span class="button next">
+                <a href="http://foxmaccloud.com/posts/2021/01/my-arch-dotfiles/">
+                    <span class="button__text">My Arch Dotfiles</span>
+                    <span class="button__icon">→</span>
+                </a>
+            </span>
+            
+        </div>
+    </div>
+
+
+    
+
+    
+
+  </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2022</span>
+            
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span> <a href="http://foxmaccloud.com/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/FoxMaccloud">Fox Maccloud</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.feebdc8d801e3fb1791305e362b6d11557f029604dd5b3c27e2686bc88787ee90ae1ccf0afe81bd7d959d7617cfe1fc73062aa82b4e1fa830d6941193d2cbddf.js" integrity="sha512-/uvcjYAeP7F5EwXjYrbRFVfwKWBN1bPCfiaGvIh4fukK4czwr&#43;gb19lZ12F8/h/HMGKqgrTh&#43;oMNaUEZPSy93w=="></script>
+
+
+
+    </body>
+</html>

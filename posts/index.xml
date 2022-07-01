@@ -6,8 +6,322 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-        <lastBuildDate>Sat, 09 Jan 2021 18:19:58 +0100</lastBuildDate>
+        <lastBuildDate>Fri, 01 Jul 2022 01:48:58 +0200</lastBuildDate>
         <atom:link href="http://foxmaccloud.com/posts/index.xml" rel="self" type="application/rss+xml" />
+        
+        <item>
+            <title>Hacking Videogames For Fun</title>
+            <link>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</link>
+            <pubDate>Fri, 01 Jul 2022 01:48:58 +0200</pubDate>
+            
+            <guid>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</guid>
+            <description>Introduction The last year and a half I have been diving into game hacking. At my university I could choose to do a passion project as a course as long as I could get atleast one professor to be on board. The game hacking topic takes a lot of research and is very hard however so does university. Why not then just hack videogames on university time? So I did.</description>
+            <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>The last year and a half I have been diving into game hacking. At my university I could choose to do a passion project as a course as long as I could get atleast one professor to be on board. The game hacking topic takes a lot of research and is very hard however so does university. Why not then just hack videogames on university time? So I did.</p>
+<p>I decided that after having this course graded I would publish all the source code and texts related to this project and I hope you the end user will enjoy this project as much as I did making it. Everything can be found on my <a href="https://github.com/FoxMaccloud/Z-INF-2022">github</a>.</p>
+]]></content>
+        </item>
+        
+        <item>
+            <title>I wanna learn C&#43;&#43;, computers and reverse engineering part 2</title>
+            <link>http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/</link>
+            <pubDate>Sat, 09 Jan 2021 18:19:58 +0100</pubDate>
+            
+            <guid>http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/</guid>
+            <description>Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&amp;rsquo;t figure out how to hack Satisfactory.
+A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&amp;rsquo;t been anythign to write about or there wasn&amp;rsquo;t any time.
+Last time we wrote an external cheat for counterstrike.</description>
+            <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>So from <a href="https://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/">part 1</a> we learned a lot about games, how they work, how they are hacked etc. I couldn&rsquo;t figure out how to hack Satisfactory.</p>
+<p>A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&rsquo;t been anythign to write about or there wasn&rsquo;t any time.</p>
+<p>Last time we wrote an external cheat for counterstrike. I have been studying the GuidedHacking forums some more and read up on internal cheats and ddl injections. It&rsquo;s a topic I have kinda avoided earlier since I wanted to get an external going first. Apparently an internal has many huge features that externals doesn&rsquo;t have like better performance, harder to detect by anti-cheat (if done propper) and you are closer to the process so you can rewrite the actual code of the game/program. <a href="https://guidedhacking.com/threads/how-to-hack-any-game-tutorial-c-trainer-3-first-internal.12142/">Rake from the guidedhacking forums had this to say</a>:
+`
+Internal vs. External?</p>
+<p>External
+External Hacks use WriteProcessMemory(WPM) and ReadProcessMemory(RPM) to interact with the game process&rsquo;s memory. To do this you need to ask the kernel to give you a handle to the process by using OpenProcess() with the Process Access Rights you require, typically PROCESS_ALL_ACCESS. The handle is a required parameter for RPM/WPM. Kernel mode anticheats can easily block external hacks by using ObjRegisterCallbacks to block handle creation. Info from DouggemHacks. RPM/WPM is slow because you have the overhead of the API calls into the kernel. You should limit the frequency of these calls and store as much information locally as possible to increase the performance of your external hack. If the game has no method of detecting RPM making an overlay ESP is a good way of making an undetected external ESP because you only need RPM to be undetected.</p>
+<p>Pros of external:</p>
+<ul>
+<li>In my opinion none compared to internal unless you just want to super quickly patch some bytes and then close the hack</li>
+</ul>
+<p>Cons of external:</p>
+<ul>
+<li>Super easy to detect because of the open process handle</li>
+<li>Harder to use especially for beginners (WPM/RPM, getting the PID, blalba) though easy to master because it has no potential</li>
+<li>Less potential</li>
+<li>Slow</li>
+</ul>
+<p>Internal</p>
+<p>Internal hacks are created by injecting DLLs into the game process, when you do this you have direct access to the process&rsquo;s memory which means fast performance and simplicity. Injected DLL&rsquo;s can be made more sneaky by using different injection methods such as Manual Mapping. View the GuidedHacking Injector thread for more info
+Try a simple DLL hack source code for Assault Cube for learning purposes.
+When you are internal you create pointers to objects, typecast them and point them to objects in memory. Then you can access variables of that object easily through the pointer. ReClass is a great tool for generating classes from memory. This is an example of how to typecast variables in memory and modify them in an internal cheat:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>DWORD<span style="color:#f92672">*</span> localPlayerAddress <span style="color:#f92672">=</span> (DWORD<span style="color:#f92672">*</span>)(<span style="color:#ae81ff">0x509B74</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span> health <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)(<span style="color:#f92672">*</span>localPlayerAddress <span style="color:#f92672">+</span> <span style="color:#ae81ff">0xf8</span>);  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">*</span>health <span style="color:#f92672">=</span> <span style="color:#ae81ff">1337</span>;
+</span></span></code></pre></div><p>Pros of internal:</p>
+<ul>
+<li>Sick performance</li>
+<li>Easy to start off with</li>
+<li>Much potential</li>
+<li>Can be super sneaky and almost impossible to detect if done properly</li>
+</ul>
+<p>Cons of internal:</p>
+<ul>
+<li>Hard to master</li>
+<li>Easier to detect when you don&rsquo;t know what you&rsquo;re doing
+`</li>
+</ul>
+<p>I have to get on this internal stuff!</p>
+<h2 id="rewriting-my-csgo-cheats-for-internal">Rewriting my CS:GO cheats for Internal</h2>
+<p>So first thing I did was taking the counterstrike cheat that was already made and make it internal. The process of doing this was easy since everything was kinda already made. Since the game will be injected and running as a thread on the actual process itself, there is no longer need for any read or write process memory. We can just directly set it like it was a variable.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bunnyHop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  vars.flag <span style="color:#f92672">=</span> memClass.readMem<span style="color:#f92672">&lt;</span>BYTE<span style="color:#f92672">&gt;</span>(vars.localPlayer <span style="color:#f92672">+</span> offsets.flags);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (GetAsyncKeyState(VK_SPACE) <span style="color:#f92672">&amp;&amp;</span> vars.flag <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    memClass.writeMem<span style="color:#f92672">&lt;</span>uintptr_t<span style="color:#f92672">&gt;</span>(vars.gameModule <span style="color:#f92672">+</span> offsets.fJump, <span style="color:#ae81ff">6</span>);
+</span></span><span style="display:flex;"><span>    Sleep(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>So instead of doing it like that, we do it like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bunnyHop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	vars.flag <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>(BYTE<span style="color:#f92672">*</span>)(vars.localPlayer <span style="color:#f92672">+</span> offsets.flags);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (GetAsyncKeyState(VK_SPACE) <span style="color:#f92672">&amp;&amp;</span> vars.flag <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">*</span>(uintptr_t<span style="color:#f92672">*</span>)(vars.gameModule <span style="color:#f92672">+</span> offsets.fJump) <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Much simpler right?</p>
+<p>Ok good, now how do we inject it?</p>
+<p>I looked into it and injection uses mainly the <code>VritualAllocEx()</code>, <code>WriteProcessMemory()</code> and <code>CreateRemoteThread()</code>, more info <a href="https://guidedhacking.com/threads/simple-dll-injector-source-code.13970/">here</a>. The site does a very good job at explaining how everything works, so I don&rsquo;t have to. At this point I&rsquo;m gonna use <a href="https://github.com/guided-hacking/GuidedHacking-Injector">guidedhackings injection tool</a> to inject my ddls, but I want at some point later wanna make my own that also does it automatically so I don&rsquo;t have to do it manually every time.</p>
+<h2 id="lets-do-skyrim">Lets do Skyrim!</h2>
+<p>So for this next segment I&rsquo;m gonna follow <a href="https://guidedhacking.com/members/icew0lf.20944/">Icew0lf</a>s walkthrough of his making of Skyrim. He introduces us to a loot of amazing tools for gamehacking and ways to reverse engineer. Tools like ReClass.net, x64dbg etc. Very nice! I wanted to avoid copy pasting, so I will be trying my luck on Skyrim Special Edition and not the original skyrim game. The Special Edition is 64-bit while the old one is only 32-bit. This will make some changes to our code and I therefor have to actually think while following. You can think of this much like doing math tasks. Same method different numbers xD.</p>
+<p>So first wanna find an entity list. I first tried to do this using multilevel pointers to a pointer list that points to the entities. I&rsquo;m not yet pro with cheat engine, so there is an easier way to get the entities. Functions such as position, damage, etc. are often shared between all entities including the player entity like they were in Satisfactory. What I mean is that you pass the &ldquo;actor&rdquo; (who is gonna move) to the function, how much etc. What&rsquo;s important here is who. So we can find one of these functions and see who accesses them. A function such as damage would be useless here since it would probably only be accessed when and if something takes damage. A position function would probably be accessed a lot more often. It might be accessed every time something moves or even every game tick.</p>
+<p>Shared instruction for X, Y and Z position in Skyrim.
+
+    <img src="/SharedInstructionsSkyrim.png"  alt="SharedInstructionsSkyrim"  class="left"  style="width: 100%"  />
+
+</p>
+<h2 id="hooks">Hooks</h2>
+<p>A game hook is when you rewrite the games code at some point to jump to your code snippet then jump back and continue the code flow. This means that we can make a game function do something different, e.g., when we take damage in a game the code might look something like this; <code>playerHealth - damage</code>. If we place our hook here and jump to our code, we can make the code do something like this; <code>playerHealth + damage</code>. If we do this we heal everytime we take damage. <a href="https://guidedhacking.com/threads/how-to-hook-functions-code-detouring-guide.14185/">(GuidedHacking, How to Hook Functions - Code Detouring Guide)</a>.</p>
+<p>If we combine these hooks with our knowledge about shared instructions, we can use these hooks to grab entity addresses on the fly and add them to an &ldquo;entity array&rdquo;. When initially doing this I was struggling for about 5 months. When you hook in a game, you overwrite the code with a jmp to your hook and execute your own code. Since you are doing your own stuff, you will mess with the register values and they will change once you jump back. This will lead to unpredictable behavior, but most often crashing. To avoid this I push all the register values onto the stack and pop them off again once I&rsquo;m done with my code and ready to return to the games code. Usually a hook will then look something like;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">__declspec</span>(<span style="color:#66d9ef">naked</span>) <span style="color:#66d9ef">void</span> entHook()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// original bytes we overwrote from the game, aka stolen bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  movss xmm10, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x54</span>]
+</span></span><span style="display:flex;"><span>  movss xmm11, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x58</span>]
+</span></span><span style="display:flex;"><span>  movss xmm12, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x5c</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>		push rax
+</span></span><span style="display:flex;"><span>		push rbx
+</span></span><span style="display:flex;"><span>		push rcx
+</span></span><span style="display:flex;"><span>		push rdx
+</span></span><span style="display:flex;"><span>		push rbp
+</span></span><span style="display:flex;"><span>		push rdi
+</span></span><span style="display:flex;"><span>		push rsi
+</span></span><span style="display:flex;"><span>		push r8
+</span></span><span style="display:flex;"><span>		push r9
+</span></span><span style="display:flex;"><span>		push r10
+</span></span><span style="display:flex;"><span>		push r11
+</span></span><span style="display:flex;"><span>		push r12
+</span></span><span style="display:flex;"><span>		push r13
+</span></span><span style="display:flex;"><span>		push r14
+</span></span><span style="display:flex;"><span>		push r15
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Our things
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>  pop r15
+</span></span><span style="display:flex;"><span>  pop r14
+</span></span><span style="display:flex;"><span>  pop r13
+</span></span><span style="display:flex;"><span>  pop r12
+</span></span><span style="display:flex;"><span>  pop r11
+</span></span><span style="display:flex;"><span>  pop r10
+</span></span><span style="display:flex;"><span>  pop r9
+</span></span><span style="display:flex;"><span>  pop r8
+</span></span><span style="display:flex;"><span>  pop rsi
+</span></span><span style="display:flex;"><span>  pop rdi
+</span></span><span style="display:flex;"><span>  pop rbp
+</span></span><span style="display:flex;"><span>  pop rdx
+</span></span><span style="display:flex;"><span>  pop rcx
+</span></span><span style="display:flex;"><span>  pop rbx
+</span></span><span style="display:flex;"><span>  pop rax
+</span></span><span style="display:flex;"><span>  jmp[jumpBack] <span style="color:#75715e">// Jump back to our gamecode + the bytes we stole.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Since we are overwriting gamecode with our own, we still also need to make sure that what we replaced also gets executed somewhere. Therefor we add these to the start of our hook. We also need to jump back to our gamecode. If we jump back to exactly where we jumped off from, we will be stuck in an infinite loop of jumping to our code and jumping back to our jump. Therefor we add the size of how many bytes stolen to the address of where we jumped from and jump there.</p>
+<h2 id="the-x64-issue">The x64 issue.</h2>
+<p>Inline assembly gives us the option to write assembly code in our c++ programs. This is important because it gives us control over how the code will look like after compile and it also gives access to registers. The problem with x64 inline assembly is that it has been deprecated for x64 and no longer supported. On microsofts website it says; <a href="https://docs.microsoft.com/en-us/cpp/assembler/inline/inline-assembler?view=msvc-160">Inline assembly is not supported on the ARM and x64 processors. The following topics explain how to use the Visual C/C++ inline assembler with x86 processors</a>. My problem then was how to emulate inline assembly using e.g., bytecode and similar. I also needed access to the registers to save those register values to my array, but I couldn&rsquo;t figure this out. After looking around I found out that swapping compilers could work. I first tried LLVM, but with LLVM clean assembly functions are required. I cannot mix c++ code and assembly here. After looking further I got a tip to use ICC (Intel C++ Compiler) which has the option to do regular inline assembly. I made a post about it on Guided hacking which could be interesting to <a href="https://guidedhacking.com/threads/skyrim-x64-midfunction-hook.17355/#post-109303">check out</a>.</p>
+<p>Now that this problem was solved, it&rsquo;s time to finish my hook. This is what I came up with;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>playerEnt<span style="color:#f92672">*&gt;</span> entities;
+</span></span><span style="display:flex;"><span>playerEnt<span style="color:#f92672">*</span> entsptr;
+</span></span><span style="display:flex;"><span>uintptr_t jmpBackAddyEntityList <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">__declspec</span>(<span style="color:#66d9ef">naked</span>) <span style="color:#66d9ef">void</span> entHook()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (entities.size() <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		entities.resize(<span style="color:#ae81ff">256</span>, <span style="color:#66d9ef">nullptr</span>);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>		mov[entsptr], rdi
+</span></span><span style="display:flex;"><span>		movss xmm10, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x54</span>]
+</span></span><span style="display:flex;"><span>		movss xmm11, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x58</span>]
+</span></span><span style="display:flex;"><span>		movss xmm12, [rdi <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x5c</span>]
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>  push rax; save current rax
+</span></span><span style="display:flex;"><span>  push rbx; save current rbx
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  push r14; save current r14
+</span></span><span style="display:flex;"><span>  push r15; save current r15
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">bool</span> alreadyThere <span style="color:#f92672">=</span> false;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (entsptr <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span> <span style="color:#f92672">||</span> localPlayer <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span>)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">goto</span> GIVE_UP;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  distEnt <span style="color:#f92672">=</span> findDistance(localPlayer<span style="color:#f92672">-&gt;</span>xyz, entsptr<span style="color:#f92672">-&gt;</span>xyz);
+</span></span><span style="display:flex;"><span>  distEnt <span style="color:#f92672">=</span> distEnt <span style="color:#f92672">/</span> <span style="color:#ae81ff">100</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (distEnt <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">160.0f</span> <span style="color:#f92672">||</span> distEnt <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.1f</span>)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">goto</span> GIVE_UP;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> entities.size(); i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (entities.at(i) <span style="color:#f92672">==</span> entsptr)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      alreadyThere <span style="color:#f92672">=</span> true;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (alreadyThere)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">goto</span> GIVE_UP;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> entities.size(); i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (entities.at(i) <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span>)
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        entities.at(i) <span style="color:#f92672">=</span> entsptr; <span style="color:#75715e">// insert
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  GIVE_UP:
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">__asm</span> {
+</span></span><span style="display:flex;"><span>		pop r15; restore current r15
+</span></span><span style="display:flex;"><span>		pop r14; restore current r14
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>		pop rax; restore current rax
+</span></span><span style="display:flex;"><span>		jmp[jmpBackAddyEntityList]
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>First I&rsquo;m making my array where the entities will be stored. If the array is uninitialized, I resize it to 256 entities. I did this because if not I was crashing due to trying to write to null&hellip; Next I save my entity to a variable and execute the original game code. Save my registers. Check that the entity that I got is not a nullptr (and that I exist. I need to check this because I&rsquo;m using this later.). If nullptr I jump to <code>GIVE_UP</code>, restore the registers and jump back. The findDistance function checks the distance between me the player and the entity. There is no reason load entities that are super far away. The for loop checks if the entity is already in the array. If it is I give up. Next part just adds the entity into the array.</p>
+<p>Now hooking with our hook we can get an entitylist.
+
+    <img src="/Entities.png"  alt="Entities"  class="left"  style="width: 100%"  />
+
+</p>
+<h2 id="the-entities">The entities</h2>
+<p>Now that we have the entities, we can then reverse engineer the structure of the entities. Looking at the code earlier <code>movss xmm10, [rdi + 0x54]</code>. We can see that we have rdi + 0x54. Here rdi is the base of the entity going through this instruction and 0x54 is the offset from the base to whatever the instruction wants to update. In this case it&rsquo;s the X axis. If we set a breakpoint on this instruction we can look at the rdi value and put it into e.g., <a href="https://github.com/ReClassNET/ReClass.NET">REClassNET</a>. Using REClass we can dissect the structure and then automatically generate code from this data.</p>
+
+    <img src="/reclassSkyrimEntities.png"  alt="reclassSkyrimEntities"  class="left"  style="width: 100%"  />
+
+
+<p>Generating code from REclass I end up with something like;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">playerEnt</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> pad_0000[<span style="color:#ae81ff">84</span>]; <span style="color:#75715e">//0x0000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	vec3 xyz; <span style="color:#75715e">//0x0054
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">locationPtrClass</span><span style="color:#f92672">*</span> locationPtr; <span style="color:#75715e">//0x0060
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> validationPtr1; <span style="color:#75715e">//0x0068
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> validationPtr2; <span style="color:#75715e">//0x0070
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> validationPtr3; <span style="color:#75715e">//0x0078
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span> pad_0080[<span style="color:#ae81ff">368</span>]; <span style="color:#75715e">//0x0080
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">namePtrClass</span><span style="color:#f92672">*</span> namePtr; <span style="color:#75715e">//0x01F0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">locationPtrClass</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> pad_0000[<span style="color:#ae81ff">40</span>]; <span style="color:#75715e">//0x0000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> location; <span style="color:#75715e">//0x0028
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span> pad_0030[<span style="color:#ae81ff">24</span>]; <span style="color:#75715e">//0x0030
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}; <span style="color:#75715e">//Size: 0x0048
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">namePtrClass</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> pad_0000[<span style="color:#ae81ff">40</span>]; <span style="color:#75715e">//0x0000
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> name; <span style="color:#75715e">//0x0028
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span> pad_0030[<span style="color:#ae81ff">24</span>]; <span style="color:#75715e">//0x0030
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}; <span style="color:#75715e">//Size: 0x0048
+</span></span></span></code></pre></div><p>I now wanted to try to make an ESP or wallhack with this information. We have the entities, their positions, their names etc and their named location (e.g., &ldquo;Riften&rdquo;). To make an ESP I need something to draw on. When we made one for CS:GO we used ingame functions to make our entities glow through walls. I don&rsquo;t know off any game functions that I can use for skyrim to draw them, so I gotta use my own. There are multiple ways to do this. Since the game uses DirectX11 we can hook this and draw our own stuff. Another way is to initialize your own graphics api and render ontop of the game. This is the method I went with.</p>
+<h2 id="overlay">Overlay</h2>
+<p>For the overlay I decided to just go with <a href="https://github.com/ocornut/imgui">ImGui</a>. ImGui is a gui library for c++. My first approach to making an imgui overlay I did using DirectX11. Making the overlay went fine, but drawing was not as easy&hellip;
+
+    <img src="/ImGuiWindow.png"  alt="ImGuiWindow.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>Since it&rsquo;s an overlay it also has its own window.
+
+    <img src="/SkyrimOverlay.png"  alt="SkyrimOverlay.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>I tried to make some wrapper functions for DirectX, but it kept crashing my graphics drivers making everything super unstable. Basically forcing me to restart my computer.
+
+    <img src="/directxFuckedWrapper.png"  alt="directxFuckedWrapper.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>I then tried doing OpenGL3 which I had better luck with. <a href="https://www.youtube.com/c/TheChernoProject">The Cherno</a> has some <a href="https://www.youtube.com/watch?v=W3gAzLwfIP0&amp;list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2&amp;ab_channel=TheCherno">amazing guides on how to work with opengl</a> which was a huge help when writing wrappers! Now that we have an overlay and some wrappers, I can start to draw. First I did was figure out how to draw a line, then use that line wrapper to draw a box. Not I just have to write the ESP!</p>
+<h2 id="writing-the-esp">Writing the ESP</h2>
+<p>Writing the esp isn&rsquo;t hard. We need a viewmatrix which you can find using the <a href="https://guidedhacking.com/threads/how-to-find-the-view-matrix-offset.7903/">guide on guidedhacking</a>, the entities locations, a <a href="https://guidedhacking.com/threads/world2screen-direct3d-and-opengl-worldtoscreen-functions.8044/">world to screen</a> function and something to draw on. Now that we have that, we can write our ESP fucntion. I&rsquo;ll first do ESP lines because they are easy.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">float</span> VM[<span style="color:#ae81ff">16</span>];
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Cheats<span style="color:#f92672">::</span>ESPLines(<span style="color:#66d9ef">bool</span> run, <span style="color:#66d9ef">int</span> width, <span style="color:#66d9ef">int</span> height, <span style="color:#66d9ef">float</span> lineWidth, <span style="color:#66d9ef">float</span> r, <span style="color:#66d9ef">float</span> g, <span style="color:#66d9ef">float</span> b, <span style="color:#66d9ef">float</span> a)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>initalized)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		Cheats<span style="color:#f92672">::</span>initalize();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (run)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		memcpy(<span style="color:#f92672">&amp;</span>VM, (PBYTE<span style="color:#f92672">*</span>)viewMatrix, <span style="color:#66d9ef">sizeof</span>(VM));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> entities.size(); i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (entities.at(i) <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nullptr</span>)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				vec2 vScreen;
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> (worldToScreen(entities.at(i)<span style="color:#f92672">-&gt;</span>xyz, vScreen, VM, width, height))
+</span></span><span style="display:flex;"><span>				{
+</span></span><span style="display:flex;"><span>						drawLine(width <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">0</span>, vScreen.x, vScreen.y, lineWidth, r, g, b, a);
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>VM is our viewmatrix. <code>Cheats::initalize();</code> just makes sure that we have our hook in place and gets our offsets etc. <code>if (run)</code> checks if our esp lines are toggled on or off. <code>memcpy(&amp;VM, (PBYTE*)viewMatrix, sizeof(VM));</code> copies the values from the games viewmatrix into our viewmatrix. <code>if (entities.at(i) != nullptr)</code> makes sure that the entity does exist. The rest translates our 3D positions to 2D so we can draw them on screen then draws it. This makes us some basic ESP lines.
+
+    <img src="/ESPLinesSkyrim.png"  alt="ESPLinesSkyrim.png"  class="left"  style="width: 100%"  />
+
+</p>
+<p>I started writing this post early 2021 and it&rsquo;s now mid 2022. In the meantime I have finished both this project and started working on more projects. At my university we can choose to have a &ldquo;passion project&rdquo;. In this project we can choose whatever course we want aslong as we can have a professor approve that project. I decided to choose game hacking as that project.</p>
+<p>In this project I explored both Skyrim Special Edition and Final Fantasy XIV as games to hack. I also wrote a lot of prequisite knowledge for understanding which was mainly for my teachers to understand. Since this project  basically makes this text redundant I suggest reading that pdf instead of this post. You can find the pdf and the source code related to the pdf <a href="https://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/">here</a></p>
+]]></content>
+        </item>
         
         <item>
             <title>My Arch Dotfiles</title>
@@ -73,44 +387,44 @@ The model I got was the <a href="https://www.lenovo.com/no/no/laptops/thinkpad/l
 <p>After looking trough his introduction on how to hack games I needed to learn C++. Off to <a href="https://learncpp.com/">learncpp.com</a> I go! I have prior experience to programming before from python, java, assembly, bash, lua etc. learning basic C++ didn&rsquo;t take long, but how C++ handled memory and pointers was new to me. And the windows.h header was another beast to tame. I headed off to my first challenge. I figured that making a cheat for <a href="https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/">Counter-Strike: Global Offensive</a> was a good place to start since CS:GO is a game that has been done to death when it comes to making game cheats.</p>
 <h2 id="what-are-offsets">What are offsets?</h2>
 <p>Before attempting making a cheat for CS:GO I tried making one for a game called <a href="https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_The_Wind_Waker">The Legend of Zelda: The Wind Waker</a>. The game was emulated using the <a href="https://dolphin-emu.org/">Dolphin Emulator</a>. I found the address rupies in the game by using cheat engine scanning memory. Much like how I used to cheat in flash games in browsers as a kid. I successfully was able to create infinite rupies for the game writing this script:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">int</span> maxCash <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span>;
-<span style="color:#66d9ef">int</span> addressCash <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x803B4C0C</span>; <span style="color:#75715e">//address for rupies
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-{
-  HWND hwnd <span style="color:#f92672">=</span> FindWindowA(NULL, <span style="color:#e6db74">&#34;Dolphin 5.0 | JIT64 DC | Direct3D 12 (experimental) | HLE | FPS: 30 - VPS: 60 - 100%&#34;</span>);
-  <span style="color:#66d9ef">if</span> (hwnd <span style="color:#f92672">==</span> NULL)
-  {
-    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Cannot find window!&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
-    Sleep(<span style="color:#ae81ff">2000</span>);
-    exit(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
-  }
-  <span style="color:#66d9ef">else</span>
-  {
-    DWORD procID;
-    GetWindowThreadProcessId(hwnd, <span style="color:#f92672">&amp;</span>procID);
-    HANDLE handle <span style="color:#f92672">=</span> OpenProcess(PROCESS_ALL_ACCESS, FALSE, procID);
-    <span style="color:#66d9ef">if</span> (procID <span style="color:#f92672">==</span> NULL)
-    {
-      std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Cannot obtain process ID!&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
-      Sleep(<span style="color:#ae81ff">2000</span>);
-      exit(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
-    }
-    <span style="color:#66d9ef">else</span>
-    {
-      <span style="color:#66d9ef">while</span> (true)
-      {
-        WriteProcessMemory(handle, (LPVOID)ad_Cash, <span style="color:#f92672">&amp;</span>maxCash, <span style="color:#66d9ef">sizeof</span>(maxCash), <span style="color:#ae81ff">0</span>);
-        Sleep(<span style="color:#ae81ff">1000</span>);
-      }
-    }
-  }
-  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-}
-</code></pre></div><p>Issue using this is that I&rsquo;m using the address in memory where the rupies are stored. This address will be different every time I reboot the game. I need a way to find the address(es) where the rupies are stored from wherever in memory it is&hellip; Another issue is that for the rupies value to change it also needs an update of some sort e.g., spending or getting a rupie. So how do we solve our first issue? Entering offsets and pointers! We can find the rupies address from the games base address e.g., <code>game.exe+0x3ACA0</code> where <code>0x3ACA0</code> would be the offset.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> maxCash <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> addressCash <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x803B4C0C</span>; <span style="color:#75715e">//address for rupies
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  HWND hwnd <span style="color:#f92672">=</span> FindWindowA(NULL, <span style="color:#e6db74">&#34;Dolphin 5.0 | JIT64 DC | Direct3D 12 (experimental) | HLE | FPS: 30 - VPS: 60 - 100%&#34;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (hwnd <span style="color:#f92672">==</span> NULL)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Cannot find window!&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+</span></span><span style="display:flex;"><span>    Sleep(<span style="color:#ae81ff">2000</span>);
+</span></span><span style="display:flex;"><span>    exit(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    DWORD procID;
+</span></span><span style="display:flex;"><span>    GetWindowThreadProcessId(hwnd, <span style="color:#f92672">&amp;</span>procID);
+</span></span><span style="display:flex;"><span>    HANDLE handle <span style="color:#f92672">=</span> OpenProcess(PROCESS_ALL_ACCESS, FALSE, procID);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (procID <span style="color:#f92672">==</span> NULL)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Cannot obtain process ID!&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+</span></span><span style="display:flex;"><span>      Sleep(<span style="color:#ae81ff">2000</span>);
+</span></span><span style="display:flex;"><span>      exit(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">while</span> (true)
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        WriteProcessMemory(handle, (LPVOID)ad_Cash, <span style="color:#f92672">&amp;</span>maxCash, <span style="color:#66d9ef">sizeof</span>(maxCash), <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>        Sleep(<span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Issue using this is that I&rsquo;m using the address in memory where the rupies are stored. This address will be different every time I reboot the game. I need a way to find the address(es) where the rupies are stored from wherever in memory it is&hellip; Another issue is that for the rupies value to change it also needs an update of some sort e.g., spending or getting a rupie. So how do we solve our first issue? Entering offsets and pointers! We can find the rupies address from the games base address e.g., <code>game.exe+0x3ACA0</code> where <code>0x3ACA0</code> would be the offset.</p>
 <h2 id="playing-with-cheat-engine">Playing with cheat engine</h2>
 <p>A year went by with me not doing anything related to this. I was very buzzy with school and was having a hard time doing extra courses. I&rsquo;m not a very good student and will mostly focus on what interest me at the time. Anyways this section is dedicated to me learning about cheat engine. I believe many of us remember doing simple hacks for flash games getting unlimited X or doing Y.</p>
 <p>At the time of writing this I have successfully made some cheats for CS:GO and I&rsquo;m a little bit more familiar with how everything works. I can see why CS:GO has been cheated to death since it&rsquo;s so easy to do! The VAC anticheat is also a joke <a href="https://guidedhacking.com/threads/how-to-bypass-vac-valve-anti-cheat-info.8125/">according to the guided hacking forums</a>. I haven&rsquo;t learned about anticheats or how they are defeated yet, so to me they don&rsquo;t exists.</p>
@@ -124,61 +438,61 @@ The model I got was the <a href="https://www.lenovo.com/no/no/laptops/thinkpad/l
 <h2 id="writing-csgo-hacks">Writing CS:GO hacks!</h2>
 <p>So here we are. Lets make some cheats! First we get our offsets. At this point I wanted to write so code badly! I got all the offsets using a tool called <a href="https://github.com/frk1/hazedumper">hazedumper</a>. I also picked up some headers from guidedhacking called <a href="https://guidedhacking.com/">MemMan</a> which I picked up from their website somewhere. MemMan is very nice because it simplify the <code>WriteProcessMemory();</code>, <code>ReadProcessMemory();</code> and the process of getting handles. e.g., instead of: <code>WriteProcessMemory(handle, (LPVOID)ad_Cash, &amp;maxCash, sizeof(maxCash), 0);</code> I can simply do <code>MemMan.writeMem(address, maxCash);</code></p>
 <p>First I wanted to write a <a href="https://www.youtube.com/watch?v=UypEUaqsCpk">bunny hop</a> script. To make this script, we first need to get a handle to the process. It&rsquo;s nice to store all these vales in a class or a struct since these values will be used over and over. We also need a need to get the right module. Using MemMan we can get the process like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;MemMan.h&#34;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-MemMan memClass;
-
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">vars</span>
-{
-  uintptr_t process;
-  uintptr_t gameModule;
-}vars;
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-{
-  vars.process <span style="color:#f92672">=</span> memClass.getProcess(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;csgo.exe&#34;</span>);
-  vars.gameModule <span style="color:#f92672">=</span> memClass.getModule(vars.process, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;client.dll&#34;</span>);
-  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-}
-</code></pre></div><p>Now lets make our bunny hop script. First we need the offset to our player structure, the relative offset from out player structure to see what state our player is in (if in the air, on the ground, in water etc.) and we need a way to force a jump. I got all my offsets from hazedumper and will be using those and also save them in a struct for easy access.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">gameOffsets</span>
-{
-  uintptr_t lPlayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xD882BC</span>; <span style="color:#75715e">// offset to player structure
-</span><span style="color:#75715e"></span>  uintptr_t fJump <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x5249B34</span>; <span style="color:#75715e">// offset from client to address storing jump value
-</span><span style="color:#75715e"></span>  uintptr_t flags <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x104</span>; <span style="color:#75715e">// offset from player structure to what state we are in.
-</span><span style="color:#75715e"></span>}offsets;
-
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">vars</span> <span style="color:#75715e">// the saved variables from the offsets
-</span><span style="color:#75715e"></span>{
-  uintptr_t process;
-  uintptr_t gameModule;
-  BYTE flag;
-}vars;
-
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bunnyHop</span>()
-{
-  vars.flag <span style="color:#f92672">=</span> memClass.readMem<span style="color:#f92672">&lt;</span>BYTE<span style="color:#f92672">&gt;</span>(vars.localPlayer <span style="color:#f92672">+</span> offsets.flags);
-  <span style="color:#66d9ef">if</span> (GetAsyncKeyState(VK_SPACE) <span style="color:#f92672">&amp;&amp;</span> vars.flag <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">0</span>))
-  {
-    memClass.writeMem<span style="color:#f92672">&lt;</span>uintptr_t<span style="color:#f92672">&gt;</span>(vars.gameModule <span style="color:#f92672">+</span> offsets.fJump, <span style="color:#ae81ff">6</span>);
-    Sleep(<span style="color:#ae81ff">1</span>);
-  }
-}
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-{
-  vars.process <span style="color:#f92672">=</span> memClass.getProcess(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;csgo.exe&#34;</span>);
-  vars.gameModule <span style="color:#f92672">=</span> memClass.getModule(vars.process, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;client.dll&#34;</span>);
-
-  <span style="color:#66d9ef">while</span> (true)
-  {
-    bunnyHop();
-  }
-  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-}
-</code></pre></div><p>We now have a basic bunny hop script working! We also needs to know what&rsquo;s going on or else it is just copy-pasted code. When I first wrote this, I was confused about <code>(1 &lt;&lt; 0)</code> in flags and why we wrote <code>6</code> into fjump&hellip; The gist of it is that <code>(1 &lt;&lt; 0)</code> means that we are standing on the ground and we are writing <code>6</code> in to memory since that will do a jump and reset it back to 4. Why 4? Because 4 i believe is the &ldquo;base&rdquo; state and by 5 is spacebar down. In cheat engine, you will see that if you type +jump in the cs:go console you will jump and the address will be set to 5. If you try to jump again after, you can&rsquo;t since it needs a -jump before you can jump again. Writing <code>6</code> into it, forces a jump and resets it back to 4.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;Windows.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;MemMan.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>MemMan memClass;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">vars</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  uintptr_t process;
+</span></span><span style="display:flex;"><span>  uintptr_t gameModule;
+</span></span><span style="display:flex;"><span>}vars;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  vars.process <span style="color:#f92672">=</span> memClass.getProcess(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;csgo.exe&#34;</span>);
+</span></span><span style="display:flex;"><span>  vars.gameModule <span style="color:#f92672">=</span> memClass.getModule(vars.process, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;client.dll&#34;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Now lets make our bunny hop script. First we need the offset to our player structure, the relative offset from out player structure to see what state our player is in (if in the air, on the ground, in water etc.) and we need a way to force a jump. I got all my offsets from hazedumper and will be using those and also save them in a struct for easy access.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">gameOffsets</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  uintptr_t lPlayer <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xD882BC</span>; <span style="color:#75715e">// offset to player structure
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  uintptr_t fJump <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x5249B34</span>; <span style="color:#75715e">// offset from client to address storing jump value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  uintptr_t flags <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x104</span>; <span style="color:#75715e">// offset from player structure to what state we are in.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}offsets;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">vars</span> <span style="color:#75715e">// the saved variables from the offsets
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span>  uintptr_t process;
+</span></span><span style="display:flex;"><span>  uintptr_t gameModule;
+</span></span><span style="display:flex;"><span>  BYTE flag;
+</span></span><span style="display:flex;"><span>}vars;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bunnyHop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  vars.flag <span style="color:#f92672">=</span> memClass.readMem<span style="color:#f92672">&lt;</span>BYTE<span style="color:#f92672">&gt;</span>(vars.localPlayer <span style="color:#f92672">+</span> offsets.flags);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (GetAsyncKeyState(VK_SPACE) <span style="color:#f92672">&amp;&amp;</span> vars.flag <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    memClass.writeMem<span style="color:#f92672">&lt;</span>uintptr_t<span style="color:#f92672">&gt;</span>(vars.gameModule <span style="color:#f92672">+</span> offsets.fJump, <span style="color:#ae81ff">6</span>);
+</span></span><span style="display:flex;"><span>    Sleep(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  vars.process <span style="color:#f92672">=</span> memClass.getProcess(<span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;csgo.exe&#34;</span>);
+</span></span><span style="display:flex;"><span>  vars.gameModule <span style="color:#f92672">=</span> memClass.getModule(vars.process, <span style="color:#e6db74">L</span><span style="color:#e6db74">&#34;client.dll&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> (true)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    bunnyHop();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We now have a basic bunny hop script working! We also needs to know what&rsquo;s going on or else it is just copy-pasted code. When I first wrote this, I was confused about <code>(1 &lt;&lt; 0)</code> in flags and why we wrote <code>6</code> into fjump&hellip; The gist of it is that <code>(1 &lt;&lt; 0)</code> means that we are standing on the ground and we are writing <code>6</code> in to memory since that will do a jump and reset it back to 4. Why 4? Because 4 i believe is the &ldquo;base&rdquo; state and by 5 is spacebar down. In cheat engine, you will see that if you type +jump in the cs:go console you will jump and the address will be set to 5. If you try to jump again after, you can&rsquo;t since it needs a -jump before you can jump again. Writing <code>6</code> into it, forces a jump and resets it back to 4.</p>
 <p>I have made some others cheats for the game like a radar-hack, triggerbot, wallhack etc. It&rsquo;s kinda funny to see how easy and effective these cheats are. For instance the radar hack just loops trough the entities in the game and sets a bool that they are indeed spotted to true. The <a href="https://guidedhacking.com/threads/external-c-csgo-glowhack-tutorial.11822/">wallhack</a> I belive isn&rsquo;t a true wallhack since it uses an in-game &ldquo;glow&rdquo; to work.</p>
 
     <img src="/glowHack.png"  alt="glowHack"  class="left"  style="width: 100%"  />

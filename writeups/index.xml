@@ -24,7 +24,7 @@
       
       <guid>http://foxmaccloud.com/writeups/pwnabletw/start/</guid>
       <description>This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
- Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7.</description>
+Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7.</description>
     </item>
     
     <item>
@@ -33,7 +33,7 @@
       <pubDate>Wed, 06 May 2020 01:03:36 +0200</pubDate>
       
       <guid>http://foxmaccloud.com/writeups/hackthebox/fatty/</guid>
-      <description>Box enumeration  Ports opened:  nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Nmap 7.80 scan initiated Sat Feb 8 20:06:13 2020 as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Warning: 10.10.10.174 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.174 Host is up (0.050s latency). Not shown: 990 closed ports PORT STATE SERVICE VERSION 21/tcp open ftp vsftpd 2.0.8 or later | ftp-anon: Anonymous FTP login allowed (FTP code 230) | -rw-r--r-- 1 ftp ftp 15426727 Oct 30 12:10 fatty-client.</description>
+      <description>Box enumeration Ports opened: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Nmap 7.80 scan initiated Sat Feb 8 20:06:13 2020 as: nmap -sC -sV -A -T5 -Pn -oN nmap 10.10.10.174 Warning: 10.10.10.174 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.174 Host is up (0.050s latency). Not shown: 990 closed ports PORT STATE SERVICE VERSION 21/tcp open ftp vsftpd 2.0.8 or later | ftp-anon: Anonymous FTP login allowed (FTP code 230) | -rw-r--r-- 1 ftp ftp 15426727 Oct 30 12:10 fatty-client.</description>
     </item>
     
     <item>
@@ -42,7 +42,7 @@
       <pubDate>Tue, 05 May 2020 06:47:08 +0200</pubDate>
       
       <guid>http://foxmaccloud.com/writeups/hackthebox/magic/</guid>
-      <description>Enumeration  Only two ports are open:  nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.185 # Nmap 7.80 scan initiated Sat Apr 18 22:30:30 2020 as: nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.185 Warning: 10.10.10.185 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.185 Host is up (0.048s latency). Not shown: 971 closed ports, 27 filtered ports PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 7.</description>
+      <description>Enumeration Only two ports are open: nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.185 # Nmap 7.80 scan initiated Sat Apr 18 22:30:30 2020 as: nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.185 Warning: 10.10.10.185 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.10.185 Host is up (0.048s latency). Not shown: 971 closed ports, 27 filtered ports PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 7.6p1 Ubuntu 4ubuntu0.</description>
     </item>
     
   </channel>

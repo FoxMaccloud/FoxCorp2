@@ -1,203 +1,135 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/arch/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/dotfiles/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/i3/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/i3-gaps/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/posts/2021/01/my-arch-dotfiles/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/posts/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/vim/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/zsh/</loc>
-    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/amd/</loc>
-    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/laptop/</loc>
-    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/posts/2021/01/lenovo-thinkpad-l15-amd-review/</loc>
-    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/review/</loc>
-    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/thinkpad/</loc>
-    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
-  </url>
-  
   <url>
     <loc>http://foxmaccloud.com/tags/c&#43;&#43;/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/cheat/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/cheat-engine/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/cpp/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/game/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/games/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/hacking/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/posts/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/projects/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/re/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/reverse-engineering/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/school/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/</loc>
+    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/arch/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/dotfiles/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/i3/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/i3-gaps/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/posts/2021/01/my-arch-dotfiles/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/vim/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/zsh/</loc>
+    <lastmod>2021-01-09T18:19:58+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/amd/</loc>
+    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/laptop/</loc>
+    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/posts/2021/01/lenovo-thinkpad-l15-amd-review/</loc>
+    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/review/</loc>
+    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/tags/thinkpad/</loc>
+    <lastmod>2021-01-06T02:06:43+01:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/</loc>
     <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/re/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/tags/reverse-engineering/</loc>
-    <lastmod>2020-06-09T01:57:59+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/writeups/hackthebox/blackfield/</loc>
     <lastmod>2020-06-07T20:02:01+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/writeups/</loc>
     <lastmod>2020-06-07T20:02:01+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/pwnable/</loc>
     <lastmod>2020-06-05T18:49:09+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/posts/2020/06/pwnable-start/</loc>
     <lastmod>2020-06-05T18:49:09+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/start/</loc>
     <lastmod>2020-06-05T18:49:09+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/tw/</loc>
     <lastmod>2020-06-05T18:49:09+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/writeup/</loc>
     <lastmod>2020-06-05T18:49:09+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/writeups/pwnabletw/start/</loc>
     <lastmod>2020-06-05T16:48:25+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/writeups/hackthebox/fatty/</loc>
     <lastmod>2020-05-06T01:03:36+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/writeups/hackthebox/magic/</loc>
     <lastmod>2020-05-05T06:47:08+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://foxmaccloud.com/posts/2020/05/welcome/</loc>
-    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/welcome/</loc>
     <lastmod>2020-05-05T06:34:51+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>http://foxmaccloud.com/posts/2020/05/welcome/</loc>
+    <lastmod>2020-05-05T06:34:51+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/whoami/</loc>
     <lastmod>2020-05-05T05:29:48+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/blog/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>http://foxmaccloud.com/series/</loc>
   </url>
-  
 </urlset>

