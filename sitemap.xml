@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://foxmaccloud.com/writeups/tryhackme/brainpan1/</loc>
+    <lastmod>2022-07-01T16:23:06+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/</loc>
+    <lastmod>2022-07-01T16:23:06+02:00</lastmod>
+  </url><url>
+    <loc>http://foxmaccloud.com/writeups/</loc>
+    <lastmod>2022-07-01T16:23:06+02:00</lastmod>
+  </url><url>
     <loc>http://foxmaccloud.com/tags/c&#43;&#43;/</loc>
     <lastmod>2022-07-01T01:48:58+02:00</lastmod>
   </url><url>
@@ -12,9 +21,6 @@
     <lastmod>2022-07-01T01:48:58+02:00</lastmod>
   </url><url>
     <loc>http://foxmaccloud.com/tags/cpp/</loc>
-    <lastmod>2022-07-01T01:48:58+02:00</lastmod>
-  </url><url>
-    <loc>http://foxmaccloud.com/</loc>
     <lastmod>2022-07-01T01:48:58+02:00</lastmod>
   </url><url>
     <loc>http://foxmaccloud.com/tags/game/</loc>
@@ -90,9 +96,6 @@
     <lastmod>2020-06-09T01:57:59+02:00</lastmod>
   </url><url>
     <loc>http://foxmaccloud.com/writeups/hackthebox/blackfield/</loc>
-    <lastmod>2020-06-07T20:02:01+02:00</lastmod>
-  </url><url>
-    <loc>http://foxmaccloud.com/writeups/</loc>
     <lastmod>2020-06-07T20:02:01+02:00</lastmod>
   </url><url>
     <loc>http://foxmaccloud.com/tags/pwnable/</loc>

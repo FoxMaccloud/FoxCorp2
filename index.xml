@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
-    <lastBuildDate>Fri, 01 Jul 2022 01:48:58 +0200</lastBuildDate><atom:link href="http://foxmaccloud.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Jul 2022 16:23:06 +0200</lastBuildDate><atom:link href="http://foxmaccloud.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Brainpan1</title>
+      <link>http://foxmaccloud.com/writeups/tryhackme/brainpan1/</link>
+      <pubDate>Fri, 01 Jul 2022 16:23:06 +0200</pubDate>
+      
+      <guid>http://foxmaccloud.com/writeups/tryhackme/brainpan1/</guid>
+      <description>Summary Brainpan is an easy buffer overflow challange where need to overflow a buffer to redirect the control to our shellcode. The binary in question is a windows binary, however it is running within a Linux machine.
+Enumeration Open ports: # Nmap 7.92 scan initiated Wed Jun 29 20:51:33 2022 as: nmap -A -T5 -Pn -oN init-nmap-scan 10.10.179.14 Nmap scan report for 10.10.179.14 Host is up (0.11s latency). Not shown: 998 closed tcp ports (conn-refused) PORT STATE SERVICE VERSION 9999/tcp open abyss?</description>
+    </item>
+    
     <item>
       <title>Hacking Videogames For Fun</title>
       <link>http://foxmaccloud.com/posts/2022/07/hacking-videogames-for-fun/</link>
@@ -23,9 +33,8 @@
       <pubDate>Sat, 09 Jan 2021 18:19:58 +0100</pubDate>
       
       <guid>http://foxmaccloud.com/posts/2021/01/i-wanna-learn-c-computers-and-reverse-engineering-part-2/</guid>
-      <description>Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&amp;rsquo;t figure out how to hack Satisfactory.
-A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&amp;rsquo;t been anythign to write about or there wasn&amp;rsquo;t any time.
-Last time we wrote an external cheat for counterstrike.</description>
+      <description>This post has been superseded by &amp;ldquo;Hacking Videogames For Fun&amp;rdquo; Introduction So from part 1 we learned a lot about games, how they work, how they are hacked etc. I couldn&amp;rsquo;t figure out how to hack Satisfactory.
+A lot of time passed since I first wrote my posts. I have been busy with school and such, so I have either been to tired to write, there hasn&amp;rsquo;t been anythign to write about or there wasn&amp;rsquo;t any time.</description>
     </item>
     
     <item>
@@ -53,11 +62,11 @@ I use a fairly minimalistic set up with i3-gaps. I like i3-gaps since it&amp;rsq
       <pubDate>Tue, 09 Jun 2020 01:57:59 +0200</pubDate>
       
       <guid>http://foxmaccloud.com/posts/2020/06/i-wanna-learn-c-computers-and-reverse-engineering/</guid>
-      <description>Introduction I wanted to learn C++, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&amp;rsquo;t know, but looking into it, LiveOverflow came into mind with his pwnadventure. From one of the episodes we were introduced to guided hacking. I then looked into it and found their playlist Start Here Beginner&amp;rsquo;s Guide to Game Hacking.</description>
+      <description>This post has been superseded by &amp;ldquo;Hacking Videogames For Fun&amp;rdquo; Introduction I wanted to learn C++, how computers work and reverse engineering. What comes to mind when combining these skills? For me the first thing that came to mind was game hacking. So where do I begin? I don&amp;rsquo;t know, but looking into it, LiveOverflow came into mind with his pwnadventure. From one of the episodes we were introduced to guided hacking.</description>
     </item>
     
     <item>
-      <title>Blackfield - Hack The Box</title>
+      <title>Hack The Box - Blackfield</title>
       <link>http://foxmaccloud.com/writeups/hackthebox/blackfield/</link>
       <pubDate>Sun, 07 Jun 2020 20:02:01 +0200</pubDate>
       
@@ -87,7 +96,7 @@ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generat
     </item>
     
     <item>
-      <title>Fatty - Hack The Box</title>
+      <title>Hack The Box - Fatty</title>
       <link>http://foxmaccloud.com/writeups/hackthebox/fatty/</link>
       <pubDate>Wed, 06 May 2020 01:03:36 +0200</pubDate>
       
@@ -96,7 +105,7 @@ Finding the buffer size I used a tool Overflow Exploit Pattern Generator generat
     </item>
     
     <item>
-      <title>Magic - Hack The Box</title>
+      <title>Hack The Box - Magic</title>
       <link>http://foxmaccloud.com/writeups/hackthebox/magic/</link>
       <pubDate>Tue, 05 May 2020 06:47:08 +0200</pubDate>
       
